@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="ajax">
+          <Property name="service">programaController#validate</Property>
+        </Validator>
+        <Validator name="validator2" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+      <Reference name="children">
+        <Property name="dataType">[SELF]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">programaController#load</Property>
+      </Reference>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsPrograma">
+      <Property name="dataType">[Programa]</Property>
+      <Property name="dataProvider">programaController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <Property name="dataResolver">programaController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsPrograma</Property>
+        <Property name="submitOldData">true</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">栏目信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode</Property>
+          <Property name="cols">*</Property>
+          <Property name="dataType">Programa</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">desc</Property>
+            <Property name="property">desc</Property>
+            <Property name="editorType">TextArea</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Panel layoutConstraint="left">
+      <Property name="caption">栏目</Property>
+      <Property name="width">35%</Property>
+      <Buttons/>
+      <Children>
+        <DataTree id="dataTree" layoutConstraint="padding:15">
+          <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onContextMenu" signature="self,arg,menu">var url = self.get(&quot;currentEntity&quot;);&#xD;
+if (!url) {&#xD;
+	view.get(&quot;^op&quot;).set(&quot;disabled&quot;, true);&#xD;
+} else {&#xD;
+	view.get(&quot;^op&quot;).set(&quot;disabled&quot;, false);&#xD;
+}&#xD;
+menu.show({&#xD;
+	position: {&#xD;
+		left: arg.event.pageX,&#xD;
+		top: arg.event.pageY&#xD;
+	}&#xD;
+});&#xD;
+</ClientEvent>
+          <ClientEvent name="onDraggingSourceDrop" signature="self,arg,updateAction">var node = arg.draggingInfo.get(&quot;object&quot;);&#xD;
+var programa = node.get(&quot;data&quot;);&#xD;
+if (programa.parent.parent) {&#xD;
+	programa.set(&quot;parentId&quot;, programa.parent.parent.get(&quot;id&quot;));&#xD;
+} else {&#xD;
+	programa.set(&quot;parentId&quot;, null);&#xD;
+}&#xD;
+var i = 0;&#xD;
+programa.parent.each(function(p) {&#xD;
+	if (p.get(&quot;order&quot;) != i) {&#xD;
+		console.log(p)&#xD;
+		p.set(&quot;order&quot;, i);&#xD;
+	}&#xD;
+	i++;&#xD;
+});&#xD;
+&#xD;
+updateAction.execute();</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="currentNodeDataPath">currentNode</Property>
+          <Property name="showLines">true</Property>
+          <Property name="dragTags">node</Property>
+          <Property name="draggable">true</Property>
+          <Property name="droppable">true</Property>
+          <Property name="droppableTags">node</Property>
+          <Property name="dropMode">onOrInsertItems</Property>
+          <BindingConfigs>
+            <BindingConfig>
+              <Property name="recursive">true</Property>
+              <Property name="childrenProperty">children</Property>
+              <Property name="name">name</Property>
+              <Property name="labelProperty">name</Property>
+              <Property name="expandLevel">1</Property>
+            </BindingConfig>
+          </BindingConfigs>
+        </DataTree>
+      </Children>
+      <Tools>
+        <SimpleIconButton>
+          <Property name="iconClass">fa fa-plus-circle</Property>
+          <Property name="action">actionAddTop</Property>
+        </SimpleIconButton>
+        <SimpleIconButton>
+          <Property name="iconClass">fa fa-plus-circle</Property>
+          <Property name="action">actionAddSub</Property>
+        </SimpleIconButton>
+        <SimpleIconButton>
+          <Property name="iconClass">fa fa-minus-circle</Property>
+          <Property name="action">actionDel</Property>
+        </SimpleIconButton>
+      </Tools>
+    </Panel>
+    <Panel>
+      <Buttons/>
+      <Children>
+        <TabControl>
+          <ControlTab>
+            <Property name="caption">基本属性</Property>
+            <Property name="iconClass">fa fa-list-alt</Property>
+            <AutoForm>
+              <Property name="dataSet">dsPrograma</Property>
+              <Property name="dataPath">!currentNode</Property>
+              <Property name="cols">*</Property>
+              <Property name="labelAlign">right</Property>
+              <Property name="dataType">Programa</Property>
+              <AutoFormElement>
+                <Property name="name">name</Property>
+                <Property name="property">name</Property>
+                <Property name="width">550</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">parentId</Property>
+                <Property name="property">parentId</Property>
+                <Property name="width">550</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">creator</Property>
+                <Property name="property">creator</Property>
+                <Property name="width">550</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">createTime</Property>
+                <Property name="property">createTime</Property>
+                <Property name="width">550</Property>
+                <Editor/>
+              </AutoFormElement>
+              <AutoFormElement>
+                <Property name="name">desc</Property>
+                <Property name="property">desc</Property>
+                <Property name="editorType">TextArea</Property>
+                <Property name="width">550</Property>
+                <Editor/>
+              </AutoFormElement>
+              <Container>
+                <Button>
+                  <Property name="caption">保存</Property>
+                  <Property name="iconClass">fa fa-floppy-o</Property>
+                  <Property name="style">
+                    <Property name="margin-left">465px</Property>
+                  </Property>
+                  <Property name="action">updateAction</Property>
+                </Button>
+              </Container>
+            </AutoForm>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">栏目设置</Property>
+            <Property name="iconClass">fa fa-cog</Property>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">扩展属性</Property>
+            <Property name="iconClass">fa fa-credit-card</Property>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">附带发布</Property>
+            <Property name="iconClass">fa fa-upload</Property>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">文档自定义字段</Property>
+            <Property name="iconClass">fa fa-pencil-square-o</Property>
+          </ControlTab>
+        </TabControl>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Menu id="menu">
+      <MenuItem>
+        <Property name="action">actionAddTop</Property>
+      </MenuItem>
+      <MenuItem>
+        <Property name="tags">op</Property>
+        <Property name="action">actionAddSub</Property>
+      </MenuItem>
+      <Separator/>
+      <MenuItem>
+        <Property name="tags">op</Property>
+        <Property name="action">actionDel</Property>
+      </MenuItem>
+    </Menu>
+    <Action id="actionAddTop">
+      <ClientEvent name="onExecute" signature="self,arg,dataTree,dsPrograma,dialog">var entity = dsPrograma.insert({});&#xD;
+dataTree.set(&quot;currentEntity&quot;, entity);&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+      <Property name="caption">添加顶级栏目</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Property name="tip">添加顶级栏目</Property>
+    </Action>
+    <Action id="actionAddSub">
+      <ClientEvent name="onExecute" signature="self,arg,dataTree,dialog">var currentEntity = dataTree.get(&quot;currentEntity&quot;);&#xD;
+var id = currentEntity.get(&quot;id&quot;);&#xD;
+if (currentEntity) {&#xD;
+	var child = currentEntity.createChild(&quot;children&quot;, {});&#xD;
+	dataTree.get(&quot;currentNode&quot;).expand();&#xD;
+	dataTree.set(&quot;currentEntity&quot;, child);&#xD;
+	child.set(&quot;parentId&quot;, id);&#xD;
+	dialog.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请选择机构.&quot;);&#xD;
+}</ClientEvent>
+      <Property name="caption">添加子级栏目</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Property name="tip">添加子级栏目</Property>
+    </Action>
+    <Action id="actionDel">
+      <ClientEvent name="onExecute" signature="self,arg,updateAction,dsPrograma">var currentEntity = dsPrograma.getData(&quot;!currentNode&quot;);&#xD;
+if (currentEntity) {&#xD;
+	delEntity(currentEntity);&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请选择需要删除的栏目.&quot;);&#xD;
+}&#xD;
+&#xD;
+function delEntity (entity) {&#xD;
+	entity.remove();&#xD;
+	var children = entity.get(&quot;children&quot;);&#xD;
+	children.each(function(c) {&#xD;
+		delEntity(c);&#xD;
+	});&#xD;
+}&#xD;
+&#xD;
+updateAction.execute();</ClientEvent>
+      <Property name="caption">删除当前栏目</Property>
+      <Property name="confirmMessage">确认删除当前选中栏目？</Property>
+      <Property name="iconClass">fa fa-minus-circle</Property>
+      <Property name="tip">删除当前栏目</Property>
+    </Action>
+  </View>
+</ViewConfig>

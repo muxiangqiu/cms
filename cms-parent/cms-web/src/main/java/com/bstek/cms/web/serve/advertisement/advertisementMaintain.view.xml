@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+        <Validator name="validator1" type="ajax">
+          <Property name="service">programController#valided</Property>
+        </Validator>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+      <Reference name="children">
+        <Property name="dataType">[SELF]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">programaController#load</Property>
+      </Reference>
+      <Reference name="advertisements">
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="pageSize">15</Property>
+        <Property name="dataType">[Advertisement]</Property>
+        <Property name="dataProvider">advertisementController#loadAdvertisements</Property>
+      </Reference>
+    </DataType>
+    <DataType name="Advertisement">
+      <Property name="creationType">com.bstek.cms.orm.Advertisement</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property/>
+        <Property name="label">版位名称</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="programas">
+        <Property/>
+        <Property name="label">所属栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="adType">
+        <Property/>
+        <Property name="label">广告类型</Property>
+      </PropertyDef>
+      <PropertyDef name="PositionType">
+        <Property/>
+        <Property name="label">版位类型</Property>
+      </PropertyDef>
+      <PropertyDef name="jsUrl">
+        <Property/>
+        <Property name="label">JS路径</Property>
+      </PropertyDef>
+      <PropertyDef name="size">
+        <Property/>
+        <Property name="label">尺寸</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property/>
+        <Property name="label">版位描述</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsPrograma">
+      <Property name="dataType">[Programa]</Property>
+      <Property name="dataProvider">programaController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialogAdvertisement">dialogAdvertisement.hide();&#xD;
+</ClientEvent>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <Property name="dataResolver">advertisementController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsPrograma</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Dialog id="dialogAdvertisement">
+      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.advertisements&quot;).cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">广告版位信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.#advertisements</Property>
+          <Property name="labelWidth">60</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">programas</Property>
+            <Property name="property">programas</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">PositionType</Property>
+            <Property name="property">PositionType</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">adType</Property>
+            <Property name="property">adType</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">jsUrl</Property>
+            <Property name="property">jsUrl</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">size</Property>
+            <Property name="property">size</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">desc</Property>
+            <Property name="property">desc</Property>
+            <Property name="editorType">TextArea</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Panel layoutConstraint="left">
+      <Buttons/>
+      <Children>
+        <DataTree id="dataTree" layoutConstraint="padding:15">
+          <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onDataRowClick" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.advertisements&quot;).flushAsync();&#xD;
+</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="currentNodeDataPath">currentNode</Property>
+          <Property name="showLines">true</Property>
+          <BindingConfigs>
+            <BindingConfig>
+              <Property name="recursive">true</Property>
+              <Property name="childrenProperty">children</Property>
+              <Property name="name">children</Property>
+              <Property name="labelProperty">name</Property>
+              <Property name="expandLevel">1</Property>
+            </BindingConfig>
+          </BindingConfigs>
+        </DataTree>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="iconClass">fa fa-picture-o orange-text</Property>
+      <Property name="caption">广告版位列表</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogAdvertisement">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
+if (entity) {&#xD;
+	dsPrograma.getData(&quot;!currentNode.advertisements&quot;).insert({});&#xD;
+	dialogAdvertisement.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+            <Property name="caption">新建</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialogAdvertisement">dialogAdvertisement.show();&#xD;
+</ClientEvent>
+            <Property name="caption">修改</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		documents.each(function(d) {&#xD;
+			d.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});	&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">手工终止</Property>
+            <Property name="iconClass">fa fa-chain-broken</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">预览</Property>
+            <Property name="iconClass">fa fa-search</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">结果</Property>
+            <Property name="iconClass">fa fa-th</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">结果明细</Property>
+            <Property name="iconClass">fa fa-th-list</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">填写项详细</Property>
+            <Property name="iconClass">fa fa-list-alt</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="trigger">triggerClear</Property>
+            <Property name="blankText">按版位名称搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.advertisements</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="showFilterBar">false</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <Property name="height">85%</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="jsUrl">
+            <Property name="property">jsUrl</Property>
+          </DataColumn>
+          <DataColumn name="programas">
+            <Property name="property">programas</Property>
+          </DataColumn>
+          <DataColumn name="PositionType">
+            <Property name="property">PositionType</Property>
+          </DataColumn>
+          <DataColumn name="adType">
+            <Property name="property">adType</Property>
+          </DataColumn>
+          <DataColumn name="size">
+            <Property name="property">size</Property>
+          </DataColumn>
+          <DataColumn name="desc">
+            <Property name="property">desc</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dsPrograma</Property>
+            <Property name="dataPath">!currentNode.advertisements</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>

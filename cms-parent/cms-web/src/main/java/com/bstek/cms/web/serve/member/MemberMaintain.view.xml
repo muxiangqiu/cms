@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Member">
+      <Property name="creationType">com.bstek.cms.orm.Member</Property>
+      <PropertyDef name="level">
+        <Property name="label">会员级别</Property>
+        <Property name="dataType">MemberConfig</Property>
+      </PropertyDef>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="memberConfigId">
+        <Property></Property>
+        <Property name="label">会员配置ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">姓名</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="username">
+        <Property></Property>
+        <Property name="label">登录名</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+        <Validator name="validator2" type="ajax">
+          <Property name="service">memberController#validate</Property>
+        </Validator>
+      </PropertyDef>
+      <PropertyDef name="password">
+        <Property></Property>
+        <Property name="label">密码</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="email">
+        <Property></Property>
+        <Property name="label">电子邮箱</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator2" type="regExp">
+          <Property name="whiteRegExp">\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*</Property>
+        </Validator>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">会员类型</Property>
+      </PropertyDef>
+      <PropertyDef name="sex">
+        <Property name="label">性别</Property>
+        <Property name="mapping">
+          <Property name="mapValues">
+            <Collection>
+              <Entity>
+                <Property name="key">0</Property>
+                <Property name="value">女</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">1</Property>
+                <Property name="value">男</Property>
+              </Entity>
+            </Collection>
+          </Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="credits">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">积分</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="audit">
+        <Property name="label">审核状态</Property>
+        <Property name="mapping">
+          <Property name="mapValues">
+            <Collection>
+              <Entity>
+                <Property name="key">0</Property>
+                <Property name="value">已审核</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">1</Property>
+                <Property name="value">未审核</Property>
+              </Entity>
+            </Collection>
+          </Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="question">
+        <Property></Property>
+        <Property name="label">密码问题</Property>
+      </PropertyDef>
+      <PropertyDef name="answer">
+        <Property></Property>
+        <Property name="label">密码回答</Property>
+      </PropertyDef>
+      <PropertyDef name="address">
+        <Property></Property>
+        <Property name="label">地址管理</Property>
+      </PropertyDef>
+      <PropertyDef name="confirmPassword">
+        <Property name="label">确认密码</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="custom">
+          <ClientEvent name="onValidate">var password = arg.entity.get(&quot;password&quot;);&#xD;
+var confirmPassword = arg.entity.get(&quot;confirmPassword&quot;);&#xD;
+if (confirmPassword != password) {&#xD;
+	arg.result = {&#xD;
+	    text: &quot;输入的密码不一致！&quot;,&#xD;
+	};&#xD;
+}</ClientEvent>
+          <Property name="runAt">client</Property>
+        </Validator>
+      </PropertyDef>
+    </DataType>
+    <DataType name="MemberConfig">
+      <Property name="creationType">com.bstek.cms.orm.MemberConfig</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">会员级别名称</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="level">
+        <Property></Property>
+        <Property name="label">会员级别</Property>
+      </PropertyDef>
+      <PropertyDef name="credits">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">积分</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[Member]</Property>
+      <Property name="pageSize">15</Property>
+      <Property name="dataProvider">memberController#load</Property>
+    </DataSet>
+    <DataSet id="dsMemberConfig">
+      <Property name="dataType">[MemberConfig]</Property>
+      <Property name="pageSize">15</Property>
+      <Property name="dataProvider">memberConfigController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="dataResolver">memberController#save</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">会员列表</Property>
+      <Property name="iconClass">fa fa-users orange-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog,username">dataSet.insert({});&#xD;
+username.set(&quot;readOnly&quot;, false);&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+            <Property name="caption">添加</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialog,username,dataSet">username.set(&quot;readOnly&quot;, true);&#xD;
+var password = dataSet.getData(&quot;#&quot;).get(&quot;password&quot;);&#xD;
+dataSet.getData(&quot;#&quot;).set(&quot;confirmPassword&quot;, password);&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+            <Property name="caption">修改</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var retrieves = dataGrid.get(&quot;selection&quot;);&#xD;
+if (retrieves.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		retrieves.each(function(r) {&#xD;
+			r.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">审核通过</Property>
+            <Property name="iconClass">fa fa-check-circle</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">审核不通过</Property>
+            <Property name="iconClass">fa fa-times-circle</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}, {&#xD;
+				property: &quot;username&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="blankText">按登录名或姓名搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="height">85%</Property>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="username">
+            <Property name="property">username</Property>
+          </DataColumn>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="type">
+            <Property name="property">type</Property>
+          </DataColumn>
+          <DataColumn>
+            <Property name="property">level.name</Property>
+            <Property name="name">level.name</Property>
+            <Property name="caption">会员级别</Property>
+          </DataColumn>
+          <DataColumn name="sex">
+            <Property name="property">sex</Property>
+          </DataColumn>
+          <DataColumn name="credits">
+            <Property name="property">credits</Property>
+            <Property name="align">left</Property>
+          </DataColumn>
+          <DataColumn name="address">
+            <Property name="property">address</Property>
+          </DataColumn>
+          <DataColumn name="audit">
+            <Property name="property">audit</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dataSet</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">会员信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-users</Property>
+      <Buttons>
+        <Button>
+          <ClientEvent name="onClick" signature="self,arg,dsMemberConfig,dataSet,updateAction,level">if (level.get(&quot;value&quot;)) {&#xD;
+	dsMemberConfig.getData().each(function(mc) {&#xD;
+		if (level.get(&quot;value&quot;) == mc.get(&quot;name&quot;)) {&#xD;
+			dataSet.getData(&quot;#&quot;).set({&#xD;
+				level: mc.toJSON(),&#xD;
+				memberConfigId: mc.get(&quot;id&quot;)&#xD;
+			});&#xD;
+		}&#xD;
+	});	&#xD;
+}&#xD;
+&#xD;
+updateAction.execute();</ClientEvent>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="labelWidth">60</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement id="username">
+            <Property name="name">username</Property>
+            <Property name="property">username</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">password</Property>
+            <Property name="property">password</Property>
+            <Property name="editorType">PasswordEditor</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">confirmPassword</Property>
+            <Property name="property">confirmPassword</Property>
+            <Property name="editorType">PasswordEditor</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">sex</Property>
+            <Property name="property">sex</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">email</Property>
+            <Property name="property">email</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">type</Property>
+            <Property name="property">type</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement id="level">
+            <Property name="name">level.name</Property>
+            <Property name="property">level.name</Property>
+            <Property name="trigger">dataSetDropDown</Property>
+            <Property name="label">会员级别</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">credits</Property>
+            <Property name="property">credits</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">audit</Property>
+            <Property name="property">audit</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">question</Property>
+            <Property name="property">question</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">answer</Property>
+            <Property name="property">answer</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">address</Property>
+            <Property name="property">address</Property>
+            <Property name="editorType">TextArea</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <DataSetDropDown id="dataSetDropDown">
+      <Property name="autoOpen">true</Property>
+      <Property name="dataSet">dsMemberConfig</Property>
+      <Property name="editable">false</Property>
+      <Property name="filterOnOpen">true</Property>
+      <Property name="property">name</Property>
+    </DataSetDropDown>
+  </View>
+</ViewConfig>

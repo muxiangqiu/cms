@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="IssueCount">
+      <Property name="creationType">com.bstek.cms.orm.IssueCount</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="username">
+        <Property/>
+        <Property name="label">录入用户</Property>
+      </PropertyDef>
+      <PropertyDef name="programaName">
+        <Property/>
+        <Property name="label">栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="draftCount">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">初稿数</Property>
+      </PropertyDef>
+      <PropertyDef name="rutenCount">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">流转数</Property>
+      </PropertyDef>
+      <PropertyDef name="issueCount">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">已发布数</Property>
+      </PropertyDef>
+      <PropertyDef name="datedCount">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">已下线数</Property>
+      </PropertyDef>
+      <PropertyDef name="archiveCount">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">已归档数</Property>
+      </PropertyDef>
+      <PropertyDef name="sum">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">文章总数</Property>
+      </PropertyDef>
+      <PropertyDef name="org">
+        <Property name="label">机构</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[IssueCount]</Property>
+      <Property name="pageSize">15</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Buttons/>
+      <Children>
+        <TabControl>
+          <ControlTab>
+            <Property name="caption">人员发布统计</Property>
+            <Property name="iconClass">fa fa-users green-text</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <Property name="caption">统计</Property>
+                  <Property name="iconClass">fa fa-list-ul</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">全部统计</Property>
+                  <Property name="iconClass">fa fa-bar-chart-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">导出</Property>
+                  <Property name="iconClass">fa fa-file-excel-o</Property>
+                </ToolBarButton>
+                <Fill/>
+                <ToolBarLabel>
+                  <Property name="text">统计时间：从</Property>
+                </ToolBarLabel>
+                <TextEditor>
+                  <Property name="dataType">Date</Property>
+                </TextEditor>
+                <ToolBarLabel>
+                  <Property name="text">到</Property>
+                </ToolBarLabel>
+                <TextEditor>
+                  <Property name="dataType">Date</Property>
+                </TextEditor>
+              </ToolBar>
+              <DataGrid id="dataGridUser">
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="org">
+                  <Property name="property">org</Property>
+                </DataColumn>
+                <DataColumn name="username">
+                  <Property name="property">username</Property>
+                </DataColumn>
+                <DataColumn name="draftCount">
+                  <Property name="property">draftCount</Property>
+                </DataColumn>
+                <DataColumn name="rutenCount">
+                  <Property name="property">rutenCount</Property>
+                </DataColumn>
+                <DataColumn name="issueCount">
+                  <Property name="property">issueCount</Property>
+                </DataColumn>
+                <DataColumn name="datedCount">
+                  <Property name="property">datedCount</Property>
+                </DataColumn>
+                <DataColumn name="archiveCount">
+                  <Property name="property">archiveCount</Property>
+                </DataColumn>
+                <DataColumn name="sum">
+                  <Property name="property">sum</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">栏目发布统计</Property>
+            <Property name="iconClass">fa fa-bar-chart-o purple-text</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <Property name="caption">统计</Property>
+                  <Property name="iconClass">fa fa-list-ul</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">全部统计</Property>
+                  <Property name="iconClass">fa fa-bar-chart-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">导出</Property>
+                  <Property name="iconClass">fa fa-file-excel-o</Property>
+                </ToolBarButton>
+                <Fill/>
+                <ToolBarLabel>
+                  <Property name="text">统计时间：从</Property>
+                </ToolBarLabel>
+                <TextEditor>
+                  <Property name="dataType">Date</Property>
+                </TextEditor>
+                <ToolBarLabel>
+                  <Property name="text">到</Property>
+                </ToolBarLabel>
+                <TextEditor>
+                  <Property name="dataType">Date</Property>
+                </TextEditor>
+              </ToolBar>
+              <DataGrid id="dataGridPrograma">
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="programaName">
+                  <Property name="property">programaName</Property>
+                </DataColumn>
+                <DataColumn name="draftCount">
+                  <Property name="property">draftCount</Property>
+                </DataColumn>
+                <DataColumn name="rutenCount">
+                  <Property name="property">rutenCount</Property>
+                </DataColumn>
+                <DataColumn name="issueCount">
+                  <Property name="property">issueCount</Property>
+                </DataColumn>
+                <DataColumn name="datedCount">
+                  <Property name="property">datedCount</Property>
+                </DataColumn>
+                <DataColumn name="archiveCount">
+                  <Property name="property">archiveCount</Property>
+                </DataColumn>
+                <DataColumn name="sum">
+                  <Property name="property">sum</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+        </TabControl>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>

@@ -7,5 +7,6 @@
   <modules>
   	<module>cms-dependencies</module>
   	<module>cms-parent</module>
+  	<module>cms-instance</module>
   </modules>
 </project>

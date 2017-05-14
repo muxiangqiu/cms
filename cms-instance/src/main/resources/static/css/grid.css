@@ -1,0 +1,7 @@
+.d-grid .data-table tr:nth-child(even) {
+	background: #E0E0E0;
+} 
+
+.d-grid .data-table .current-row {
+    background-color: #15a4fa !important;
+}

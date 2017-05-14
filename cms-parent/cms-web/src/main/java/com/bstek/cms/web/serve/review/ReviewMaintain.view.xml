@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Review">
+      <Property name="creationType">com.bstek.cms.orm.Review</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">评论标题</Property>
+      </PropertyDef>
+      <PropertyDef name="observer">
+        <Property></Property>
+        <Property name="label">评论人</Property>
+      </PropertyDef>
+      <PropertyDef name="programas">
+        <Property></Property>
+        <Property name="label">所属栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">留言时间</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="ip">
+        <Property></Property>
+        <Property name="label">IP</Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property name="dataType">boolean</Property>
+        <Property name="label">审核状态</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[Review]</Property>
+      <Property name="pageSize">15</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">评论管理列表</Property>
+      <Property name="iconClass">fa fa-list-alt olive-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <Property name="caption">审核通过</Property>
+            <Property name="iconClass">fa fa-check</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">审核不通过</Property>
+            <Property name="iconClass">fa fa-times</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="blankText">按标题搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="height">85%</Property>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+            <Property name="width">180</Property>
+          </DataColumn>
+          <DataColumn name="content">
+            <Property name="property">content</Property>
+          </DataColumn>
+          <DataColumn name="programas">
+            <Property name="property">programas</Property>
+            <Property name="width">180</Property>
+          </DataColumn>
+          <DataColumn name="observer">
+            <Property name="property">observer</Property>
+            <Property name="width">120</Property>
+          </DataColumn>
+          <DataColumn name="ip">
+            <Property name="property">ip</Property>
+            <Property name="width">120</Property>
+          </DataColumn>
+          <DataColumn name="createDate">
+            <Property name="property">createDate</Property>
+            <Property name="width">120</Property>
+          </DataColumn>
+          <DataColumn name="status">
+            <Property name="property">status</Property>
+            <Property name="width">120</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dataSet</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>

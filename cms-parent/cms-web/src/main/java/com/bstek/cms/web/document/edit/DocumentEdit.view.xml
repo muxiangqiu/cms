@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+        <Validator name="validator1" type="ajax">
+          <Property name="service">programController#valided</Property>
+        </Validator>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+      <Reference name="children">
+        <Property name="dataType">[SELF]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">programaController#load</Property>
+      </Reference>
+      <Reference name="documents">
+        <Property name="dataType">[Document]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">documentEditController#loadDocuments</Property>
+        <Property name="pageSize">15</Property>
+      </Reference>
+    </DataType>
+    <DataType name="Document">
+      <Property name="creationType">com.bstek.cms.orm.Document</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="deptId">
+        <Property></Property>
+        <Property name="label">部门</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">作者</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="validity">
+        <Property name="dataType">Date</Property>
+        <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">类型</Property>
+      </PropertyDef>
+      <PropertyDef name="securityLevel">
+        <Property name="label">密级</Property>
+        <Property name="mapping">
+          <Property name="mapValues">
+            <Collection>
+              <Entity>
+                <Property name="key">open</Property>
+                <Property name="value">非密</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">secrecy</Property>
+                <Property name="value">秘密</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">Secret</Property>
+                <Property name="value">机密</Property>
+              </Entity>
+            </Collection>
+          </Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property name="label">状态</Property>
+        <Property name="mapping">
+          <Property name="mapValues">
+            <Collection>
+              <Entity>
+                <Property name="key">draft</Property>
+                <Property name="value">初稿</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">issue</Property>
+                <Property name="value">已发布</Property>
+              </Entity>
+              <Entity>
+                <Property name="key">dated</Property>
+                <Property name="value">已下线</Property>
+              </Entity>
+            </Collection>
+          </Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsPrograma">
+      <Property name="dataType">[Programa]</Property>
+      <Property name="dataProvider">programaController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialogDocument">dialogDocument.hide();&#xD;
+</ClientEvent>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <Property name="dataResolver">documentEditController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsPrograma</Property>
+        <Property name="submitOldData">true</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <AjaxAction id="ajaxAction">
+      <ClientEvent name="onExecute"></ClientEvent>
+      <ClientEvent name="beforeExecute" signature="self,arg,dataTreePrograma,dataGrid,dataTree">var params = {&#xD;
+	programas: [],&#xD;
+	documents: [],&#xD;
+	currentPrograma: null,&#xD;
+	move: false&#xD;
+}&#xD;
+&#xD;
+var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+documents.each(function(d) {&#xD;
+	params.documents.push(d);&#xD;
+});	&#xD;
+&#xD;
+var nodes = dataTreePrograma.getCheckedNodes();&#xD;
+nodes.each(function(node) {&#xD;
+	params.programas.push(node.get(&quot;data&quot;));&#xD;
+});&#xD;
+&#xD;
+params.currentPrograma = dataTree.get(&quot;currentEntity&quot;);&#xD;
+&#xD;
+params.move = !!view.move;&#xD;
+&#xD;
+self.set(&quot;parameter&quot;, params);&#xD;
+</ClientEvent>
+      <ClientEvent name="onSuccess" signature="self,arg,dialogPrograma">dialogPrograma.hide();&#xD;
+</ClientEvent>
+      <Property name="service">documentEditController#copyOrMove</Property>
+    </AjaxAction>
+    <Dialog id="dialogDocument">
+      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.documents&quot;).cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">文档信息</Property>
+      <Property name="height">750</Property>
+      <Property name="width">650</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.#documents</Property>
+          <Property name="labelWidth">60</Property>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">creator</Property>
+            <Property name="property">creator</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">deptId</Property>
+            <Property name="property">deptId</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">securityLevel</Property>
+            <Property name="property">securityLevel</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">validity</Property>
+            <Property name="property">validity</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">type</Property>
+            <Property name="property">type</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">content</Property>
+            <Property name="property">content</Property>
+            <Property name="editorType">TextArea</Property>
+            <Property name="height">490</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Dialog id="dialogPrograma">
+      <Property name="height">480</Property>
+      <Property name="width">400</Property>
+      <Property name="caption">栏目选择</Property>
+      <Buttons>
+        <Button>
+          <ClientEvent name="onClick" signature="self,arg,ajaxAction,dataTreePrograma">var nodes = dataTreePrograma.getCheckedNodes();&#xD;
+if (nodes.length > 0) {&#xD;
+	ajaxAction.execute();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选所需栏目。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+          <Property name="caption">确定</Property>
+          <Property name="iconClass">fa fa-check</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <DataTree id="dataTreePrograma" layoutConstraint="padding:15">
+          <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="showLines">true</Property>
+          <BindingConfigs>
+            <BindingConfig>
+              <Property name="recursive">true</Property>
+              <Property name="childrenProperty">children</Property>
+              <Property name="name">children</Property>
+              <Property name="labelProperty">name</Property>
+              <Property name="expandLevel">1</Property>
+              <Property name="checkable">true</Property>
+            </BindingConfig>
+          </BindingConfigs>
+        </DataTree>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Panel layoutConstraint="left">
+      <Buttons/>
+      <Children>
+        <DataTree id="dataTree" layoutConstraint="padding:15">
+          <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onDataRowClick" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.documents&quot;).flushAsync();&#xD;
+</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="currentNodeDataPath">currentNode</Property>
+          <Property name="showLines">true</Property>
+          <BindingConfigs>
+            <BindingConfig>
+              <Property name="recursive">true</Property>
+              <Property name="childrenProperty">children</Property>
+              <Property name="name">children</Property>
+              <Property name="labelProperty">name</Property>
+              <Property name="expandLevel">1</Property>
+            </BindingConfig>
+          </BindingConfigs>
+        </DataTree>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">文档列表</Property>
+      <Property name="iconClass">fa fa-file-text-o blue-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogDocument">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
+if (entity) {&#xD;
+	dsPrograma.getData(&quot;!currentNode.documents&quot;).insert({status: &quot;draft&quot;});&#xD;
+	dialogDocument.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+            <Property name="caption">新建</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialogDocument">dialogDocument.show();&#xD;
+</ClientEvent>
+            <Property name="caption">编辑</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {&#xD;
+	documents.each(function(d) {&#xD;
+		d.set(&quot;status&quot;, &quot;issue&quot;);&#xD;
+	});&#xD;
+	updateAction.execute();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要发布的文档。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">发布</Property>
+            <Property name="iconClass">fa fa-external-link</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">预览</Property>
+            <Property name="iconClass">fa fa-search</Property>
+            <Property name="ignored">true</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialogPrograma,dataGrid">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {&#xD;
+	dialogPrograma.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要复制的文档。&quot;);&#xD;
+}&#xD;
+&#xD;
+&#xD;
+</ClientEvent>
+            <Property name="caption">复制</Property>
+            <Property name="iconClass">fa fa-files-o</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,dialogPrograma">view.move = !view.move;&#xD;
+var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {	&#xD;
+	dialogPrograma.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要转移的文档。&quot;);&#xD;
+}&#xD;
+&#xD;
+&#xD;
+&#xD;
+</ClientEvent>
+            <Property name="caption">转移</Property>
+            <Property name="iconClass">fa fa-file-code-o</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">排序</Property>
+            <Property name="iconClass">fa fa-arrow-up</Property>
+            <Property name="ignored">true</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项?&quot;, function() {&#xD;
+		documents.each(function(d) {&#xD;
+			d.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});	&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的文档。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="trigger">triggerClear</Property>
+            <Property name="blankText">按标题搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <ClientEvent name="onDraggingSourceDrop" signature="self,arg,updateAction">var items = self.get(&quot;itemModel&quot;).getItems().toArray();&#xD;
+for (var i = 0; i &lt; items.length; i++){&#xD;
+    items[i].set(&quot;order&quot;, i);&#xD;
+}&#xD;
+&#xD;
+updateAction.execute();&#xD;
+</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.documents</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="showFilterBar">false</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <Property name="height">85%</Property>
+          <Property name="dragTags">row</Property>
+          <Property name="draggable">true</Property>
+          <Property name="droppable">true</Property>
+          <Property name="droppableTags">row</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="creator">
+            <Property name="property">creator</Property>
+          </DataColumn>
+          <DataColumn name="status">
+            <Property name="property">status</Property>
+          </DataColumn>
+          <DataColumn name="createDate">
+            <Property name="property">createDate</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dsPrograma</Property>
+            <Property name="dataPath">!currentNode.documents</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>

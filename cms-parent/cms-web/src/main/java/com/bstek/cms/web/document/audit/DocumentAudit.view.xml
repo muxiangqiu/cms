@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Audit">
+      <Property name="creationType">com.bstek.cms.orm.Audit</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="handler">
+        <Property></Property>
+        <Property name="label">处理人</Property>
+      </PropertyDef>
+      <PropertyDef name="programas">
+        <Property></Property>
+        <Property name="label">所属栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="lastAction">
+        <Property></Property>
+        <Property name="label">上次动作</Property>
+      </PropertyDef>
+      <PropertyDef name="currentStep">
+        <Property></Property>
+        <Property name="label">当前步骤</Property>
+      </PropertyDef>
+      <PropertyDef name="mark">
+        <Property></Property>
+        <Property name="label">标志</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[Audit]</Property>
+      <Property name="pageSize">15</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">文档审核列表</Property>
+      <Property name="iconClass">fa fa-tachometer green-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <Property name="caption">打开</Property>
+            <Property name="iconClass">fa fa-pencil-square-o</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">申请处理</Property>
+            <Property name="iconClass">fa fa-clipboard</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">处理历史</Property>
+            <Property name="iconClass">fa fa-file-text-o</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">强行结束流程</Property>
+            <Property name="iconClass">fa fa-ban</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">查看流程</Property>
+            <Property name="iconClass">fa fa-sitemap</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="blankText">按标题搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="height">85%</Property>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="readOnly">true</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="programas">
+            <Property name="property">programas</Property>
+          </DataColumn>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="creator">
+            <Property name="property">creator</Property>
+          </DataColumn>
+          <DataColumn name="createDate">
+            <Property name="property">createDate</Property>
+          </DataColumn>
+          <DataColumn name="lastAction">
+            <Property name="property">lastAction</Property>
+          </DataColumn>
+          <DataColumn name="currentStep">
+            <Property name="property">currentStep</Property>
+          </DataColumn>
+          <DataColumn name="mark">
+            <Property name="property">mark</Property>
+          </DataColumn>
+          <DataColumn name="handler">
+            <Property name="property">handler</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>

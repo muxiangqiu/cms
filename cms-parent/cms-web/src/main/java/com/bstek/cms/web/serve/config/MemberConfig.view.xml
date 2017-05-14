@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="MemberConfig">
+      <Property name="creationType">com.bstek.cms.orm.MemberConfig</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property/>
+        <Property name="label">会员级别名称</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="level">
+        <Property/>
+        <Property name="label">会员级别</Property>
+      </PropertyDef>
+      <PropertyDef name="credits">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">积分</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[MemberConfig]</Property>
+      <Property name="pageSize">15</Property>
+      <Property name="dataProvider">memberConfigController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="dataResolver">memberConfigController#save</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Buttons/>
+      <Children>
+        <TabControl>
+          <ControlTab>
+            <Property name="caption">配置会员等级</Property>
+            <Property name="iconClass">fa fa-user orange-text</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">添加</Property>
+                  <Property name="iconClass">fa fa-plus</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">修改</Property>
+                  <Property name="iconClass">fa fa-pencil</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var retrieves = dataGrid.get(&quot;selection&quot;);&#xD;
+if (retrieves.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		retrieves.each(function(r) {&#xD;
+			r.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+                  <Property name="caption">删除</Property>
+                  <Property name="iconClass">fa fa-minus</Property>
+                </ToolBarButton>
+              </ToolBar>
+              <DataGrid id="dataGrid">
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="name">
+                  <Property name="property">name</Property>
+                </DataColumn>
+                <DataColumn name="level">
+                  <Property name="property">level</Property>
+                </DataColumn>
+                <DataColumn name="credits">
+                  <Property name="property">credits</Property>
+                  <Property name="align">left</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">配置会员扩展字段</Property>
+            <Property name="iconClass">fa fa-tasks violet-text</Property>
+            <Container/>
+          </ControlTab>
+        </TabControl>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">会员信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">350</Property>
+      <Property name="iconClass">fa fa-users</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="labelWidth">100</Property>
+          <Property name="cols">*</Property>
+          <Property name="labelAlign">left</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">level</Property>
+            <Property name="property">level</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">credits</Property>
+            <Property name="property">credits</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+  </View>
+</ViewConfig>

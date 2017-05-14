@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+        <Validator name="validator1" type="ajax">
+          <Property name="service">programController#valided</Property>
+        </Validator>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+      <Reference name="children">
+        <Property name="dataType">[SELF]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">programaController#load</Property>
+      </Reference>
+      <Reference name="surveies">
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="pageSize">15</Property>
+        <Property name="dataType">[Survey]</Property>
+        <Property name="dataProvider">surveyVoteController#loadSurveies</Property>
+      </Reference>
+    </DataType>
+    <DataType name="Survey">
+      <Property name="creationType">com.bstek.cms.orm.Survey</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">调查主题</Property>
+        <Property name="required">true</Property>
+        <Validator name="validator1" type="required"/>
+      </PropertyDef>
+      <PropertyDef name="voteuser">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">投票人数</Property>
+      </PropertyDef>
+      <PropertyDef name="astrictIP">
+        <Property></Property>
+        <Property name="label">限制IP</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="startTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">开始时间</Property>
+      </PropertyDef>
+      <PropertyDef name="endTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">截至时间</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsPrograma">
+      <Property name="dataType">[Programa]</Property>
+      <Property name="dataProvider">programaController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialogSurvey">dialogSurvey.hide();&#xD;
+</ClientEvent>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <Property name="dataResolver">surveyVoteController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsPrograma</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Dialog id="dialogSurvey">
+      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.surveies&quot;).cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">调查投票信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-folder-o</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.#surveies</Property>
+          <Property name="labelWidth">60</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">voteuser</Property>
+            <Property name="property">voteuser</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">astrictIP</Property>
+            <Property name="property">astrictIP</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">startTime</Property>
+            <Property name="property">startTime</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">endTime</Property>
+            <Property name="property">endTime</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Panel layoutConstraint="left">
+      <Buttons/>
+      <Children>
+        <DataTree id="dataTree" layoutConstraint="padding:15">
+          <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
+var level = arg.node.get(&quot;level&quot;);&#xD;
+if (level == 1) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+} else if (level == 2) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+} else if (level == 3) {&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+}&#xD;
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+          <ClientEvent name="onDataRowClick" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.surveies&quot;).flushAsync();&#xD;
+</ClientEvent>
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="currentNodeDataPath">currentNode</Property>
+          <Property name="showLines">true</Property>
+          <BindingConfigs>
+            <BindingConfig>
+              <Property name="recursive">true</Property>
+              <Property name="childrenProperty">children</Property>
+              <Property name="name">children</Property>
+              <Property name="labelProperty">name</Property>
+              <Property name="expandLevel">1</Property>
+            </BindingConfig>
+          </BindingConfigs>
+        </DataTree>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">调查投票列表</Property>
+      <Property name="iconClass">fa fa-bar-chart-o</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogSurvey">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
+if (entity) {&#xD;
+	dsPrograma.getData(&quot;!currentNode.surveies&quot;).insert({});&#xD;
+	dialogSurvey.show();&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+            <Property name="caption">新建</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialogSurvey">dialogSurvey.show();&#xD;
+</ClientEvent>
+            <Property name="caption">修改</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+if (documents.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		documents.each(function(d) {&#xD;
+			d.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});	&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">手工终止</Property>
+            <Property name="iconClass">fa fa-chain-broken</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">预览</Property>
+            <Property name="iconClass">fa fa-search</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">结果</Property>
+            <Property name="iconClass">fa fa-th</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">结果明细</Property>
+            <Property name="iconClass">fa fa-th-list</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">填写项详细</Property>
+            <Property name="iconClass">fa fa-list-alt</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="trigger">triggerClear</Property>
+            <Property name="blankText">按主题名称搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="dataPath">!currentNode.surveies</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="showFilterBar">false</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <Property name="height">85%</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="voteuser">
+            <Property name="property">voteuser</Property>
+            <Property name="align">left</Property>
+          </DataColumn>
+          <DataColumn name="astrictIP">
+            <Property name="property">astrictIP</Property>
+          </DataColumn>
+          <DataColumn name="startTime">
+            <Property name="property">startTime</Property>
+          </DataColumn>
+          <DataColumn name="endTime">
+            <Property name="property">endTime</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dsPrograma</Property>
+            <Property name="dataPath">!currentNode.surveies</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>
