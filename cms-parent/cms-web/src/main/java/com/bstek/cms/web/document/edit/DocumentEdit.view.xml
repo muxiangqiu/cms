@@ -384,8 +384,7 @@ if (documents.length > 0) {&#xD;
           </ToolBarButton>
           <ToolBarButton>
             <Property name="caption">预览</Property>
-            <Property name="iconClass">fa fa-search</Property>
-            <Property name="ignored">true</Property>
+            <Property name="iconClass">fa fa-eye</Property>
           </ToolBarButton>
           <ToolBarButton>
             <ClientEvent name="onClick" signature="self,arg,dialogPrograma,dataGrid">var documents = dataGrid.get(&quot;selection&quot;);&#xD;

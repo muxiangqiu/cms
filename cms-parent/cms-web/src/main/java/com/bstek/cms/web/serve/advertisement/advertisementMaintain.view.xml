@@ -47,21 +47,21 @@
     <DataType name="Advertisement">
       <Property name="creationType">com.bstek.cms.orm.Advertisement</Property>
       <PropertyDef name="id">
-        <Property/>
+        <Property></Property>
         <Property name="label">ID</Property>
       </PropertyDef>
       <PropertyDef name="name">
-        <Property/>
+        <Property></Property>
         <Property name="label">版位名称</Property>
         <Property name="required">true</Property>
         <Validator name="validator1" type="required"/>
       </PropertyDef>
       <PropertyDef name="creator">
-        <Property/>
+        <Property></Property>
         <Property name="label">创建人</Property>
       </PropertyDef>
       <PropertyDef name="programas">
-        <Property/>
+        <Property></Property>
         <Property name="label">所属栏目</Property>
       </PropertyDef>
       <PropertyDef name="createDate">
@@ -69,23 +69,23 @@
         <Property name="label">创建时间</Property>
       </PropertyDef>
       <PropertyDef name="adType">
-        <Property/>
+        <Property></Property>
         <Property name="label">广告类型</Property>
       </PropertyDef>
       <PropertyDef name="PositionType">
-        <Property/>
+        <Property></Property>
         <Property name="label">版位类型</Property>
       </PropertyDef>
       <PropertyDef name="jsUrl">
-        <Property/>
+        <Property></Property>
         <Property name="label">JS路径</Property>
       </PropertyDef>
       <PropertyDef name="size">
-        <Property/>
+        <Property></Property>
         <Property name="label">尺寸</Property>
       </PropertyDef>
       <PropertyDef name="desc">
-        <Property/>
+        <Property></Property>
         <Property name="label">版位描述</Property>
       </PropertyDef>
     </DataType>
@@ -260,7 +260,7 @@ if (documents.length > 0) {&#xD;
           </ToolBarButton>
           <ToolBarButton>
             <Property name="caption">预览</Property>
-            <Property name="iconClass">fa fa-search</Property>
+            <Property name="iconClass">fa fa-eye</Property>
           </ToolBarButton>
           <ToolBarButton>
             <Property name="caption">结果</Property>

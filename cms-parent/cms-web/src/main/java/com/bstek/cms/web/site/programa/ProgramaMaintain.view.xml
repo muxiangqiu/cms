@@ -112,21 +112,21 @@
           <ClientEvent name="onDataNodeCreate">var data = arg.node.get(&quot;data&quot;);&#xD;
 var level = arg.node.get(&quot;level&quot;);&#xD;
 if (level == 1) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-database black-text&quot;);&#xD;
 } else if (level == 2) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o black-text&quot;);&#xD;
 } else if (level == 3) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o black-text&quot;);&#xD;
 }&#xD;
 $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
           <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
 var level = arg.node.get(&quot;level&quot;);&#xD;
 if (level == 1) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-open-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-database black-text&quot;);&#xD;
 } else if (level == 2) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-folder-o black-text&quot;);&#xD;
 } else if (level == 3) {&#xD;
-	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
+	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o black-text&quot;);&#xD;
 }&#xD;
 $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
           <ClientEvent name="onContextMenu" signature="self,arg,menu">var url = self.get(&quot;currentEntity&quot;);&#xD;
@@ -200,54 +200,65 @@ updateAction.execute();</ClientEvent>
           <ControlTab>
             <Property name="caption">基本属性</Property>
             <Property name="iconClass">fa fa-list-alt</Property>
-            <AutoForm>
-              <Property name="dataSet">dsPrograma</Property>
-              <Property name="dataPath">!currentNode</Property>
-              <Property name="cols">*</Property>
-              <Property name="labelAlign">right</Property>
-              <Property name="dataType">Programa</Property>
-              <AutoFormElement>
-                <Property name="name">name</Property>
-                <Property name="property">name</Property>
-                <Property name="width">550</Property>
-                <Editor/>
-              </AutoFormElement>
-              <AutoFormElement>
-                <Property name="name">parentId</Property>
-                <Property name="property">parentId</Property>
-                <Property name="width">550</Property>
-                <Editor/>
-              </AutoFormElement>
-              <AutoFormElement>
-                <Property name="name">creator</Property>
-                <Property name="property">creator</Property>
-                <Property name="width">550</Property>
-                <Editor/>
-              </AutoFormElement>
-              <AutoFormElement>
-                <Property name="name">createTime</Property>
-                <Property name="property">createTime</Property>
-                <Property name="width">550</Property>
-                <Editor/>
-              </AutoFormElement>
-              <AutoFormElement>
-                <Property name="name">desc</Property>
-                <Property name="property">desc</Property>
-                <Property name="editorType">TextArea</Property>
-                <Property name="width">550</Property>
-                <Editor/>
-              </AutoFormElement>
-              <Container>
-                <Button>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
                   <Property name="caption">保存</Property>
                   <Property name="iconClass">fa fa-floppy-o</Property>
-                  <Property name="style">
-                    <Property name="margin-left">465px</Property>
-                  </Property>
                   <Property name="action">updateAction</Property>
-                </Button>
-              </Container>
-            </AutoForm>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">发布</Property>
+                  <Property name="iconClass">fa fa-external-link</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">预览</Property>
+                  <Property name="iconClass">fa fa-eye</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">清除缓存</Property>
+                  <Property name="iconClass">fa fa-exchange</Property>
+                </ToolBarButton>
+              </ToolBar>
+              <AutoForm>
+                <Property name="dataSet">dsPrograma</Property>
+                <Property name="dataPath">!currentNode</Property>
+                <Property name="cols">*</Property>
+                <Property name="labelAlign">right</Property>
+                <Property name="dataType">Programa</Property>
+                <AutoFormElement>
+                  <Property name="name">name</Property>
+                  <Property name="property">name</Property>
+                  <Property name="width">550</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">parentId</Property>
+                  <Property name="property">parentId</Property>
+                  <Property name="width">550</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">creator</Property>
+                  <Property name="property">creator</Property>
+                  <Property name="width">550</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">createTime</Property>
+                  <Property name="property">createTime</Property>
+                  <Property name="width">550</Property>
+                  <Editor/>
+                </AutoFormElement>
+                <AutoFormElement>
+                  <Property name="name">desc</Property>
+                  <Property name="property">desc</Property>
+                  <Property name="editorType">TextArea</Property>
+                  <Property name="width">550</Property>
+                  <Editor/>
+                </AutoFormElement>
+              </AutoForm>
+            </Container>
           </ControlTab>
           <ControlTab>
             <Property name="caption">栏目设置</Property>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="File">
+      <Property name="creationType">com.bstek.cms.orm.File</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property/>
+        <Property name="label">文件名称</Property>
+      </PropertyDef>
+      <PropertyDef name="parentName">
+        <Property/>
+        <Property name="label">上级目录名称</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="updateDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">更新时间</Property>
+      </PropertyDef>
+      <PropertyDef name="size">
+        <Property/>
+        <Property name="label">大小</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[File]</Property>
+      <Property name="pageSize">15</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">文件列表</Property>
+      <Property name="iconClass">fa fa-file-text-o black-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <Property name="caption">新增目录</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">新增文件</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">编辑</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">上传</Property>
+            <Property name="iconClass">fa fa-upload</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">导出</Property>
+            <Property name="iconClass">fa fa-file-word-o</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="blankText">按标题搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="height">85%</Property>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="parentName">
+            <Property name="property">parentName</Property>
+          </DataColumn>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="size">
+            <Property name="property">size</Property>
+          </DataColumn>
+          <DataColumn name="createDate">
+            <Property name="property">createDate</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dataSet</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+  </View>
+</ViewConfig>
