@@ -6,19 +6,19 @@
     <DataType name="File">
       <Property name="creationType">com.bstek.cms.orm.File</Property>
       <PropertyDef name="id">
-        <Property/>
+        <Property></Property>
         <Property name="label">ID</Property>
       </PropertyDef>
       <PropertyDef name="name">
-        <Property/>
+        <Property></Property>
         <Property name="label">文件名称</Property>
       </PropertyDef>
       <PropertyDef name="parentName">
-        <Property/>
+        <Property></Property>
         <Property name="label">上级目录名称</Property>
       </PropertyDef>
       <PropertyDef name="creator">
-        <Property/>
+        <Property></Property>
         <Property name="label">创建人</Property>
       </PropertyDef>
       <PropertyDef name="createDate">
@@ -30,7 +30,7 @@
         <Property name="label">更新时间</Property>
       </PropertyDef>
       <PropertyDef name="size">
-        <Property/>
+        <Property></Property>
         <Property name="label">大小</Property>
       </PropertyDef>
     </DataType>
@@ -40,8 +40,14 @@
     <DataSet id="dataSet">
       <Property name="dataType">[File]</Property>
       <Property name="pageSize">15</Property>
+      <Property name="dataProvider">fileController#load</Property>
     </DataSet>
     <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="dataResolver">fileController#save</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
       <UpdateItem>
         <Property name="dataSet">dataSet</Property>
       </UpdateItem>
@@ -53,18 +59,37 @@
       <Children>
         <ToolBar>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
+dialog.show();&#xD;
+</ClientEvent>
             <Property name="caption">新增目录</Property>
             <Property name="iconClass">fa fa-plus</Property>
           </ToolBarButton>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
+dialog.show();&#xD;
+</ClientEvent>
             <Property name="caption">新增文件</Property>
             <Property name="iconClass">fa fa-plus</Property>
           </ToolBarButton>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
             <Property name="caption">编辑</Property>
             <Property name="iconClass">fa fa-pencil</Property>
           </ToolBarButton>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var files = dataGrid.get(&quot;selection&quot;);&#xD;
+if (files.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		files.each(function(f) {&#xD;
+			f.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}</ClientEvent>
             <Property name="caption">删除</Property>
             <Property name="iconClass">fa fa-minus</Property>
           </ToolBarButton>
@@ -93,11 +118,15 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
 				property: &quot;name&quot;,&#xD;
 				operator: &quot;like&quot;,&#xD;
 				value: key&#xD;
+			}, {&#xD;
+				property: &quot;parentName&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
 			}]&#xD;
 		}]);&#xD;
 	}&#xD;
 }, 250);</ClientEvent>
-            <Property name="blankText">按标题搜索</Property>
+            <Property name="blankText">按名称搜索</Property>
           </TextEditor>
         </ToolBar>
         <DataGrid id="dataGrid">
@@ -129,5 +158,42 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
       </Children>
       <Tools/>
     </Panel>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="width">550</Property>
+      <Property name="height">450</Property>
+      <Property name="caption">文件信息</Property>
+      <Property name="iconClass">fa fa-file-text-o black-text</Property>
+      <Buttons>
+        <Button>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="caption">保存</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="iconClass">fa fa-times</Property>
+          <Property name="caption">取消</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dataSet</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">size</Property>
+            <Property name="property">size</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
   </View>
 </ViewConfig>

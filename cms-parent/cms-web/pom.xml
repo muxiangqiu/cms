@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>cms-web</artifactId>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.bstek.bdf3</groupId>
