@@ -10,7 +10,7 @@ import com.bstek.dorado.annotation.DataResolver;
 import com.bstek.dorado.data.provider.Page;
 
 @Controller
-public class templateController {
+public class TemplateController {
 	
 	@DataProvider
 	@Transactional(readOnly = true)
