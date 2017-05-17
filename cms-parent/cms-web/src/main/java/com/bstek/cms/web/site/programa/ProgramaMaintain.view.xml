@@ -63,7 +63,7 @@
       </UpdateItem>
     </UpdateAction>
     <Dialog id="dialog">
-      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData().cancel();&#xD;
+      <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode&quot;).cancel();&#xD;
 </ClientEvent>
       <Property name="caption">栏目信息</Property>
       <Property name="height">450</Property>
