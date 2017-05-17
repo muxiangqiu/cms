@@ -11,11 +11,20 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.bstek.bdf3</groupId>
+			<artifactId>bdf3-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.bstek.bdf3</groupId>
 			<artifactId>bdf3-dorado-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.bstek.cms</groupId>
 			<artifactId>cms-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.bstek.dorado</groupId>
+			<artifactId>dorado-ueditor</artifactId>
+			<version>1.0.6</version>
 		</dependency>
 	</dependencies>
 	<repositories>
