@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="DatabaseCollect">
+      <Property name="creationType">com.bstek.cms.orm.DatabaseCollect</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property/>
+        <Property name="label">任务名称</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property/>
+        <Property name="label">任务状态</Property>
+      </PropertyDef>
+      <PropertyDef name="targetPrograma">
+        <Property/>
+        <Property name="label">采集到此栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="linkName">
+        <Property/>
+        <Property name="label">外部连接名称</Property>
+      </PropertyDef>
+      <PropertyDef name="tableName">
+        <Property/>
+        <Property name="label">表名称</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[DatabaseCollect]</Property>
+      <Property name="pageSize">15</Property>
+      <Property name="dataProvider">databaseCollectController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="dataResolver">databaseCollectController#save</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Property name="caption">数据库采集任务列表</Property>
+      <Property name="iconClass">fa fa-database violet-text</Property>
+      <Buttons/>
+      <Children>
+        <ToolBar>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+            <Property name="caption">添加</Property>
+            <Property name="iconClass">fa fa-plus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
+            <Property name="caption">修改</Property>
+            <Property name="iconClass">fa fa-pencil</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var retrieves = dataGrid.get(&quot;selection&quot;);&#xD;
+if (retrieves.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		retrieves.each(function(r) {&#xD;
+			r.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">删除</Property>
+            <Property name="iconClass">fa fa-minus</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">手工执行</Property>
+            <Property name="iconClass">fa fa-check-circle</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">重新开始采集</Property>
+            <Property name="iconClass">fa fa-history</Property>
+          </ToolBarButton>
+          <ToolBarButton>
+            <Property name="caption">外部连接</Property>
+            <Property name="iconClass">fa fa-link</Property>
+          </ToolBarButton>
+          <Fill/>
+          <TextEditor>
+            <ClientEvent name="onKeyDown" signature="self,arg,dataGrid">if (arg.keyCode === 13) {&#xD;
+	return;&#xD;
+}&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (!key) {&#xD;
+		dataGrid.filter();&#xD;
+	} else {&#xD;
+		dataGrid.filter([{&#xD;
+			junction: &quot;or&quot;,&#xD;
+			criterions: [{&#xD;
+				property: &quot;name&quot;,&#xD;
+				operator: &quot;like&quot;,&#xD;
+				value: key&#xD;
+			}]&#xD;
+		}]);&#xD;
+	}&#xD;
+}, 250);</ClientEvent>
+            <Property name="blankText">按名称搜索</Property>
+          </TextEditor>
+        </ToolBar>
+        <DataGrid id="dataGrid">
+          <Property name="height">85%</Property>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="selectionMode">multiRows</Property>
+          <RowNumColumn/>
+          <RowSelectorColumn/>
+          <DataColumn name="name">
+            <Property name="property">name</Property>
+          </DataColumn>
+          <DataColumn name="status">
+            <Property name="property">status</Property>
+          </DataColumn>
+          <DataColumn name="linkName">
+            <Property name="property">linkName</Property>
+          </DataColumn>
+          <DataColumn name="tableName">
+            <Property name="property">tableName</Property>
+          </DataColumn>
+          <DataColumn name="targetPrograma">
+            <Property name="property">targetPrograma</Property>
+          </DataColumn>
+          <DataColumn name="createDate">
+            <Property name="property">createDate</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar>
+          <DataPilot>
+            <Property name="itemCodes">info,pages</Property>
+            <Property name="dataSet">dataSet</Property>
+          </DataPilot>
+        </ToolBar>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">采集信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-database</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="labelWidth">85</Property>
+          <Property name="cols">*</Property>
+          <AutoFormElement>
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">status</Property>
+            <Property name="property">status</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">linkName</Property>
+            <Property name="property">linkName</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">tableName</Property>
+            <Property name="property">tableName</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">targetPrograma</Property>
+            <Property name="property">targetPrograma</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+  </View>
+</ViewConfig>
