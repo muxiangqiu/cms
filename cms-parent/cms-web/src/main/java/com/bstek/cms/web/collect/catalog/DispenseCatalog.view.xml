@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="DispenseCatalog">
+      <Property name="creationType">com.bstek.cms.orm.DispenseCatalog</Property>
+      <PropertyDef name="id">
+        <Property/>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="copy">
+        <Property/>
+        <Property name="label">复制方式</Property>
+      </PropertyDef>
+      <PropertyDef name="localCatalog">
+        <Property/>
+        <Property name="label">本地目录</Property>
+      </PropertyDef>
+      <PropertyDef name="targetCatalog">
+        <Property/>
+        <Property name="label">目标目录</Property>
+      </PropertyDef>
+      <PropertyDef name="url">
+        <Property/>
+        <Property name="label">服务器地址</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">执行时间</Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property/>
+        <Property name="label">启用状态</Property>
+      </PropertyDef>
+      <PropertyDef name="localFile">
+        <Property/>
+        <Property name="label">本地文件</Property>
+      </PropertyDef>
+      <PropertyDef name="targetFile">
+        <Property/>
+        <Property name="label">目标文件</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="regionPadding:15">
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dataSet">
+      <Property name="dataType">[DispenseCatalog]</Property>
+      <Property name="pageSize">15</Property>
+      <Property name="dataProvider">dispenseCatalogController#load</Property>
+    </DataSet>
+    <UpdateAction id="updateAction">
+      <ClientEvent name="onSuccess" signature="self,arg,dialog">dialog.hide();&#xD;
+</ClientEvent>
+      <Property name="dataResolver">dispenseCatalogController#save</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dataSet</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <Panel layout="padding:5;regionPadding:10">
+      <Buttons/>
+      <Children>
+        <TabControl>
+          <ControlTab>
+            <Property name="iconClass">fa fa-cogs</Property>
+            <Property name="caption">任务配置</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
+dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">添加</Property>
+                  <Property name="iconClass">fa fa-plus</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">修改</Property>
+                  <Property name="iconClass">fa fa-pencil</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">发布</Property>
+                  <Property name="iconClass">fa fa-external-link</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var retrieves = dataGrid.get(&quot;selection&quot;);&#xD;
+if (retrieves.length > 0) {&#xD;
+	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
+		retrieves.each(function(r) {&#xD;
+			r.remove();&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+	});&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+                  <Property name="caption">删除</Property>
+                  <Property name="iconClass">fa fa-minus</Property>
+                </ToolBarButton>
+              </ToolBar>
+              <DataGrid id="dataGrid">
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="copy">
+                  <Property name="property">copy</Property>
+                </DataColumn>
+                <DataColumn name="localCatalog">
+                  <Property name="property">localCatalog</Property>
+                </DataColumn>
+                <DataColumn name="url">
+                  <Property name="property">url</Property>
+                </DataColumn>
+                <DataColumn name="targetCatalog">
+                  <Property name="property">targetCatalog</Property>
+                </DataColumn>
+                <DataColumn name="status">
+                  <Property name="property">status</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">任务监视</Property>
+            <Property name="iconClass">fa fa-eye</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">查看详情</Property>
+                  <Property name="iconClass">fa fa-file-text-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">重新执行</Property>
+                  <Property name="iconClass">fa fa-check</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">执行失败任务</Property>
+                  <Property name="iconClass">fa fa-check-circle</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">删除</Property>
+                  <Property name="iconClass">fa fa-minus</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">清空</Property>
+                  <Property name="iconClass">fa fa-trash-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">刷新</Property>
+                  <Property name="iconClass">fa fa-refresh</Property>
+                </ToolBarButton>
+              </ToolBar>
+              <DataGrid>
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="localFile">
+                  <Property name="property">localFile</Property>
+                </DataColumn>
+                <DataColumn name="targetFile">
+                  <Property name="property">targetFile</Property>
+                </DataColumn>
+                <DataColumn name="copy">
+                  <Property name="property">copy</Property>
+                </DataColumn>
+                <DataColumn name="url">
+                  <Property name="property">url</Property>
+                </DataColumn>
+                <DataColumn name="status">
+                  <Property name="property">status</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+          <ControlTab>
+            <Property name="caption">执行日志</Property>
+            <Property name="iconClass">fa fa-book</Property>
+            <Container>
+              <ToolBar>
+                <ToolBarButton>
+                  <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
+</ClientEvent>
+                  <Property name="caption">查看详情</Property>
+                  <Property name="iconClass">fa fa-file-text-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">清空</Property>
+                  <Property name="iconClass">fa fa-trash-o</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">删除</Property>
+                  <Property name="iconClass">fa fa-minus</Property>
+                </ToolBarButton>
+                <ToolBarButton>
+                  <Property name="caption">刷新</Property>
+                  <Property name="iconClass">fa fa-refresh</Property>
+                </ToolBarButton>
+              </ToolBar>
+              <DataGrid>
+                <Property name="height">85%</Property>
+                <Property name="dataSet">dataSet</Property>
+                <Property name="readOnly">true</Property>
+                <Property name="selectionMode">multiRows</Property>
+                <RowNumColumn/>
+                <RowSelectorColumn/>
+                <DataColumn name="copy">
+                  <Property name="property">copy</Property>
+                </DataColumn>
+                <DataColumn name="localCatalog">
+                  <Property name="property">localCatalog</Property>
+                </DataColumn>
+                <DataColumn name="targetCatalog">
+                  <Property name="property">targetCatalog</Property>
+                </DataColumn>
+                <DataColumn name="url">
+                  <Property name="property">url</Property>
+                </DataColumn>
+                <DataColumn name="createDate">
+                  <Property name="property">createDate</Property>
+                </DataColumn>
+              </DataGrid>
+              <ToolBar>
+                <DataPilot>
+                  <Property name="itemCodes">info,pages</Property>
+                  <Property name="dataSet">dataSet</Property>
+                </DataPilot>
+              </ToolBar>
+            </Container>
+          </ControlTab>
+        </TabControl>
+      </Children>
+      <Tools/>
+    </Panel>
+    <Dialog id="dialog">
+      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+</ClientEvent>
+      <Property name="caption">会员信息</Property>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="iconClass">fa fa-users</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dataSet</Property>
+          <Property name="labelWidth">75</Property>
+          <AutoFormElement>
+            <Property name="name">copy</Property>
+            <Property name="property">copy</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">url</Property>
+            <Property name="property">url</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">localCatalog</Property>
+            <Property name="property">localCatalog</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">targetCatalog</Property>
+            <Property name="property">targetCatalog</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">status</Property>
+            <Property name="property">status</Property>
+            <Editor/>
+          </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+  </View>
+</ViewConfig>
