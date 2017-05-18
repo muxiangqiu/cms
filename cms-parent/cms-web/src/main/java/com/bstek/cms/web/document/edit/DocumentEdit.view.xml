@@ -68,9 +68,13 @@
         <Property name="dataType">Date</Property>
         <Property name="label">创建时间</Property>
       </PropertyDef>
-      <PropertyDef name="validity">
+      <PropertyDef name="startDate">
         <Property name="dataType">Date</Property>
         <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="endDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">至</Property>
       </PropertyDef>
       <PropertyDef name="content">
         <Property></Property>
@@ -174,7 +178,7 @@ self.set(&quot;parameter&quot;, params);&#xD;
 </ClientEvent>
       <Property name="service">documentEditController#copyOrMove</Property>
     </AjaxAction>
-    <Dialog id="dialogDocument">
+    <Dialog id="dialogDocument" layout="vbox">
       <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.documents&quot;).cancel();&#xD;
 </ClientEvent>
       <Property name="caption">文档信息</Property>
@@ -220,23 +224,33 @@ self.set(&quot;parameter&quot;, params);&#xD;
             <Editor/>
           </AutoFormElement>
           <AutoFormElement>
-            <Property name="name">validity</Property>
-            <Property name="property">validity</Property>
-            <Editor/>
-          </AutoFormElement>
-          <AutoFormElement>
             <Property name="name">type</Property>
             <Property name="property">type</Property>
             <Editor/>
           </AutoFormElement>
-          <AutoFormElement layoutConstraint="colSpan:2">
-            <Property name="name">content</Property>
-            <Property name="property">content</Property>
-            <Property name="editorType">TextArea</Property>
-            <Property name="height">490</Property>
+          <AutoFormElement>
+            <Property name="name">startDate</Property>
+            <Property name="property">startDate</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">endDate</Property>
+            <Property name="property">endDate</Property>
             <Editor/>
           </AutoFormElement>
         </AutoForm>
+        <Label>
+          <Property name="text">文档内容</Property>
+          <Property name="style">
+            <Property name="padding-left">8px</Property>
+          </Property>
+        </Label>
+        <UEditor id="editor">
+          <Property name="dataSet">dsPrograma</Property>
+          <Property name="property">content</Property>
+          <Property name="dataPath">!currentNode.#documents</Property>
+          <Property name="height">460</Property>
+        </UEditor>
       </Children>
       <Tools/>
     </Dialog>

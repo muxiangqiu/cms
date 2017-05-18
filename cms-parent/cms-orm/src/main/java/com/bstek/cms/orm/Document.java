@@ -45,9 +45,13 @@ public class Document implements Serializable {
 	@PropertyDef(label = "创建时间")
 	private Date createDate;
 	
-	@Column(name = "VALIDITY_")
+	@Column(name = "START_DATE_")
 	@PropertyDef(label = "有效期")
-	private Date validity;
+	private Date startDate;
+	
+	@Column(name = "END_DATE_")
+	@PropertyDef(label = "至")
+	private Date endDate;
 	
 	@Column(name = "CONTENT_")
 	@PropertyDef(label = "内容")
@@ -109,12 +113,20 @@ public class Document implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public Date getValidity() {
-		return validity;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setValidity(Date validity) {
-		this.validity = validity;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	public Integer getOrder() {
