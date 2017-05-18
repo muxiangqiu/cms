@@ -1,4 +1,4 @@
-package com.bstek.cms.web.collect.catalog;
+package com.bstek.cms.web.collect.dispense.catalog;
 
 import java.util.List;
 import org.springframework.stereotype.Controller;
