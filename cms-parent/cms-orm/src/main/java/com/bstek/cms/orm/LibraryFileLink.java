@@ -29,7 +29,7 @@ public class LibraryFileLink implements Serializable {
 	
 	@Column(name = "LIBRARY_ID_", length = 60)
 	@PropertyDef(label = "媒体库ID")
-	private String LibraryId;
+	private String libraryId;
 	
 	@Column(name = "FILE_ID_", length = 60)
 	@PropertyDef(label = "文件ID")
@@ -53,11 +53,11 @@ public class LibraryFileLink implements Serializable {
 	}
 
 	public String getLibraryId() {
-		return LibraryId;
+		return libraryId;
 	}
 
 	public void setLibraryId(String libraryId) {
-		LibraryId = libraryId;
+		this.libraryId = libraryId;
 	}
 
 	public String getFileId() {

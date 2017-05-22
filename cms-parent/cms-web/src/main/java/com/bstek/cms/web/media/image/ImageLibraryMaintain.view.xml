@@ -128,7 +128,8 @@
       <Property name="dataProvider">imageLibraryController#load</Property>
     </DataSet>
     <UpdateAction id="updateAction">
-      <ClientEvent name="onSuccess" signature="self,arg,dialogMediaLibrary">dialogMediaLibrary.hide();&#xD;
+      <ClientEvent name="onSuccess" signature="self,arg,dialogMediaLibrary,dialogFile">dialogMediaLibrary.hide();&#xD;
+dialogFile.hide();&#xD;
 </ClientEvent>
       <Property name="executingMessage">正在保存...</Property>
       <Property name="successMessage">保存成功.</Property>
@@ -147,8 +148,8 @@
       <Property name="iconClass">fa fa-database</Property>
       <Buttons>
         <Button>
-          <Property name="caption">确定</Property>
-          <Property name="iconClass">fa fa-check</Property>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
           <Property name="action">updateAction</Property>
         </Button>
         <Button>
@@ -176,6 +177,58 @@
             <Property name="editorType">TextArea</Property>
             <Editor/>
           </AutoFormElement>
+        </AutoForm>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Dialog id="dialogFile">
+      <ClientEvent name="onHide" signature="self,arg,dsMediaLibrary">dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).cancel();&#xD;
+</ClientEvent>
+      <Property name="height">450</Property>
+      <Property name="width">550</Property>
+      <Property name="caption">文件信息</Property>
+      <Property name="iconClass">fa fa-picture-o</Property>
+      <Buttons>
+        <Button>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="caption">取消</Property>
+          <Property name="iconClass">fa fa-times</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <AutoForm>
+          <Property name="dataSet">dsMediaLibrary</Property>
+          <Property name="dataPath">!currentNode.#fileInfos</Property>
+          <Property name="cols">480,20</Property>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">name</Property>
+            <Property name="property">name</Property>
+            <Property name="width">480</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">desc</Property>
+            <Property name="property">desc</Property>
+            <Property name="editorType">TextArea</Property>
+            <Property name="width">480</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">path</Property>
+            <Property name="property">path</Property>
+            <Property name="width">480</Property>
+            <Editor/>
+          </AutoFormElement>
+          <Button>
+            <Property name="caption">浏览</Property>
+            <Property name="action">uploadAction</Property>
+          </Button>
         </AutoForm>
       </Children>
       <Tools/>
@@ -252,9 +305,12 @@ menu.show({&#xD;
       <Children>
         <ToolBar>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dialogFile,dsMediaLibrary">&#xD;
+dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).insert({});&#xD;
+dialogFile.show();&#xD;
+</ClientEvent>
             <Property name="caption">上传</Property>
             <Property name="iconClass">fa fa-upload</Property>
-            <Property name="action">uploadAction</Property>
           </ToolBarButton>
           <ToolBarButton>
             <ClientEvent name="onClick" signature="self,arg,dialogFile">dialogFile.show();&#xD;
@@ -449,7 +505,8 @@ self.set(&quot;parameter&quot;, {&#xD;
 	relationId: library.get(&quot;id&quot;)&#xD;
 });&#xD;
 </ClientEvent>
-      <ClientEvent name="onFilesAdded" signature="self,arg,dsMediaLibrary">arg.files.each(function(file){&#xD;
+      <ClientEvent name="onFilesAdded" signature="self,arg,dsMediaLibrary,updateAction">/*&#xD;
+arg.files.each(function(file){&#xD;
 	dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).insert({&#xD;
 		name : file.name,&#xD;
 		size : file.size,&#xD;
@@ -458,7 +515,7 @@ self.set(&quot;parameter&quot;, {&#xD;
 		fileId : file.id&#xD;
 	});&#xD;
 });&#xD;
-</ClientEvent>
+*/</ClientEvent>
       <Property name="selectionMode">multiFiles</Property>
       <Property name="fileResolver">cms.upload#upload</Property>
       <Filters/>
