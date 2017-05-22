@@ -4,10 +4,12 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import com.bstek.bdf3.dorado.jpa.JpaUtil;
+import com.bstek.cms.orm.FileInfo;
 import com.bstek.cms.orm.MediaLibrary;
 import com.bstek.dorado.annotation.DataProvider;
 import com.bstek.dorado.annotation.DataResolver;
 import com.bstek.dorado.annotation.Expose;
+import com.bstek.dorado.data.provider.Page;
 
 @Controller
 @Transactional(readOnly = true)
@@ -29,7 +31,7 @@ public class ImageLibraryController {
 	
 	@DataResolver
 	@Transactional
-	public void save(List<MediaLibrary> mediaLibraries) {
+	public void save(List<MediaLibrary> mediaLibraries) {	
 		JpaUtil.save(mediaLibraries);
 	}
 	
@@ -40,5 +42,13 @@ public class ImageLibraryController {
 			return "该分类已存在！";
 		}
 		return null;
+	}
+	
+	@DataProvider
+	public void loadImageByLibraryId(Page<FileInfo> page, String libraryId) {
+		JpaUtil
+			.linq(FileInfo.class)
+			.equal("relationId", libraryId)
+			.paging(page);
 	}
 }
