@@ -2,10 +2,13 @@ package com.bstek.cms.orm;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.bstek.bdf3.dorado.jpa.annotation.Generator;
 import com.bstek.bdf3.dorado.jpa.policy.impl.CreatedDatePolicy;
@@ -71,6 +74,9 @@ public class FileInfo implements Serializable{
 	@Column(name = "DESC_", length = 120)
 	@PropertyDef(label = "描述")
 	private String desc;
+	
+	@Transient
+	private List<MediaLibrary> libraries;
 
 	public String getId() {
 		return id;
@@ -166,6 +172,14 @@ public class FileInfo implements Serializable{
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public List<MediaLibrary> getLibraries() {
+		return libraries;
+	}
+
+	public void setLibraries(List<MediaLibrary> libraries) {
+		this.libraries = libraries;
 	}
 	
 }

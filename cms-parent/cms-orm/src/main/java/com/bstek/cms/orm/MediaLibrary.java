@@ -60,6 +60,9 @@ public class MediaLibrary implements Serializable {
 	
 	@Transient
 	private List<MediaLibrary> children;
+	
+	@Transient
+	private List<FileInfo> fileInfos;
 
 	public String getId() {
 		return id;
@@ -124,5 +127,15 @@ public class MediaLibrary implements Serializable {
 	public void setChildren(List<MediaLibrary> children) {
 		this.children = children;
 	}
+
+	public List<FileInfo> getFileInfos() {
+		return fileInfos;
+	}
+
+	public void setFileInfos(List<FileInfo> fileInfos) {
+		this.fileInfos = fileInfos;
+	}
+
+	
 
 }

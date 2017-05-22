@@ -62,15 +62,21 @@
         <Property name="parameter">$${this.id}</Property>
         <Property name="dataProvider">imageLibraryController#load</Property>
       </Reference>
+      <Reference name="fileInfos">
+        <Property name="dataType">[FileInfo]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">imageLibraryController#loadImageByLibraryId</Property>
+        <Property name="pageSize">15</Property>
+      </Reference>
     </DataType>
     <DataType name="FileInfo">
       <Property name="creationType">com.bstek.cms.orm.FileInfo</Property>
       <PropertyDef name="id">
-        <Property/>
+        <Property></Property>
         <Property name="label">主键</Property>
       </PropertyDef>
       <PropertyDef name="name">
-        <Property/>
+        <Property></Property>
         <Property name="label">文件名称</Property>
       </PropertyDef>
       <PropertyDef name="size">
@@ -78,19 +84,19 @@
         <Property name="label">文件大小</Property>
       </PropertyDef>
       <PropertyDef name="path">
-        <Property/>
+        <Property></Property>
         <Property name="label">文件路径</Property>
       </PropertyDef>
       <PropertyDef name="category">
-        <Property/>
+        <Property></Property>
         <Property name="label">文件分类</Property>
       </PropertyDef>
       <PropertyDef name="relationName">
-        <Property/>
+        <Property></Property>
         <Property name="label">相关名称</Property>
       </PropertyDef>
       <PropertyDef name="relationId">
-        <Property/>
+        <Property></Property>
         <Property name="label">相关ID</Property>
       </PropertyDef>
       <PropertyDef name="createDate">
@@ -102,15 +108,15 @@
         <Property name="label">更新时间</Property>
       </PropertyDef>
       <PropertyDef name="creator">
-        <Property/>
+        <Property></Property>
         <Property name="label">创建人</Property>
       </PropertyDef>
       <PropertyDef name="parentName">
-        <Property/>
+        <Property></Property>
         <Property name="label">上级目录名称</Property>
       </PropertyDef>
       <PropertyDef name="desc">
-        <Property/>
+        <Property></Property>
         <Property name="label">描述</Property>
       </PropertyDef>
     </DataType>
@@ -121,28 +127,15 @@
       <Property name="dataType">[MediaLibrary]</Property>
       <Property name="dataProvider">imageLibraryController#load</Property>
     </DataSet>
-    <DataSet id="dsFileInfo">
-      <Property name="dataType">[FileInfo]</Property>
-      <Property name="pageSize">15</Property>
-    </DataSet>
     <UpdateAction id="updateAction">
-      <ClientEvent name="onSuccess" signature="self,arg,dialogMediaLibrary">dialogMediaLibrary.hide();&#xD;
+      <ClientEvent name="onSuccess" signature="self,arg,dialogMediaLibrary,dialogFile">dialogMediaLibrary.hide();&#xD;
+dialogFile.hide();&#xD;
 </ClientEvent>
       <Property name="executingMessage">正在保存...</Property>
       <Property name="successMessage">保存成功.</Property>
       <Property name="dataResolver">imageLibraryController#save</Property>
       <UpdateItem>
         <Property name="dataSet">dsMediaLibrary</Property>
-        <Property name="submitOldData">true</Property>
-      </UpdateItem>
-    </UpdateAction>
-    <UpdateAction id="updateActionFile">
-      <ClientEvent name="onSuccess" signature="self,arg,dialogFile">dialogFile.hide();&#xD;
-</ClientEvent>
-      <Property name="executingMessage">正在保存...</Property>
-      <Property name="successMessage">保存成功.</Property>
-      <UpdateItem>
-        <Property name="dataSet">dsFileInfo</Property>
         <Property name="submitOldData">true</Property>
       </UpdateItem>
     </UpdateAction>
@@ -155,8 +148,8 @@
       <Property name="iconClass">fa fa-database</Property>
       <Buttons>
         <Button>
-          <Property name="caption">确定</Property>
-          <Property name="iconClass">fa fa-check</Property>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
           <Property name="action">updateAction</Property>
         </Button>
         <Button>
@@ -189,17 +182,17 @@
       <Tools/>
     </Dialog>
     <Dialog id="dialogFile">
-      <ClientEvent name="onHide" signature="self,arg,dsFileInfo">dsFileInfo.getData().cancel();&#xD;
+      <ClientEvent name="onHide" signature="self,arg,dsMediaLibrary">dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).cancel();&#xD;
 </ClientEvent>
-      <Property name="caption">图片信息</Property>
-      <Property name="height">480</Property>
+      <Property name="height">450</Property>
       <Property name="width">550</Property>
+      <Property name="caption">文件信息</Property>
       <Property name="iconClass">fa fa-picture-o</Property>
       <Buttons>
         <Button>
-          <Property name="caption">确定</Property>
-          <Property name="iconClass">fa fa-check</Property>
-          <Property name="action">updateActionFile</Property>
+          <Property name="caption">保存</Property>
+          <Property name="iconClass">fa fa-floppy-o</Property>
+          <Property name="action">updateAction</Property>
         </Button>
         <Button>
           <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
@@ -210,25 +203,32 @@
       </Buttons>
       <Children>
         <AutoForm>
-          <Property name="dataSet">dsFileInfo</Property>
-          <Property name="labelWidth">90</Property>
-          <Property name="cols">*</Property>
-          <AutoFormElement>
+          <Property name="dataSet">dsMediaLibrary</Property>
+          <Property name="dataPath">!currentNode.#fileInfos</Property>
+          <Property name="cols">480,20</Property>
+          <AutoFormElement layoutConstraint="colSpan:2">
             <Property name="name">name</Property>
             <Property name="property">name</Property>
+            <Property name="width">480</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement layoutConstraint="colSpan:2">
+            <Property name="name">desc</Property>
+            <Property name="property">desc</Property>
+            <Property name="editorType">TextArea</Property>
+            <Property name="width">480</Property>
             <Editor/>
           </AutoFormElement>
           <AutoFormElement>
             <Property name="name">path</Property>
             <Property name="property">path</Property>
+            <Property name="width">480</Property>
             <Editor/>
           </AutoFormElement>
-          <AutoFormElement>
-            <Property name="name">desc</Property>
-            <Property name="property">desc</Property>
-            <Property name="editorType">TextEditor</Property>
-            <Editor/>
-          </AutoFormElement>
+          <Button>
+            <Property name="caption">浏览</Property>
+            <Property name="action">uploadAction</Property>
+          </Button>
         </AutoForm>
       </Children>
       <Tools/>
@@ -305,14 +305,9 @@ menu.show({&#xD;
       <Children>
         <ToolBar>
           <ToolBarButton>
-            <ClientEvent name="onClick" signature="self,arg,dsFileInfo,dataTree,dialogFile">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
-if (entity) {&#xD;
-	dsFileInfo.insert({});&#xD;
-	dialogFile.show();&#xD;
-} else {&#xD;
-	dorado.MessageBox.alert(&quot;请先新建分类.&quot;);&#xD;
-}&#xD;
-&#xD;
+            <ClientEvent name="onClick" signature="self,arg,dialogFile,dsMediaLibrary">&#xD;
+dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).insert({});&#xD;
+dialogFile.show();&#xD;
 </ClientEvent>
             <Property name="caption">上传</Property>
             <Property name="iconClass">fa fa-upload</Property>
@@ -411,7 +406,8 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
           <Property name="showFilterBar">false</Property>
           <Property name="selectionMode">multiRows</Property>
           <Property name="height">85%</Property>
-          <Property name="dataSet">dsFileInfo</Property>
+          <Property name="dataSet">dsMediaLibrary</Property>
+          <Property name="dataPath">!currentNode.fileInfos</Property>
           <RowNumColumn/>
           <RowSelectorColumn/>
           <DataColumn name="name">
@@ -436,7 +432,8 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
         <ToolBar>
           <DataPilot>
             <Property name="itemCodes">info,pages</Property>
-            <Property name="dataSet">dsPrograma</Property>
+            <Property name="dataSet">dsMediaLibrary</Property>
+            <Property name="dataPath">!currentNode.fileInfos</Property>
           </DataPilot>
         </ToolBar>
       </Children>
@@ -501,5 +498,27 @@ updateAction.execute();</ClientEvent>
       <Property name="iconClass">fa fa-minus-circle</Property>
       <Property name="tip">删除当前分类</Property>
     </Action>
+    <UploadAction id="uploadAction">
+      <ClientEvent name="beforeFileUpload" signature="self,arg,dsMediaLibrary">var library = dsMediaLibrary.getData(&quot;!currentNode&quot;);&#xD;
+self.set(&quot;parameter&quot;, {&#xD;
+    relationName: library.get(&quot;name&quot;),&#xD;
+	relationId: library.get(&quot;id&quot;)&#xD;
+});&#xD;
+</ClientEvent>
+      <ClientEvent name="onFilesAdded" signature="self,arg,dsMediaLibrary,updateAction">/*&#xD;
+arg.files.each(function(file){&#xD;
+	dsMediaLibrary.getData(&quot;!currentNode.fileInfos&quot;).insert({&#xD;
+		name : file.name,&#xD;
+		size : file.size,&#xD;
+		percent : file.percent,&#xD;
+		status : file.status,&#xD;
+		fileId : file.id&#xD;
+	});&#xD;
+});&#xD;
+*/</ClientEvent>
+      <Property name="selectionMode">multiFiles</Property>
+      <Property name="fileResolver">cms.upload#upload</Property>
+      <Filters/>
+    </UploadAction>
   </View>
 </ViewConfig>
