@@ -182,8 +182,8 @@ self.set(&quot;parameter&quot;, params);&#xD;
       <ClientEvent name="onHide" signature="self,arg,dsPrograma">dsPrograma.getData(&quot;!currentNode.documents&quot;).cancel();&#xD;
 </ClientEvent>
       <Property name="caption">文档信息</Property>
-      <Property name="height">750</Property>
-      <Property name="width">650</Property>
+      <Property name="height">600</Property>
+      <Property name="width">550</Property>
       <Property name="iconClass">fa fa-folder-o</Property>
       <Buttons>
         <Button>
@@ -249,7 +249,7 @@ self.set(&quot;parameter&quot;, params);&#xD;
           <Property name="dataSet">dsPrograma</Property>
           <Property name="property">content</Property>
           <Property name="dataPath">!currentNode.#documents</Property>
-          <Property name="height">460</Property>
+          <Property name="height">290</Property>
         </UEditor>
       </Children>
       <Tools/>

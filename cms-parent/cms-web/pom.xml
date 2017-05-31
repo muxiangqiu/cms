@@ -26,6 +26,11 @@
 			<artifactId>dorado-ueditor</artifactId>
 			<version>1.0.6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.bstek.dorado</groupId>
+			<artifactId>dorado-portal</artifactId>
+			<version>0.1.9-BETA</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
