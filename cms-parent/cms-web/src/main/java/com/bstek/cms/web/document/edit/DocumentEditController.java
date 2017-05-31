@@ -21,6 +21,7 @@ public class DocumentEditController {
 	@DataProvider
 	@Transactional(readOnly = true)
 	public void loadDocuments(Page<Document> page, String programaId) {
+	
 		JpaUtil
 			.linq(Document.class)
 			.in(ProgramaDocumentLink.class)
@@ -29,8 +30,9 @@ public class DocumentEditController {
 			.end()
 			.asc("order")
 			.desc("createDate")			
-			.paging(page);
+			.paging(page);	
 	}
+	
 	
 	@DataResolver
 	@Transactional
