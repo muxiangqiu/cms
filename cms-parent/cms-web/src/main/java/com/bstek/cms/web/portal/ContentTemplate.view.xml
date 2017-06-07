@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Document">
+      <Property name="creationType">com.bstek.cms.orm.Document</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="startDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="endDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">至</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">类型</Property>
+      </PropertyDef>
+      <PropertyDef name="deptId">
+        <Property></Property>
+        <Property name="label">部门</Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+      <PropertyDef name="programaName">
+        <Property></Property>
+        <Property name="label">所属栏目名称</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <DataSet id="dsDocument">
+      <ClientEvent name="beforeLoadData">self.set(&quot;parameter&quot;, &quot;${param.name}&quot;);&#xD;
+</ClientEvent>
+      <ClientEvent name="onLoadData" signature="self,arg,title,date">title.set(&quot;text&quot;, self.getData(&quot;#.name&quot;));&#xD;
+date.set(&quot;text&quot;, &quot;发表日期: &quot; + self.getData(&quot;#.createDate&quot;).formatDate(&quot;Y-m-d&quot;));&#xD;
+</ClientEvent>
+      <Property name="dataProvider">portalController#loadDocumentByName</Property>
+      <Property name="dataType">[Document]</Property>
+      <Property name="loadMode">onReady</Property>
+    </DataSet>
+    <Container>
+      <Property name="width">70%</Property>
+      <Property name="style">
+        <Property name="margin-left">260px</Property>
+      </Property>
+      <Image>
+        <Property name="height">80</Property>
+        <Property name="style">
+          <Property name="background-color">blue</Property>
+        </Property>
+      </Image>
+      <Label id="title">
+        <Property name="style">
+          <Property name="font-size">20px</Property>
+          <Property name="text-align">center</Property>
+          <Property name="margin-top">30px</Property>
+        </Property>
+        <Property name="height">60</Property>
+      </Label>
+      <Label id="date">
+        <Property name="text">创建时间</Property>
+        <Property name="style">
+          <Property name="margin-left">50px</Property>
+        </Property>
+      </Label>
+      <UEditor>
+        <ClientEvent name="onCreate">dorado.ueditor.registerMode(&quot;custom&quot;, []);</ClientEvent>
+        <Property name="mode">custom</Property>
+        <Property name="readOnly">true</Property>
+        <Property name="dataSet">dsDocument</Property>
+        <Property name="property">content</Property>
+      </UEditor>
+    </Container>
+  </View>
+</ViewConfig>

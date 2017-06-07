@@ -404,6 +404,7 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
         <Panel>
           <Property name="height">85%</Property>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Property name="dataSet">dsMediaLibrary</Property>
           <Property name="dataPath">!currentNode.fileInfos</Property>
           <RowNumColumn/>
@@ -427,6 +428,12 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
             <Property name="property">relationName</Property>
           </DataColumn>
         </DataGrid>
+=======
+          <Buttons/>
+          <Children/>
+          <Tools/>
+        </Panel>
+>>>>>>> refs/heads/fea-lin-portal
 =======
           <Buttons/>
           <Children/>

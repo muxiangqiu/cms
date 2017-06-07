@@ -1,0 +1,94 @@
+@CHARSET "US-ASCII";
+
+p {
+	margin-left: 500px;
+	margin-top: -22px;
+}
+
+.tabs-wrap.bar-tabs-wrap {
+	margin-left: 35% !important; 
+}
+
+.d-block-view .block-current {
+	color: #000;
+    background-color: #f7f7f7;
+}
+
+.d-block-view .block-hover {
+	color: #000;
+  	background-color: #f7f7f7;
+}
+
+.d-block-view .ex.header {
+	text-align: left;
+	border-bottom: 1px dashed #01649E;
+	padding: 8px;
+	color: #047fc8;
+}
+
+.d-block-view .ex.items {
+	padding-left: 15px;
+	color: rgba(0,0,0,0.7);
+}
+
+.d-block-view .ex.items>li {
+	margin-left: 15px;
+	line-height: 1.7em;
+	cursor: pointer;
+	-webkit-transition-duration: 0.3s; -moz-transition-duration : 0.3s;
+	-ms-transition-duration : 0.3s; -o-transition-duration : 0.3s;
+	transition-duration : 0.3s;
+	-webkit-transition-property: color, -webkit-box-shadow,
+		-webkit-transform;
+	-moz-transition-property: -moz-box-shadow, -moz-transform;
+	-ms-transition-property: color, -ms-box-shadow, -ms-transform;
+	-o-transition-property: color, -o-box-shadow, -o-transform;
+	transition-property: color, box-shadow, transform;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+}
+
+.d-block-view .ex.header {
+	line-height: 1.7em;
+	cursor: pointer;
+	-webkit-transition-duration: 0.3s; -moz-transition-duration : 0.3s;
+	-ms-transition-duration : 0.3s; -o-transition-duration : 0.3s;
+	transition-duration : 0.3s;
+	-webkit-transition-property: color, -webkit-box-shadow,
+		-webkit-transform;
+	-moz-transition-property: -moz-box-shadow, -moz-transform;
+	-ms-transition-property: color, -ms-box-shadow, -ms-transform;
+	-o-transition-property: color, -o-box-shadow, -o-transform;
+	transition-property: color, box-shadow, transform;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+}
+
+.d-block-view .ex.items > li:hover {
+	color: #15A4FA;
+}
+
+.d-block-view .ex.items > li > i {
+	margin-right: 1em;
+	width: 1em;
+}
+
+.link {
+	color: #058FE1;
+	cursor: pointer;
+}
+
+.d-grid .data-table .current-row .link {
+    color: #ffffff !important;
+}
+
+.d-grid .data-table .row .current-cell {
+    background-color: inherit;
+}
+
+
+

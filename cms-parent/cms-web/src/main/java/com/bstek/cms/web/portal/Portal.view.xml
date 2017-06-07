@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+      <PropertyDef name="documents">
+        <Property name="dataType">[Document]</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+    </DataType>
+    <DataType name="Document">
+      <Property name="creationType">com.bstek.cms.orm.Document</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="startDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="endDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">至</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">类型</Property>
+      </PropertyDef>
+      <PropertyDef name="deptId">
+        <Property></Property>
+        <Property name="label">部门</Property>
+      </PropertyDef>
+      <PropertyDef name="programaName">
+        <Property></Property>
+        <Property name="label">所属栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="top">
+        <Property name="dataType">boolean</Property>
+        <Property name="label">置顶</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View>
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsPrograma">
+      <ClientEvent name="beforeLoadData"></ClientEvent>
+      <ClientEvent name="onLoadData" signature="self,arg,bvDocument">var items = [];&#xD;
+var programas = self.getData();&#xD;
+&#xD;
+programas.each(function(p) {&#xD;
+	var type = p.get(&quot;name&quot;);&#xD;
+&#xD;
+	var item = {&#xD;
+		type: type,&#xD;
+		items: p.get(&quot;documents&quot;)&#xD;
+	};&#xD;
+	items.push(item);&#xD;
+});&#xD;
+bvDocument.set(&quot;items&quot;, items);</ClientEvent>
+      <Property name="dataProvider">portalController#loadDocuments</Property>
+      <Property name="dataType">[Programa]</Property>
+      <Property name="loadMode">onReady</Property>
+    </DataSet>
+    <BlockView id="bvDocument">
+      <ClientEvent name="onRenderBlock" signature="self,arg,dsPrograma">$(arg.dom).empty();&#xD;
+var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-angle-double-right'>&lt;/i> &quot;+ arg.data.type +&quot;&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
+$h.click(function() {&#xD;
+	window.open(&quot;com.bstek.cms.web.document.edit.DocumentEdit.d?programaName=&quot; + arg.data.type);&#xD;
+});&#xD;
+var items = arg.data.items || [];&#xD;
+var $ul = $(&quot;&lt;ul class='ex items'>&lt;/ul>&quot;).appendTo(arg.dom);&#xD;
+items.each(function(item){	&#xD;
+	var time = item.get(&quot;createDate&quot;).formatDate(&quot;Y-m-d&quot;);	&#xD;
+	var $li = $(&quot;&lt;li>&quot;+ item.get(&quot;name&quot;) +&quot;&lt;/li>&quot; + &quot;&lt;p>&quot;+ time + &quot;&lt;/p>&quot;).appendTo($ul);	&#xD;
+		$li.click(function() {&#xD;
+			item.setCurrent();			&#xD;
+			window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + item.get(&quot;name&quot;));&#xD;
+		});&#xD;
+});&#xD;
+&#xD;
+</ClientEvent>
+      <Property name="blockHeight">340</Property>
+      <Property name="style">
+        <Property name="font-size">15px</Property>
+        <Property name="margin-left">50px</Property>
+      </Property>
+      <Property name="blockWidth">700</Property>
+    </BlockView>
+  </View>
+</ViewConfig>
