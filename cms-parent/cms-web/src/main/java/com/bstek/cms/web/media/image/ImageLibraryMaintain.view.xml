@@ -401,11 +401,9 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
             <Property name="blankText">按名称搜索</Property>
           </TextEditor>
         </ToolBar>
-        <DataGrid id="dataGrid">
-          <Property name="readOnly">true</Property>
-          <Property name="showFilterBar">false</Property>
-          <Property name="selectionMode">multiRows</Property>
+        <Panel>
           <Property name="height">85%</Property>
+<<<<<<< HEAD
           <Property name="dataSet">dsMediaLibrary</Property>
           <Property name="dataPath">!currentNode.fileInfos</Property>
           <RowNumColumn/>
@@ -429,6 +427,12 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
             <Property name="property">relationName</Property>
           </DataColumn>
         </DataGrid>
+=======
+          <Buttons/>
+          <Children/>
+          <Tools/>
+        </Panel>
+>>>>>>> refs/heads/fea-lin-portal
         <ToolBar>
           <DataPilot>
             <Property name="itemCodes">info,pages</Property>

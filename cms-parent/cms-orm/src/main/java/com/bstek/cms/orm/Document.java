@@ -36,6 +36,10 @@ public class Document implements Serializable {
 	@PropertyDef(label = "标题")
 	private String name;
 	
+	@Column(name = "PROGRAMA_NAME_", length = 60)
+	@PropertyDef(label = "所属栏目名称")
+	private String programaName;
+	
 	@Column(name = "CREATOR_", length = 60)
 	@PropertyDef(label = "创建人")
 	private String creator;
@@ -66,9 +70,9 @@ public class Document implements Serializable {
 	@PropertyDef(label = "部门")
 	private String deptId;
 	
-	@Column(name = "ORDER_", length = 60)
-	@PropertyDef(label = "序号")
-	private Integer order;
+	@Column(name = "TOP_")
+	@PropertyDef(label = "置顶")
+	private boolean top;
 	
 	@Column(name = "DOCUMENT_STATUS_")
 	@PropertyDef(label = "状态")
@@ -95,6 +99,14 @@ public class Document implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getProgramaName() {
+		return programaName;
+	}
+
+	public void setProgramaName(String programaName) {
+		this.programaName = programaName;
 	}
 
 	public String getCreator() {
@@ -129,12 +141,12 @@ public class Document implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public Integer getOrder() {
-		return order;
+	public boolean isTop() {
+		return top;
 	}
 
-	public void setOrder(Integer order) {
-		this.order = order;
+	public void setTop(boolean top) {
+		this.top = top;
 	}
 
 	public String getContent() {

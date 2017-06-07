@@ -28,7 +28,7 @@ public class DocumentEditController {
 				.select("documentId")
 				.equal("programaId", programaId)
 			.end()
-			.asc("order")
+			.desc("top")
 			.desc("createDate")			
 			.paging(page);	
 	}

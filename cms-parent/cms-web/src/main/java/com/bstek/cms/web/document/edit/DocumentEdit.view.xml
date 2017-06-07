@@ -45,6 +45,12 @@
       </Reference>
     </DataType>
     <DataType name="Document">
+      <ClientEvent name="onCurrentChange" signature="self,arg,topButton">var top = arg.newCurrent.get(&quot;top&quot;);&#xD;
+if (top) {&#xD;
+	topButton.set(&quot;caption&quot;, &quot;取消置顶&quot;);&#xD;
+} else {&#xD;
+	topButton.set(&quot;caption&quot;, &quot;置顶&quot;);&#xD;
+}</ClientEvent>
       <Property name="creationType">com.bstek.cms.orm.Document</Property>
       <PropertyDef name="id">
         <Property></Property>
@@ -126,9 +132,13 @@
           </Property>
         </Property>
       </PropertyDef>
-      <PropertyDef name="order">
-        <Property name="dataType">Integer</Property>
-        <Property name="label">序号</Property>
+      <PropertyDef name="programaName">
+        <Property></Property>
+        <Property name="label">所属栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="top">
+        <Property name="dataType">boolean</Property>
+        <Property name="label">置顶</Property>
       </PropertyDef>
     </DataType>
   </Model>
@@ -328,7 +338,15 @@ if (level == 1) {&#xD;
 } else if (level == 3) {&#xD;
 	arg.node.set(&quot;iconClass&quot;, &quot;fa fa-file-word-o&quot;);&#xD;
 }&#xD;
-$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
+$(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);&#xD;
+&#xD;
+var programaName = &quot;${param.programaName}&quot;;&#xD;
+if (programaName) {&#xD;
+	if (arg.data.get(&quot;name&quot;) == programaName) {&#xD;
+		self.set(&quot;currentNode&quot;, arg.node);	&#xD;
+	}&#xD;
+}&#xD;
+</ClientEvent>
           <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
 var level = arg.node.get(&quot;level&quot;);&#xD;
 if (level == 1) {&#xD;
@@ -350,7 +368,6 @@ $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
               <Property name="childrenProperty">children</Property>
               <Property name="name">children</Property>
               <Property name="labelProperty">name</Property>
-              <Property name="expandLevel">1</Property>
             </BindingConfig>
           </BindingConfigs>
         </DataTree>
@@ -366,7 +383,10 @@ $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
           <ToolBarButton>
             <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogDocument">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
 if (entity) {&#xD;
-	dsPrograma.getData(&quot;!currentNode.documents&quot;).insert({status: &quot;draft&quot;});&#xD;
+	dsPrograma.getData(&quot;!currentNode.documents&quot;).insert({&#xD;
+		status: &quot;draft&quot;,&#xD;
+		programaName: entity.get(&quot;name&quot;)&#xD;
+	});&#xD;
 	dialogDocument.show();&#xD;
 } else {&#xD;
 	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;
@@ -397,6 +417,11 @@ if (documents.length > 0) {&#xD;
             <Property name="iconClass">fa fa-external-link</Property>
           </ToolBarButton>
           <ToolBarButton>
+            <ClientEvent name="onClick" signature="self,arg,dataGrid">var doc = dataGrid.getCurrentItem();&#xD;
+if (doc) {&#xD;
+	window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + doc.get(&quot;name&quot;));&#xD;
+}&#xD;
+</ClientEvent>
             <Property name="caption">预览</Property>
             <Property name="iconClass">fa fa-eye</Property>
           </ToolBarButton>
@@ -428,10 +453,36 @@ if (documents.length > 0) {	&#xD;
             <Property name="caption">转移</Property>
             <Property name="iconClass">fa fa-file-code-o</Property>
           </ToolBarButton>
-          <ToolBarButton>
-            <Property name="caption">排序</Property>
+          <ToolBarButton id="topButton">
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction,dsPrograma,dataTree">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
+&#xD;
+var caption = self.get(&quot;caption&quot;);&#xD;
+&#xD;
+if (documents.length > 0) {&#xD;
+	if (caption == &quot;置顶&quot;) {&#xD;
+		documents.each(function(d) {&#xD;
+			d.set(&quot;top&quot;, true);&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+		dsPrograma.flushAsync();&#xD;
+	} else {&#xD;
+		documents.each(function(d) {&#xD;
+			d.set(&quot;top&quot;, false);&#xD;
+		});&#xD;
+		updateAction.execute();&#xD;
+		dsPrograma.flushAsync();&#xD;
+	}&#xD;
+	&#xD;
+} else {&#xD;
+	if (caption == &quot;置顶&quot;) {&#xD;
+		dorado.MessageBox.alert(&quot;请勾选需要置顶的文档。&quot;);&#xD;
+	} else {&#xD;
+		dorado.MessageBox.alert(&quot;请勾选需要取消置顶的文档。&quot;);&#xD;
+	}&#xD;
+}&#xD;
+</ClientEvent>
+            <Property name="caption">置顶</Property>
             <Property name="iconClass">fa fa-arrow-up</Property>
-            <Property name="ignored">true</Property>
           </ToolBarButton>
           <ToolBarButton>
             <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
@@ -475,23 +526,14 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
           </TextEditor>
         </ToolBar>
         <DataGrid id="dataGrid">
-          <ClientEvent name="onDraggingSourceDrop" signature="self,arg,updateAction">var items = self.get(&quot;itemModel&quot;).getItems().toArray();&#xD;
-for (var i = 0; i &lt; items.length; i++){&#xD;
-    items[i].set(&quot;order&quot;, i);&#xD;
-}&#xD;
-&#xD;
-updateAction.execute();&#xD;
-</ClientEvent>
+          <ClientEvent name="onRenderRow">var top = arg.data.get(&quot;top&quot;);&#xD;
+arg.dom.style.color = (top == true) ? &quot;red&quot; : &quot;&quot;;</ClientEvent>
           <Property name="dataSet">dsPrograma</Property>
           <Property name="dataPath">!currentNode.documents</Property>
           <Property name="readOnly">true</Property>
           <Property name="showFilterBar">false</Property>
           <Property name="selectionMode">multiRows</Property>
           <Property name="height">85%</Property>
-          <Property name="dragTags">row</Property>
-          <Property name="draggable">true</Property>
-          <Property name="droppable">true</Property>
-          <Property name="droppableTags">row</Property>
           <RowNumColumn/>
           <RowSelectorColumn/>
           <DataColumn name="name">
