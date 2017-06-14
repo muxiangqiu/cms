@@ -3,42 +3,62 @@
   <Arguments/>
   <Context/>
   <Model>
-    <DataType name="File">
-      <Property name="creationType">com.bstek.cms.orm.File</Property>
+    <DataType name="FileInfo">
+      <Property name="creationType">com.bstek.cms.orm.FileInfo</Property>
       <PropertyDef name="id">
-        <Property></Property>
-        <Property name="label">ID</Property>
+        <Property/>
+        <Property name="label">主键</Property>
       </PropertyDef>
       <PropertyDef name="name">
-        <Property></Property>
+        <Property/>
         <Property name="label">文件名称</Property>
       </PropertyDef>
-      <PropertyDef name="parentName">
-        <Property></Property>
-        <Property name="label">上级目录名称</Property>
+      <PropertyDef name="size">
+        <Property name="dataType">long</Property>
+        <Property name="label">文件大小(KB)</Property>
       </PropertyDef>
-      <PropertyDef name="creator">
-        <Property></Property>
-        <Property name="label">创建人</Property>
+      <PropertyDef name="path">
+        <Property/>
+        <Property name="label">文件路径</Property>
+      </PropertyDef>
+      <PropertyDef name="category">
+        <Property/>
+        <Property name="label">文件分类</Property>
+      </PropertyDef>
+      <PropertyDef name="relationName">
+        <Property/>
+        <Property name="label">相关名称</Property>
+      </PropertyDef>
+      <PropertyDef name="relationId">
+        <Property/>
+        <Property name="label">相关ID</Property>
       </PropertyDef>
       <PropertyDef name="createDate">
         <Property name="dataType">Date</Property>
-        <Property name="label">创建时间</Property>
+        <Property name="label">上传时间</Property>
       </PropertyDef>
       <PropertyDef name="updateDate">
         <Property name="dataType">Date</Property>
         <Property name="label">更新时间</Property>
       </PropertyDef>
-      <PropertyDef name="size">
-        <Property></Property>
-        <Property name="label">大小</Property>
+      <PropertyDef name="creator">
+        <Property/>
+        <Property name="label">上传人</Property>
+      </PropertyDef>
+      <PropertyDef name="parentName">
+        <Property/>
+        <Property name="label">上级目录名称</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property/>
+        <Property name="label">描述</Property>
       </PropertyDef>
     </DataType>
   </Model>
   <View layout="regionPadding:15">
     <Property name="packages">font-awesome,colors</Property>
-    <DataSet id="dataSet">
-      <Property name="dataType">[File]</Property>
+    <DataSet id="dsFileInfo">
+      <Property name="dataType">[FileInfo]</Property>
       <Property name="pageSize">15</Property>
       <Property name="dataProvider">fileController#load</Property>
     </DataSet>
@@ -49,9 +69,32 @@
       <Property name="executingMessage">正在保存...</Property>
       <Property name="successMessage">保存成功.</Property>
       <UpdateItem>
-        <Property name="dataSet">dataSet</Property>
+        <Property name="dataSet">dsFileInfo</Property>
       </UpdateItem>
     </UpdateAction>
+    <UpdateAction id="updateActionDelete">
+      <Property name="dataResolver">fileController#delete</Property>
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsFileInfo</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <UploadAction id="uploadAction">
+      <ClientEvent name="onFileUploaded" signature="self,arg,dsFileInfo">dsFileInfo.flushAsync();&#xD;
+</ClientEvent>
+      <Property name="selectionMode">multiFiles</Property>
+      <Property name="fileResolver">cms.upload#upload</Property>
+      <Property name="successMessage">上传成功.</Property>
+      <Filters/>
+    </UploadAction>
+    <DownloadAction id="downloadAction">
+      <ClientEvent name="beforeExecute" signature="self,arg,dsFileInfo">self.set(&quot;parameter&quot;, {&#xD;
+        fileId: dsFileInfo.getData(&quot;#&quot;).get(&quot;id&quot;)&#xD;
+    });</ClientEvent>
+      <Property name="fileProvider">cms.upload#download</Property>
+      <Property name="successMessage">下载成功。</Property>
+    </DownloadAction>
     <Panel layout="padding:5;regionPadding:10">
       <Property name="caption">文件列表</Property>
       <Property name="iconClass">fa fa-file-text-o black-text</Property>
@@ -59,33 +102,19 @@
       <Children>
         <ToolBar>
           <ToolBarButton>
-            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
-dialog.show();&#xD;
+            <ClientEvent name="onClick" signature="self,arg,dialogUpload">dialogUpload.show();&#xD;
 </ClientEvent>
-            <Property name="caption">新增目录</Property>
-            <Property name="iconClass">fa fa-plus</Property>
+            <Property name="caption">上传</Property>
+            <Property name="iconClass">fa fa-upload</Property>
           </ToolBarButton>
           <ToolBarButton>
-            <ClientEvent name="onClick" signature="self,arg,dataSet,dialog">dataSet.insert({});&#xD;
-dialog.show();&#xD;
-</ClientEvent>
-            <Property name="caption">新增文件</Property>
-            <Property name="iconClass">fa fa-plus</Property>
-          </ToolBarButton>
-          <ToolBarButton>
-            <ClientEvent name="onClick" signature="self,arg,dialog">dialog.show();&#xD;
-</ClientEvent>
-            <Property name="caption">编辑</Property>
-            <Property name="iconClass">fa fa-pencil</Property>
-          </ToolBarButton>
-          <ToolBarButton>
-            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var files = dataGrid.get(&quot;selection&quot;);&#xD;
+            <ClientEvent name="onClick" signature="self,arg,dataGrid,updateActionDelete">var files = dataGrid.get(&quot;selection&quot;);&#xD;
 if (files.length > 0) {&#xD;
 	dorado.MessageBox.confirm(&quot;确认删除勾选项？&quot;, function() {&#xD;
 		files.each(function(f) {&#xD;
 			f.remove();&#xD;
 		});&#xD;
-		updateAction.execute();&#xD;
+		updateActionDelete.execute();&#xD;
 	});&#xD;
 } else {&#xD;
 	dorado.MessageBox.alert(&quot;请勾选需要删除的列表项。&quot;);&#xD;
@@ -94,12 +123,7 @@ if (files.length > 0) {&#xD;
             <Property name="iconClass">fa fa-minus</Property>
           </ToolBarButton>
           <ToolBarButton>
-            <Property name="caption">上传</Property>
-            <Property name="iconClass">fa fa-upload</Property>
-          </ToolBarButton>
-          <ToolBarButton>
-            <Property name="caption">导出</Property>
-            <Property name="iconClass">fa fa-file-word-o</Property>
+            <Property name="action">export2ReportAction</Property>
           </ToolBarButton>
           <Fill/>
           <TextEditor>
@@ -118,10 +142,6 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
 				property: &quot;name&quot;,&#xD;
 				operator: &quot;like&quot;,&#xD;
 				value: key&#xD;
-			}, {&#xD;
-				property: &quot;parentName&quot;,&#xD;
-				operator: &quot;like&quot;,&#xD;
-				value: key&#xD;
 			}]&#xD;
 		}]);&#xD;
 	}&#xD;
@@ -131,35 +151,43 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
         </ToolBar>
         <DataGrid id="dataGrid">
           <Property name="height">85%</Property>
-          <Property name="dataSet">dataSet</Property>
+          <Property name="dataSet">dsFileInfo</Property>
           <Property name="readOnly">true</Property>
           <Property name="selectionMode">multiRows</Property>
           <RowNumColumn/>
           <RowSelectorColumn/>
-          <DataColumn name="parentName">
-            <Property name="property">parentName</Property>
-          </DataColumn>
           <DataColumn name="name">
+            <ClientEvent name="onRenderCell" signature="self,arg,downloadAction">$(arg.dom).off(&quot;click&quot;);&#xD;
+$(arg.dom)&#xD;
+	.text(arg.data.get(&quot;name&quot;) || &quot;&quot;)&#xD;
+	.addClass(&quot;link&quot;)&#xD;
+	.click(function() {&#xD;
+		downloadAction.execute();&#xD;
+	});</ClientEvent>
             <Property name="property">name</Property>
           </DataColumn>
           <DataColumn name="size">
             <Property name="property">size</Property>
+            <Property name="align">left</Property>
           </DataColumn>
           <DataColumn name="createDate">
             <Property name="property">createDate</Property>
+          </DataColumn>
+          <DataColumn name="creator">
+            <Property name="property">creator</Property>
           </DataColumn>
         </DataGrid>
         <ToolBar>
           <DataPilot>
             <Property name="itemCodes">info,pages</Property>
-            <Property name="dataSet">dataSet</Property>
+            <Property name="dataSet">dsFileInfo</Property>
           </DataPilot>
         </ToolBar>
       </Children>
       <Tools/>
     </Panel>
     <Dialog id="dialog">
-      <ClientEvent name="onHide" signature="self,arg,dataSet">dataSet.getData().cancel();&#xD;
+      <ClientEvent name="onHide" signature="self,arg,dsFileInfo">dsFileInfo.getData().cancel();&#xD;
 </ClientEvent>
       <Property name="width">550</Property>
       <Property name="height">450</Property>
@@ -180,7 +208,7 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
       </Buttons>
       <Children>
         <AutoForm>
-          <Property name="dataSet">dataSet</Property>
+          <Property name="dataSet">dsFileInfo</Property>
           <AutoFormElement>
             <Property name="name">name</Property>
             <Property name="property">name</Property>
@@ -191,9 +219,84 @@ self.urlQueryTimeout = window.setTimeout(function() {&#xD;
             <Property name="property">size</Property>
             <Editor/>
           </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">path</Property>
+            <Property name="property">path</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">category</Property>
+            <Property name="property">category</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">relationName</Property>
+            <Property name="property">relationName</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">relationId</Property>
+            <Property name="property">relationId</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">parentName</Property>
+            <Property name="property">parentName</Property>
+            <Editor/>
+          </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">desc</Property>
+            <Property name="property">desc</Property>
+            <Editor/>
+          </AutoFormElement>
         </AutoForm>
       </Children>
       <Tools/>
     </Dialog>
+    <Dialog id="dialogUpload">
+      <Property name="caption">提示</Property>
+      <Property name="height">160</Property>
+      <Property name="width">300</Property>
+      <Buttons>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="iconClass">fa fa-check</Property>
+          <Property name="caption">确定</Property>
+          <Property name="action">uploadAction</Property>
+        </Button>
+        <Button>
+          <ClientEvent name="onClick">self.get(&quot;parent&quot;).hide();&#xD;
+</ClientEvent>
+          <Property name="iconClass">fa fa-times</Property>
+          <Property name="caption">取消</Property>
+        </Button>
+      </Buttons>
+      <Children>
+        <Label>
+          <Property name="text">确认上传文件？</Property>
+          <Property name="style">
+            <Property name="font-size">16px</Property>
+            <Property name="padding-left">85px</Property>
+          </Property>
+        </Label>
+      </Children>
+      <Tools/>
+    </Dialog>
+    <Export2ReportAction id="export2ReportAction">
+      <ClientEvent name="onGetExportData" signature="self,arg,dataGrid">dataGrid.selectAll();&#xD;
+&#xD;
+var grid = view.id(arg.id);&#xD;
+if(grid instanceof dorado.widget.DataGrid){&#xD;
+    arg.data = grid.get(&quot;selection&quot;);&#xD;
+}&#xD;
+&#xD;
+dataGrid.unselectAll();</ClientEvent>
+      <Property name="caption">导出</Property>
+      <Property name="executingMessage">正在导出……</Property>
+      <Property name="iconClass">fa fa-file-excel-o</Property>
+      <Property name="successMessage">导出成功。</Property>
+      <Property name="template">dataGrid</Property>
+    </Export2ReportAction>
   </View>
 </ViewConfig>

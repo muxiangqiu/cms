@@ -5,3 +5,16 @@
 .d-grid .data-table .current-row {
     background-color: #15a4fa !important;
 }
+
+.link {
+	color: #058FE1;
+	cursor: pointer;
+}
+
+.d-grid .data-table .current-row .link {
+    color: #ffffff !important;
+}
+
+.d-grid .data-table .row .current-cell {
+    background-color: inherit;
+}

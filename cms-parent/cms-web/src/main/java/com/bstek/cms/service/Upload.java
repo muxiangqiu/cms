@@ -27,7 +27,7 @@ public class Upload {
 		fileInfo.setRelationId((String)parameter.get("relationId"));
 		fileInfo.setRelationName((String)parameter.get("relationName"));
 		fileInfo.setCreateDate(new Date());
-		fileInfo.setSize(file.getSize());
+		fileInfo.setSize(file.getSize()/1024);
 		fileInfo.setName(file.getFileName());
 		File dest = new File(FileUtils.getFileDirectory(), fileInfo.getId() + "@" + fileInfo.getName());
 		fileInfo.setPath(dest.getAbsolutePath());	

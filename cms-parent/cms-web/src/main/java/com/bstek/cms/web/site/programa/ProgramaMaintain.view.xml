@@ -173,7 +173,6 @@ updateAction.execute();</ClientEvent>
               <Property name="childrenProperty">children</Property>
               <Property name="name">name</Property>
               <Property name="labelProperty">name</Property>
-              <Property name="expandLevel">1</Property>
             </BindingConfig>
           </BindingConfigs>
         </DataTree>

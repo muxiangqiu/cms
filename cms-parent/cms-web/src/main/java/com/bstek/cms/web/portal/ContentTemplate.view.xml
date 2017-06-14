@@ -66,33 +66,39 @@ date.set(&quot;text&quot;, &quot;发表日期: &quot; + self.getData(&quot;#.cre
       <Property name="width">70%</Property>
       <Property name="style">
         <Property name="margin-left">260px</Property>
+        <Property name="border-style">solid</Property>
       </Property>
-      <Image>
-        <Property name="height">80</Property>
-        <Property name="style">
-          <Property name="background-color">blue</Property>
-        </Property>
-      </Image>
-      <Label id="title">
-        <Property name="style">
-          <Property name="font-size">20px</Property>
-          <Property name="text-align">center</Property>
-          <Property name="margin-top">30px</Property>
-        </Property>
-        <Property name="height">60</Property>
-      </Label>
-      <Label id="date">
-        <Property name="text">创建时间</Property>
-        <Property name="style">
-          <Property name="margin-left">50px</Property>
-        </Property>
-      </Label>
+      <Property name="height">100%</Property>
+      <Container>
+        <Property name="height">200</Property>
+        <Image>
+          <Property name="height">80</Property>
+          <Property name="style">
+            <Property name="background-color">blue</Property>
+          </Property>
+        </Image>
+        <Label id="title">
+          <Property name="style">
+            <Property name="font-size">30px</Property>
+            <Property name="text-align">center</Property>
+            <Property name="margin-top">30px</Property>
+          </Property>
+          <Property name="height">60</Property>
+        </Label>
+        <Label id="date">
+          <Property name="style">
+            <Property name="padding-left">20px</Property>
+            <Property name="font-size">15px</Property>
+          </Property>
+        </Label>
+      </Container>
       <UEditor>
         <ClientEvent name="onCreate">dorado.ueditor.registerMode(&quot;custom&quot;, []);</ClientEvent>
         <Property name="mode">custom</Property>
         <Property name="readOnly">true</Property>
         <Property name="dataSet">dsDocument</Property>
         <Property name="property">content</Property>
+        <Property name="defaultFontSize">22px</Property>
       </UEditor>
     </Container>
   </View>

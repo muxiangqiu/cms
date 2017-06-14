@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import com.bstek.bdf3.dorado.jpa.annotation.Generator;
 import com.bstek.bdf3.dorado.jpa.policy.impl.CreatedDatePolicy;
+import com.bstek.bdf3.dorado.jpa.policy.impl.UpdatedDatePolicy;
 import com.bstek.dorado.annotation.PropertyDef;
 
 /**
@@ -48,6 +49,11 @@ public class Document implements Serializable {
 	@Generator(policy = CreatedDatePolicy.class)
 	@PropertyDef(label = "创建时间")
 	private Date createDate;
+	
+	@Column(name = "UPDATE_TIME_")
+	@Generator(policy = UpdatedDatePolicy.class)
+	@PropertyDef(label = "修改时间")
+	private Date updateDate;
 	
 	@Column(name = "START_DATE_")
 	@PropertyDef(label = "有效期")
@@ -123,6 +129,14 @@ public class Document implements Serializable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public Date getStartDate() {

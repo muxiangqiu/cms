@@ -74,6 +74,10 @@ if (top) {&#xD;
         <Property name="dataType">Date</Property>
         <Property name="label">创建时间</Property>
       </PropertyDef>
+      <PropertyDef name="updateDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">修改时间</Property>
+      </PropertyDef>
       <PropertyDef name="startDate">
         <Property name="dataType">Date</Property>
         <Property name="label">有效期</Property>
@@ -457,20 +461,24 @@ if (documents.length > 0) {	&#xD;
             <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction,dsPrograma,dataTree">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
 &#xD;
 var caption = self.get(&quot;caption&quot;);&#xD;
-&#xD;
 if (documents.length > 0) {&#xD;
 	if (caption == &quot;置顶&quot;) {&#xD;
-		documents.each(function(d) {&#xD;
+		documents.each(function(d) {			&#xD;
 			d.set(&quot;top&quot;, true);&#xD;
 		});&#xD;
-		updateAction.execute();&#xD;
-		dsPrograma.flushAsync();&#xD;
+		updateAction.execute(function() {&#xD;
+			dataGrid.unselectAll();&#xD;
+		});&#xD;
+		dataGrid.sort(&quot;top&quot;, true);&#xD;
+&#xD;
 	} else {&#xD;
 		documents.each(function(d) {&#xD;
 			d.set(&quot;top&quot;, false);&#xD;
 		});&#xD;
-		updateAction.execute();&#xD;
-		dsPrograma.flushAsync();&#xD;
+		updateAction.execute(function() {&#xD;
+			dataGrid.unselectAll();&#xD;
+		});&#xD;
+		dataGrid.sort(&quot;top&quot;, true);&#xD;
 	}&#xD;
 	&#xD;
 } else {&#xD;
