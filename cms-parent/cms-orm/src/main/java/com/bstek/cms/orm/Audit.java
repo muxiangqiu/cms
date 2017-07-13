@@ -3,15 +3,14 @@ package com.bstek.cms.orm;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import com.bstek.bdf3.dorado.jpa.annotation.Generator;
 import com.bstek.bdf3.dorado.jpa.policy.impl.CreatedDatePolicy;
+import com.bstek.cms.policy.CreatorPolicy;
 import com.bstek.dorado.annotation.PropertyDef;
 
 /**
@@ -37,6 +36,7 @@ public class Audit implements Serializable {
 	
 	@Column(name = "CREATOR_", length = 60)
 	@PropertyDef(label = "创建人")
+	@Generator(policy = CreatorPolicy.class)
 	private String creator;
 	
 	@Column(name = "HANDLER_", length = 60)
@@ -54,7 +54,7 @@ public class Audit implements Serializable {
 	
 	@Column(name = "DOCUMENT_STATUS_")
 	@PropertyDef(label = "状态")
-	private DocumentStatus status;
+	private String status;
 	
 	@Column(name = "LAST_ACTION_", length = 120)
 	@PropertyDef(label = "上次动作")
@@ -119,11 +119,11 @@ public class Audit implements Serializable {
 		this.createDate = createDate;
 	}
 
-	public DocumentStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(DocumentStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

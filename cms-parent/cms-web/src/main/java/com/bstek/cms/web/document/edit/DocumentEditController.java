@@ -13,6 +13,7 @@ import com.bstek.cms.orm.ProgramaDocumentLink;
 import com.bstek.dorado.annotation.DataProvider;
 import com.bstek.dorado.annotation.DataResolver;
 import com.bstek.dorado.annotation.Expose;
+import com.bstek.dorado.data.provider.Criteria;
 import com.bstek.dorado.data.provider.Page;
 
 @Controller
@@ -20,10 +21,11 @@ public class DocumentEditController {
 	
 	@DataProvider
 	@Transactional(readOnly = true)
-	public void loadDocuments(Page<Document> page, String programaId) {
+	public void loadDocuments(Page<Document> page, Criteria criteria, String programaId) {
 	
 		JpaUtil
 			.linq(Document.class)
+			.where(criteria)
 			.in(ProgramaDocumentLink.class)
 				.select("documentId")
 				.equal("programaId", programaId)

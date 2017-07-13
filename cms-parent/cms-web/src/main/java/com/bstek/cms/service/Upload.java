@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import com.bstek.bdf3.dorado.jpa.JpaUtil;
@@ -22,10 +25,13 @@ public class Upload {
 	@FileResolver
 	@Transactional
 	public FileInfo upload(UploadFile file, Map<String, Object> parameter) throws Exception {
+		UserDetails user = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setId(UUID.randomUUID().toString());
 		fileInfo.setRelationId((String)parameter.get("relationId"));
 		fileInfo.setRelationName((String)parameter.get("relationName"));
+		fileInfo.setCreator(user.getUsername());
 		fileInfo.setCreateDate(new Date());
 		fileInfo.setSize(file.getSize()/1024);
 		fileInfo.setName(file.getFileName());

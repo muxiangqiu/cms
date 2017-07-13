@@ -45,12 +45,17 @@
       </Reference>
     </DataType>
     <DataType name="Document">
-      <ClientEvent name="onCurrentChange" signature="self,arg,topButton">var top = arg.newCurrent.get(&quot;top&quot;);&#xD;
-if (top) {&#xD;
-	topButton.set(&quot;caption&quot;, &quot;取消置顶&quot;);&#xD;
-} else {&#xD;
-	topButton.set(&quot;caption&quot;, &quot;置顶&quot;);&#xD;
-}</ClientEvent>
+      <ClientEvent name="onCurrentChange" signature="self,arg,topButton">var doc = arg.newCurrent;&#xD;
+if (doc) {&#xD;
+	var top = doc.get(&quot;top&quot;);&#xD;
+	if (top) {&#xD;
+		topButton.set(&quot;caption&quot;, &quot;取消置顶&quot;);&#xD;
+	} else {&#xD;
+		topButton.set(&quot;caption&quot;, &quot;置顶&quot;);&#xD;
+	}&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
       <Property name="creationType">com.bstek.cms.orm.Document</Property>
       <PropertyDef name="id">
         <Property></Property>
@@ -97,43 +102,17 @@ if (top) {&#xD;
       <PropertyDef name="securityLevel">
         <Property name="label">密级</Property>
         <Property name="mapping">
-          <Property name="mapValues">
-            <Collection>
-              <Entity>
-                <Property name="key">open</Property>
-                <Property name="value">非密</Property>
-              </Entity>
-              <Entity>
-                <Property name="key">secrecy</Property>
-                <Property name="value">秘密</Property>
-              </Entity>
-              <Entity>
-                <Property name="key">Secret</Property>
-                <Property name="value">机密</Property>
-              </Entity>
-            </Collection>
-          </Property>
+          <Property name="mapValues">${dict.items(&quot;MJ&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
         </Property>
       </PropertyDef>
       <PropertyDef name="status">
         <Property name="label">状态</Property>
         <Property name="mapping">
-          <Property name="mapValues">
-            <Collection>
-              <Entity>
-                <Property name="key">draft</Property>
-                <Property name="value">初稿</Property>
-              </Entity>
-              <Entity>
-                <Property name="key">issue</Property>
-                <Property name="value">已发布</Property>
-              </Entity>
-              <Entity>
-                <Property name="key">dated</Property>
-                <Property name="value">已下线</Property>
-              </Entity>
-            </Collection>
-          </Property>
+          <Property name="mapValues">${dict.items(&quot;DS&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
         </Property>
       </PropertyDef>
       <PropertyDef name="programaName">
@@ -146,7 +125,7 @@ if (top) {&#xD;
       </PropertyDef>
     </DataType>
   </Model>
-  <View layout="regionPadding:15">
+  <View>
     <Property name="packages">font-awesome,colors</Property>
     <DataSet id="dsPrograma">
       <Property name="dataType">[Programa]</Property>
@@ -160,7 +139,6 @@ if (top) {&#xD;
       <Property name="dataResolver">documentEditController#save</Property>
       <UpdateItem>
         <Property name="dataSet">dsPrograma</Property>
-        <Property name="submitOldData">true</Property>
       </UpdateItem>
     </UpdateAction>
     <AjaxAction id="ajaxAction">
@@ -344,12 +322,6 @@ if (level == 1) {&#xD;
 }&#xD;
 $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);&#xD;
 &#xD;
-var programaName = &quot;${param.programaName}&quot;;&#xD;
-if (programaName) {&#xD;
-	if (arg.data.get(&quot;name&quot;) == programaName) {&#xD;
-		self.set(&quot;currentNode&quot;, arg.node);	&#xD;
-	}&#xD;
-}&#xD;
 </ClientEvent>
           <ClientEvent name="onRenderNode">var data = arg.node.get(&quot;data&quot;);&#xD;
 var level = arg.node.get(&quot;level&quot;);&#xD;
@@ -388,7 +360,7 @@ $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
             <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogDocument">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
 if (entity) {&#xD;
 	dsPrograma.getData(&quot;!currentNode.documents&quot;).insert({&#xD;
-		status: &quot;draft&quot;,&#xD;
+		status: &quot;0&quot;,&#xD;
 		programaName: entity.get(&quot;name&quot;)&#xD;
 	});&#xD;
 	dialogDocument.show();&#xD;
@@ -410,7 +382,7 @@ if (entity) {&#xD;
             <ClientEvent name="onClick" signature="self,arg,dataGrid,updateAction">var documents = dataGrid.get(&quot;selection&quot;);&#xD;
 if (documents.length > 0) {&#xD;
 	documents.each(function(d) {&#xD;
-		d.set(&quot;status&quot;, &quot;issue&quot;);&#xD;
+		d.set(&quot;status&quot;, &quot;2&quot;);&#xD;
 	});&#xD;
 	updateAction.execute();&#xD;
 } else {&#xD;
@@ -497,7 +469,7 @@ if (documents.length > 0) {&#xD;
 if (documents.length > 0) {&#xD;
 	dorado.MessageBox.confirm(&quot;确认删除勾选项?&quot;, function() {&#xD;
 		documents.each(function(d) {&#xD;
-			d.remove();&#xD;
+			d.remove();			&#xD;
 		});&#xD;
 		updateAction.execute();&#xD;
 	});	&#xD;

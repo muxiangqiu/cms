@@ -13,6 +13,6 @@
 		 
 		<Package name="common" pattern="css">
 			static/css/grid
-		</Package>
+		</Package>	
 	</Packages>
 </config>

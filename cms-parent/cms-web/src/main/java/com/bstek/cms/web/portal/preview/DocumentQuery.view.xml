@@ -36,6 +36,7 @@
         <Property></Property>
         <Property name="label">描述</Property>
       </PropertyDef>
+      <PropertyDef name="documents"/>
     </DataType>
     <DataType name="Document">
       <Property name="creationType">com.bstek.cms.orm.Document</Property>
@@ -109,14 +110,14 @@
       </PropertyDef>
     </DataType>
   </Model>
-  <View layout="vbox">
+  <View>
     <Property name="packages">font-awesome,colors</Property>
-    <DataSet id="dsDocument">
-      <ClientEvent name="onLoadData" signature="self,arg,bvDocument">var items = [];&#xD;
+    <DataSet id="dsHotNews">
+      <ClientEvent name="onLoadData" signature="self,arg,bvHotNews">var items = [];&#xD;
 var programas = self.getData();&#xD;
 programas.each(function(p) {&#xD;
 	var type = p.get(&quot;name&quot;);&#xD;
-&#xD;
+	&#xD;
 	var item = {&#xD;
 		type: type,&#xD;
 		items: p.get(&quot;documents&quot;)&#xD;
@@ -124,15 +125,16 @@ programas.each(function(p) {&#xD;
 	items.push(item);&#xD;
 });&#xD;
 &#xD;
-bvDocument.set(&quot;items&quot;, items);&#xD;
 &#xD;
+bvHotNews.set(&quot;items&quot;, items);&#xD;
 </ClientEvent>
+      <ClientEvent name="beforeLoadData">self.set(&quot;parameter&quot;, &quot;${param.programaName}&quot;);</ClientEvent>
       <Property name="dataType">[Programa]</Property>
-      <Property name="dataProvider">portalController#loadDocuments</Property>
+      <Property name="dataProvider">documentQueryController#loadHotNews</Property>
       <Property name="loadMode">onReady</Property>
     </DataSet>
-    <DataSet id="dsHotNews">
-      <ClientEvent name="onLoadData" signature="self,arg,bvHot">var items = [];&#xD;
+    <DataSet id="dsOther">
+      <ClientEvent name="onLoadData" signature="self,arg,bvOther">var items = [];&#xD;
 var programas = self.getData();&#xD;
 programas.each(function(p) {&#xD;
 	var type = p.get(&quot;name&quot;);&#xD;
@@ -144,10 +146,12 @@ programas.each(function(p) {&#xD;
 	items.push(item);&#xD;
 });&#xD;
 &#xD;
-bvHot.set(&quot;items&quot;, items);&#xD;
+bvOther.set(&quot;items&quot;, items);&#xD;
+</ClientEvent>
+      <ClientEvent name="beforeLoadData">self.set(&quot;parameter&quot;, &quot;${param.programaName}&quot;);&#xD;
 </ClientEvent>
       <Property name="dataType">[Programa]</Property>
-      <Property name="dataProvider">portalController#loadHotNews</Property>
+      <Property name="dataProvider">documentQueryController#loadDocumentsOther</Property>
       <Property name="loadMode">onReady</Property>
     </DataSet>
     <Container layout="hbox">
@@ -164,7 +168,7 @@ bvHot.set(&quot;items&quot;, items);&#xD;
         </Property>
       </Label>
       <Label>
-        <Property name="text">  首页</Property>
+        <Property name="text">  ${param.programaName}</Property>
         <Property name="exClassName">fa fa-globe violet-text</Property>
       </Label>
       <TextEditor>
@@ -172,9 +176,7 @@ bvHot.set(&quot;items&quot;, items);&#xD;
 	if (arg.keyCode === 13) {&#xD;
 		window.open(&quot;com.bstek.cms.web.portal.search.SearchResult.d?value=&quot; + self.get(&quot;text&quot;));&#xD;
 	}	&#xD;
-}&#xD;
-&#xD;
-</ClientEvent>
+}</ClientEvent>
         <Property name="width">500</Property>
         <Property name="blankText">按标题搜索...</Property>
         <Property name="exClassName">fa fa-search</Property>
@@ -190,16 +192,14 @@ bvHot.set(&quot;items&quot;, items);&#xD;
 		window.location.href = &quot;${configure['bdf3.logoutPath']}&quot;;		&#xD;
 	});&#xD;
 }&#xD;
-&#xD;
 </ClientEvent>
         <ClientEvent name="onReady">var username = &quot;${loginUsername}&quot;;&#xD;
 if (username) {&#xD;
 	self.set(&quot;caption&quot;, username);&#xD;
 } else {&#xD;
 	self.set(&quot;caption&quot;, &quot; 登 陆&quot;);&#xD;
-}&#xD;
-</ClientEvent>
-        <Property name="caption"> 登 陆</Property>
+}</ClientEvent>
+        <Property name="caption">登陆</Property>
         <Property name="style">
           <Property name="font-weight">bold</Property>
         </Property>
@@ -207,21 +207,16 @@ if (username) {&#xD;
     </Container>
     <Container id="homePage">
       <Property name="height">0</Property>
-      <BlockView id="bvDocument" layoutConstraint="left">
+      <BlockView id="bvOther" layoutConstraint="left">
         <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
 var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-tag'>&lt;/i> &quot;+ arg.data.type +&quot;&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
-var $p = $(&quot;&lt;p>更多&lt;i class='fa fa-angle-double-right'>&lt;/i>&lt;/p>&quot;);&#xD;
-$p.appendTo($h);&#xD;
-$p.click(function() {&#xD;
-	window.open(&quot;com.bstek.cms.web.portal.preview.DocumentQuery.d?programaName=&quot; + arg.data.type);&#xD;
-});&#xD;
 var items = arg.data.items || [];&#xD;
 var $ul = $(&quot;&lt;ul class='ex items'>&lt;/ul>&quot;).appendTo(arg.dom);&#xD;
 items.each(function(item){		&#xD;
-	var time = new Date(item.get(&quot;createDate&quot;)).formatDate(&quot;Y-m-d&quot;);&#xD;
-	var $li = $(&quot;&lt;li>&quot;+ item.get(&quot;name&quot;) +&quot;&lt;/li>&quot; + &quot;&lt;p>&quot;+ time + &quot;&lt;/p>&quot;).appendTo($ul);	&#xD;
+	var time = new Date(item.createDate).formatDate(&quot;Y-m-d&quot;);&#xD;
+	var $li = $(&quot;&lt;li>&quot;+ item.name +&quot;&lt;/li>&quot; + &quot;&lt;p>&quot;+ time + &quot;&lt;/p>&quot;).appendTo($ul);	&#xD;
 		$li.click(function() {		&#xD;
-			window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + item.get(&quot;name&quot;));&#xD;
+			window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + item.name);&#xD;
 		});&#xD;
 });&#xD;
 var url = &quot;/static/images/news1.png&quot;;&#xD;
@@ -257,21 +252,22 @@ $(arg.dom)&#xD;
         <Property name="width">650</Property>
         <Property name="image">/static/images/news1.png</Property>
       </Image>
-      <BlockView id="bvHot">
+      <BlockView id="bvHotNews">
         <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
 var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-tag'>&lt;/i> &quot;+ arg.data.type +&quot;&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
 var items = arg.data.items || [];&#xD;
 var $ul = $(&quot;&lt;ul class='ex items'>&lt;/ul>&quot;).appendTo(arg.dom);&#xD;
-items.each(function(item){		&#xD;
-	var $li = $(&quot;&lt;li>&quot;+ item.get(&quot;name&quot;) +&quot;&lt;/li>&quot;).appendTo($ul);	&#xD;
+items.each(function(item){&#xD;
+	var time = new Date(item.createDate).formatDate(&quot;Y-m-d&quot;);		&#xD;
+	var $li = $(&quot;&lt;li>&quot;+ item.name +&quot;&lt;/li>&quot; + &quot;&lt;p>&quot;+ time + &quot;&lt;/p>&quot;).appendTo($ul);	&#xD;
 	$li.click(function() {		&#xD;
-		window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + item.get(&quot;name&quot;));&#xD;
+		window.open(&quot;com.bstek.cms.web.portal.ContentTemplate.d?name=&quot; + item.name);&#xD;
 	});&#xD;
 });&#xD;
 &#xD;
-var url = &quot;/static/images/news2.png&quot;;&#xD;
-var $img = $(&quot;&lt;img src=&quot; + url +&quot;>&quot;);&#xD;
-$img.appendTo($ul);&#xD;
+//var url = &quot;/static/images/news2.png&quot;;&#xD;
+//var $img = $(&quot;&lt;img src=&quot; + url +&quot;>&quot;);&#xD;
+//$img.appendTo($ul);&#xD;
 </ClientEvent>
         <Property name="blockHeight">550</Property>
         <Property name="style">

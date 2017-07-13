@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import com.bstek.bdf3.dorado.jpa.annotation.Generator;
 import com.bstek.bdf3.dorado.jpa.policy.impl.CreatedDatePolicy;
+import com.bstek.cms.policy.CreatorPolicy;
 import com.bstek.dorado.annotation.PropertyDef;
 
 /**
@@ -33,6 +34,7 @@ public class WebsiteDispense implements Serializable {
 	
 	@Column(name = "CREATOR_", length = 60)
 	@PropertyDef(label = "创建人")
+	@Generator(policy = CreatorPolicy.class)
 	private String creator;
 	
 	@Column(name = "CREATE_TIME_")

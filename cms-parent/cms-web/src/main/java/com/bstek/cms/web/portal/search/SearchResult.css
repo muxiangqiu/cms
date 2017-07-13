@@ -1,0 +1,140 @@
+@CHARSET "US-ASCII";
+
+
+/* 工具栏--名称 */
+#d__uid_16 {
+	position: absolute;
+	top: 28px;
+	left: 20px;
+	font-size: 26px;
+	color: #3C3C3C;
+	height: 0px !important;
+}
+
+/* 工具栏--首页 */
+#d__uid_18 {
+	position: absolute;
+	top: 28px;
+	left: 260px;
+	font-size: 26px;
+	height: 0px !important;
+}
+
+/* 工具栏--栏目按钮 */
+#d__uid_22 {
+	position: absolute;
+	top: 30px;
+	left: 90%;
+	font-size: 22px;
+	height: 0px !important;
+}
+
+/* 工具栏--登陆按钮 */
+#d__uid_24 {
+	position: absolute;
+	top: 11px;
+	left: 93%;
+	height: 55px;
+	width: 55px;
+	border-radius: 50%;
+}
+
+#d__uid_24>span {
+	padding-top: 12px;
+	font-size: 15px;
+	margin-left: -1px;
+}
+
+/* 工具栏--搜索框 */
+#d_textEditor {
+	height: 55px;
+	width: 50% !important;
+	border-radius: 60px;	
+	position: absolute;
+	top: 10px;
+	left: 450px;
+}
+
+/* 搜索框中的搜索图标 */
+.fa-search:before {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	font-size: 25px;
+	color: #BEBEBE;
+}
+
+/* 搜索框中的编辑框 */
+input.editor {
+	font-size: 22px;
+	padding-top: 4px !important;
+	padding-left: 30px !important;
+	height: 45px !important;
+	
+}
+
+.editor {
+	width: 95% !important;
+	margin-left: 15px !important;
+}
+
+
+/*表格*/
+#d_dgSearch {
+	top: 120px !important;
+	left: 265px !important;
+	background-color: #FFF;
+}
+
+#d_dgSearch tr {
+	height: 40px !important;
+}
+
+
+/*分页*/
+#d_polit {
+	font-size: 18px;
+	top: 1350px !important;
+	left: 570px !important;
+}
+
+#d_polit input.editor {
+	font-size: 14px;
+	margin-top: 0px !important;
+	padding-left: 0px !important;
+	height: 40px !important;
+	width: 20px !important;
+}
+
+#d__uid_43>div {
+	margin-top: -13px !important;
+	margin-left: -9px !important;
+}
+
+
+/*link样式*/
+.link {
+	color: #058FE1;
+	cursor: pointer;
+}
+
+.d-grid .data-table .current-row .link {
+	color: #ffffff !important;
+}
+
+.d-grid .data-table .row .current-cell {
+	background-color: inherit;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,17 +3,16 @@ package com.bstek.cms.orm;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import com.bstek.bdf3.dorado.jpa.annotation.Generator;
 import com.bstek.bdf3.dorado.jpa.policy.impl.CreatedDatePolicy;
 import com.bstek.bdf3.dorado.jpa.policy.impl.UpdatedDatePolicy;
+import com.bstek.cms.policy.CreatorPolicy;
 import com.bstek.dorado.annotation.PropertyDef;
 
 /**
@@ -33,16 +32,17 @@ public class Document implements Serializable {
 	@PropertyDef(label = "ID")
 	private String id;
 	
-	@Column(name = "NAME_", length = 60)
+	@Column(name = "NAME_", length = 120)
 	@PropertyDef(label = "标题")
 	private String name;
 	
-	@Column(name = "PROGRAMA_NAME_", length = 60)
+	@Column(name = "PROGRAMA_NAME_", length = 120)
 	@PropertyDef(label = "所属栏目名称")
 	private String programaName;
 	
 	@Column(name = "CREATOR_", length = 60)
 	@PropertyDef(label = "创建人")
+	@Generator(policy = CreatorPolicy.class)
 	private String creator;
 	
 	@Column(name = "CREATE_TIME_")
@@ -82,11 +82,15 @@ public class Document implements Serializable {
 	
 	@Column(name = "DOCUMENT_STATUS_")
 	@PropertyDef(label = "状态")
-	private DocumentStatus status;
+	private String status;
 	
 	@Column(name = "SECURITY_LEVEL_")
 	@PropertyDef(label = "密级")
-	private SecurityLevelType securityLevel;
+	private String securityLevel;
+	
+	@Column(name = "BROWSE_NUMBER_")
+	@PropertyDef(label = "浏览次数")
+	private Integer browseNumber;
 	
 	@Transient
 	private List<Programa> pros;
@@ -187,20 +191,28 @@ public class Document implements Serializable {
 		this.deptId = deptId;
 	}
 
-	public DocumentStatus getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(DocumentStatus status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public SecurityLevelType getSecurityLevel() {
+	public String getSecurityLevel() {
 		return securityLevel;
 	}
 
-	public void setSecurityLevel(SecurityLevelType securityLevel) {
+	public void setSecurityLevel(String securityLevel) {
 		this.securityLevel = securityLevel;
+	}
+
+	public Integer getBrowseNumber() {
+		return browseNumber;
+	}
+
+	public void setBrowseNumber(Integer browseNumber) {
+		this.browseNumber = browseNumber;
 	}
 
 	public List<Programa> getPros() {

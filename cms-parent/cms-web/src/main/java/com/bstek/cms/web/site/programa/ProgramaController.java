@@ -29,6 +29,16 @@ public class ProgramaController {
 			.list();
 	}
 	
+	@DataProvider
+	public List<Programa> loadAll() {
+		return JpaUtil
+				.linq(Programa.class)
+				.isNotNull("parentId")
+				.asc("createTime")
+				.asc("order")
+				.list();
+	}
+	
 	@DataResolver
 	@Transactional
 	public void save(List<Programa> programs) {
@@ -37,7 +47,7 @@ public class ProgramaController {
 	
 	@Expose
 	public String validate(String name) {
-		boolean result = JpaUtil.linq(Programa.class).equal("name", name).exists();
+		boolean result = JpaUtil.linq(Programa.class).isNull("parentId").equal("name", name).exists();
 		if (result) {
 			return "该栏目名称已存在！";
 		}

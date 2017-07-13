@@ -13,10 +13,10 @@
         <Property></Property>
         <Property name="label">栏目名称</Property>
         <Property name="required">true</Property>
-        <Validator name="validator1" type="ajax">
+        <Validator name="validator1" type="required"/>
+        <Validator name="validator2" type="ajax">
           <Property name="service">programaController#validate</Property>
         </Validator>
-        <Validator name="validator2" type="required"/>
       </PropertyDef>
       <PropertyDef name="parentId">
         <Property></Property>

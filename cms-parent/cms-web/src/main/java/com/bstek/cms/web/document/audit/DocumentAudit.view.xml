@@ -41,6 +41,15 @@
         <Property></Property>
         <Property name="label">标志</Property>
       </PropertyDef>
+      <PropertyDef name="status">
+        <Property></Property>
+        <Property name="label">状态</Property>
+        <Property name="mapping">
+          <Property name="mapValues">${dict.items(&quot;DS&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
+        </Property>
+      </PropertyDef>
     </DataType>
   </Model>
   <View layout="regionPadding:15">
