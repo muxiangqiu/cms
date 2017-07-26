@@ -230,6 +230,11 @@ self.set(&quot;parameter&quot;, params);&#xD;
             <Property name="property">endDate</Property>
             <Editor/>
           </AutoFormElement>
+          <AutoFormElement>
+            <Property name="name">status</Property>
+            <Property name="property">status</Property>
+            <Editor/>
+          </AutoFormElement>
         </AutoForm>
         <Label>
           <Property name="text">文档内容</Property>
@@ -242,6 +247,7 @@ self.set(&quot;parameter&quot;, params);&#xD;
           <Property name="property">content</Property>
           <Property name="dataPath">!currentNode.#documents</Property>
           <Property name="height">290</Property>
+          <Property name="defaultFontSize">22px</Property>
         </UEditor>
       </Children>
       <Tools/>
@@ -359,10 +365,12 @@ $(arg.dom).text(data.get(&quot;name&quot;) || &quot;&quot;);</ClientEvent>
           <ToolBarButton>
             <ClientEvent name="onClick" signature="self,arg,dsPrograma,dataTree,dialogDocument">var entity = dataTree.get(&quot;currentEntity&quot;);&#xD;
 if (entity) {&#xD;
+	var parentName = entity.parent.parent?entity.parent.parent.get(&quot;name&quot;) + &quot; - &quot;:&quot;&quot;;&#xD;
 	dsPrograma.getData(&quot;!currentNode.documents&quot;).insert({&#xD;
 		status: &quot;0&quot;,&#xD;
-		programaName: entity.get(&quot;name&quot;)&#xD;
+		programaName: parentName + entity.get(&quot;name&quot;)&#xD;
 	});&#xD;
+	alert(parentName);&#xD;
 	dialogDocument.show();&#xD;
 } else {&#xD;
 	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;

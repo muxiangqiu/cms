@@ -1,0 +1,467 @@
+
+@media screen and (min-width: 1100px) {
+	/*搜索框*/
+	.searchBox {
+		height: 45px;
+		border-radius: 60px;	
+		position: absolute;
+		top: 7px;
+		left: 250px;
+		background-color: #F0F0F0;
+	}
+	
+	/*栏目按钮*/
+	.programaBtn {
+		position: absolute;
+		top: 25px;
+		left: 90%;
+		font-size: 22px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
+	}
+	
+	/*登陆按钮 */
+	.loginBtn {
+		position: absolute;
+		top: 7px;
+		left: 93%;
+		height: 50px;
+		width: 50px;
+		border-radius: 50%;
+	}
+	
+	/*发布按钮 */
+	.issueBtn {
+		position: absolute;
+		top: 25px;
+		left: 84%;
+		font-size: 18px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
+	}
+}
+
+@media screen and (min-width: 800px) and (max-width: 1100px) {
+	/*搜索框*/
+	.searchBox {
+		height: 45px;
+		border-radius: 60px;	
+		position: absolute;
+		top: 7px;
+		left: 250px;
+		background-color: #F0F0F0;
+	}
+	 
+	/*栏目按钮*/
+	.programaBtn {
+		position: absolute;
+		top: 25px;
+		left: 88%;
+		font-size: 22px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
+	}
+	
+	/*登陆按钮 */
+	.loginBtn {
+		position: absolute;
+		top: 7px;
+		left: 93%;
+		height: 50px;
+		width: 50px;
+		border-radius: 50%;
+	}
+	
+	/*发布按钮 */
+	.issueBtn {
+		position: absolute;
+		top: 25px;
+		left: 80%;
+		font-size: 18px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
+	}
+
+	
+	
+}
+
+@media screen and (min-width: 650px) and (max-width: 800px) {
+
+	/*搜索框*/
+	.searchBox {
+		height: 45px;
+		border-radius: 60px;	
+		position: absolute;
+		top: 7px;
+		left: 250px;
+		width: 300px !important;
+		background-color: #F0F0F0;
+	}
+	
+	/*栏目按钮*/
+	.programaBtn {
+		position: absolute;
+		top: 25px;
+		left: 86%;
+		font-size: 22px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
+	}
+	
+	/*登陆按钮 */
+	.loginBtn {
+		position: absolute;
+		top: 7px;
+		left: 90%;
+		height: 50px;
+		width: 50px;
+		border-radius: 50%;
+	}
+	
+	/*滚动条*/
+	#d__uid_16>.d-modern-scroller>.track, .slider.ui-draggable {
+		visibility: hidden !important;
+	}
+	
+	/*发布按钮 */
+	.issueBtn {
+		visibility: hidden;
+	}
+}
+
+
+@media screen and (min-width: 460px) and (max-width: 650px) {
+	
+	/*搜索框*/
+	.searchBox {
+		visibility: hidden;
+		width: 0px !inportant;
+	}
+	
+	/*栏目按钮*/
+	.programaBtn {
+		visibility: hidden;
+	}
+	
+	/*登陆按钮 */
+	.loginBtn {
+		position: absolute;
+		top: 7px;
+		left: 87%;
+		height: 50px;
+		width: 50px;
+		border-radius: 50%;
+	}
+	
+	/*滚动条*/
+	#d__uid_16>.d-modern-scroller>.track, .slider.ui-draggable {
+		visibility: hidden !important;
+	}
+	
+	/*发布按钮 */
+	.issueBtn {
+		visibility: hidden;
+	}
+}
+
+@media screen and (max-width: 460px) {
+	
+	/*搜索框*/
+	.searchBox {
+		visibility: hidden;
+		width: 0px !inportant;
+	}
+	
+	/*栏目按钮*/
+	.programaBtn {
+		visibility: hidden;
+	}
+	
+	/*登陆按钮 */
+	.loginBtn {
+		visibility: hidden;
+	}
+	
+	/*滚动条*/
+	#d__uid_15>.d-modern-scroller>.track, .slider.ui-draggable {
+		visibility: hidden !important;
+	}
+	
+	/*发布按钮 */
+	.issueBtn {
+		visibility: hidden;
+	}
+}
+
+/**********************************************************/
+
+#d_viewMain {
+	background-color: #F0F0F0;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+}
+
+/*搜索提示框*/
+#d__uid_45 {
+	font-size: 16px;
+}
+
+/* 系统名称 */
+#d__uid_16 {
+	position: absolute;
+	top: 18px;
+	left: 20px;
+	font-size: 26px;
+	color: #6C6C6C;
+	height: 0px !important;
+}
+
+/*登陆按钮 */
+#d__uid_24>span {
+	padding-top: 12px;
+	font-size: 13px;
+	margin-left: -1px;
+}
+
+#d__uid_24:hover {
+	background-color: #4684ee;
+	color: #FFF;
+}
+
+/* 搜索框中的搜索图标 */
+.fa-search:before {
+	position: absolute;
+	top: 10px;
+	left: 15px;
+	font-size: 25px;
+	color: #BEBEBE;
+}
+
+/* 搜索框中的编辑框 */
+input.editor {
+	font-size: 20px;
+	padding-top: 2px !important;
+	padding-left: 30px !important;
+	height: 40px !important;
+	
+}
+
+.editor {
+	width: 95% !important;
+	margin-left: 15px !important;
+}
+
+/*栏目按钮*/
+#d__uid_22:hover {
+	color: #000;
+}
+
+/*发布按钮*/
+#d__uid_20:hover {
+	color: #000;
+}
+
+/*工具栏  外层container*/
+#d__uid_15 {
+	position: fixed !important;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+	background-color: #FFF;
+	width: 100% !important;
+	box-shadow: 0px 4px 6px #BEBEBE;
+}
+
+/*blockView 外层container*/
+#d_homePage {
+	padding-top: 100px;
+	z-index: 1;
+}
+
+/**********************************************************/
+
+/*更多 按钮*/
+.ex.header p {
+	margin-left: 400px !important;
+	margin-top: -25px;
+}
+
+/*新闻项时间*/
+p {
+	margin-left: 360px;
+	margin-top: -23px;
+	height: 10px;
+}
+
+/*二级栏目*/
+#d_bvDocument>div>div>div>h4 {
+	padding-left: 20px !important;
+	font-family: serif;
+	font-size: 19px;
+}
+
+/*新闻项背景*/
+#d_bvDocument .block {
+	background-color: #FFF;	
+	border:1px solid;
+	border-color: #d0d0d0;
+
+}
+
+/*新闻项整体背景*/
+.d-block-view .block-current {
+	color: #000;
+	background-color: #f7f7f7;
+}
+
+.d-block-view .block-hover {
+	color: #000;
+	background-color: #f7f7f7;
+}
+
+
+/*新闻项*/
+.d-block-view .ex.items>li {
+	line-height: 1.7em;
+	cursor: pointer;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-webkit-transition-property: color, -webkit-box-shadow,
+		-webkit-transform;
+	-moz-transition-property: -moz-box-shadow, -moz-transform;
+	-ms-transition-property: color, -ms-box-shadow, -ms-transform;
+	-o-transition-property: color, -o-box-shadow, -o-transform;
+	transition-property: color, box-shadow, transform;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+}
+
+.d-block-view .ex.items>li:hover {
+	color: #15A4FA;
+	text-decoration: underline;
+}
+ 
+.d-block-view .ex.items>li {
+	width: 300px !important;
+}
+
+/* 
+ul.ex.items span {
+	display: none;
+}
+
+ul.ex.items:hover span {
+	display:block;
+	position:absolute; 
+	top:12px; 
+	left:200px; 
+	width:400px; 
+	border:1px solid #0cf; 
+	background-color:#cff; 
+	color:#000; 
+	text-align: center;
+}
+
+ */
+
+/*次级栏目 --更多 按钮*/
+
+.d-block-view .ex.header>p {
+	line-height: 1.7em;
+	cursor: pointer;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	-webkit-transition-property: color, -webkit-box-shadow,
+		-webkit-transform;
+	-moz-transition-property: -moz-box-shadow, -moz-transform;
+	-ms-transition-property: color, -ms-box-shadow, -ms-transform;
+	-o-transition-property: color, -o-box-shadow, -o-transform;
+	transition-property: color, box-shadow, transform;
+	-moz-transition-duration: 0.3s;
+	-ms-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+}
+
+.d-block-view .ex.header>p:hover {
+	color: #EA0000;
+}
+
+
+/*悬浮栏目Panel*/
+#d_programaPanel {
+	border:1px solid;
+	border-color: #d0d0d0;
+}
+
+/*悬浮栏目*/
+#d_bvPrograma {
+	background-color: #FFF;
+}
+
+/*悬浮栏目项背景*/
+#d_bvPrograma .block {
+	background-color: #FFF;
+	cursor: pointer;
+}
+
+/*悬浮栏目项名称*/
+#d_bvPrograma>div>div>div>h2 {
+	text-align: center;
+	margin-top: -15px;
+	font-weight: 500;
+	font-size: 16px;
+}
+
+/*悬浮栏目项图标*/
+#d_bvPrograma>div>div>div>h4>i {
+	padding-left: 23px;
+	font-size: 50px;
+}
+
+
+/******************************************************/
+
+
+
+/*新闻项图片*/
+/* img {
+	height: 300px;
+	width: 590px;
+	position: absolute;
+	top: 236px;
+} */
+
+/*轮播图位置*/
+/* #d__uid_31 {
+	padding-top: 40px;
+	height: 350px !important;
+}
+
+#d__uid_31>img {
+	
+	padding-left: 30px;
+	height: 350px;
+	width: 650px;
+} */
+
+
+
+
+
+
+

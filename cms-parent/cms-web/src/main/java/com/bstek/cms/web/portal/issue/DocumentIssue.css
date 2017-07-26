@@ -1,0 +1,100 @@
+
+#d_viewMain {
+	background-color: #F0F0F0;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+}
+
+/* 系统名称 */
+#d__uid_16 {
+	position: absolute;
+	top: 18px;
+	left: 20px;
+	font-size: 26px;
+	color: #6C6C6C;
+	height: 0px !important;
+}
+
+/*工具栏  外层container*/
+#d__uid_15 {
+	position: fixed !important;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+	background-color: #FFF;
+	width: 100% !important;
+	box-shadow: 0px 4px 6px #BEBEBE;
+}
+
+/*blockView 外层container*/
+#d_homePage {
+	padding-top: 100px;
+	z-index: 1;
+	border: 1px solid;
+	background-color: #FFF;
+}
+
+/*发布按钮*/
+
+#d_issue {
+	height: 36px;
+	width: 80px;
+	font-size: 16px;
+}
+
+#d_issue:hover {
+	background-color: #ECECFF;
+	border: 1px solid;
+	border-color: #4684ee;
+	
+}
+
+/*按钮名称图标*/
+#d_issue>span, #d_cancel>span {
+	padding-top: 7px;
+}
+
+.d-icon.fa.fa-share-square-o, .d-icon.fa.fa-minus {
+	font-size: 18px !important;
+}
+
+/*取消按钮*/
+#d_cancel {
+	height: 36px;
+	width: 80px;
+	font-size: 16px;
+}
+#d_cancel:hover {
+	background-color: #FFECEC;
+	border: 1px solid;
+	border-color: #AE0000;
+	
+}
+
+/*提示框*/
+#d__uid_55 {
+	height: 50px !important;
+	margin-top: 20px;
+}
+
+/*提示框按钮*/
+#d__uid_53 {
+	width: 70px;
+	margin-left: -15px;
+}
+#d__uid_53:hover, #d__uid_54:hover {
+	border-color: #4684ee;
+	background-color: #FBFBFF;
+}
+
+#d__uid_54 {
+	width: 70px;
+	margin-left: 15px;
+}
+/******************************************************/
+
+
+
+
+
+

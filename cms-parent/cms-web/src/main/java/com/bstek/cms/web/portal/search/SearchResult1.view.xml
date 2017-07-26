@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Document">
+      <Property name="creationType">com.bstek.cms.orm.Document</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="startDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="endDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">至</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">类型</Property>
+      </PropertyDef>
+      <PropertyDef name="deptId">
+        <Property></Property>
+        <Property name="label">部门</Property>
+      </PropertyDef>
+      <PropertyDef name="programaName">
+        <Property></Property>
+        <Property name="label">所属栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="top">
+        <Property name="dataType">boolean</Property>
+        <Property name="label">置顶</Property>
+      </PropertyDef>
+      <PropertyDef name="updateDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">修改时间</Property>
+      </PropertyDef>
+      <PropertyDef name="browseNumber">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">浏览次数</Property>
+      </PropertyDef>
+      <PropertyDef name="securityLevel">
+        <Property name="label">密级</Property>
+        <Property name="mapping">
+          <Property name="mapValues">${dict.items(&quot;MJ&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property name="label">状态</Property>
+        <Property name="mapping">
+          <Property name="mapValues">${dict.items(&quot;DS&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="text">
+        <ClientEvent name="onGetText">arg.text = arg.entity.get(&quot;content&quot;).replace(/&lt;[^>]+>/g, &quot;&quot;);&#xD;
+</ClientEvent>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+    </DataType>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+      <PropertyDef name="documents">
+        <Property name="dataType">[Document]</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="vbox">
+    <ClientEvent name="onClick" signature="self,arg,programaPanel,polit">programaPanel.hide();&#xD;
+</ClientEvent>
+    <ClientEvent name="onReady">window.number = 1;&#xD;
+</ClientEvent>
+    <Property name="packages">font-awesome,colors</Property>
+    <Property name="contentOverflow">hidden</Property>
+    <DataSet id="dsDocument">
+      <ClientEvent name="beforeLoadData" signature="self,arg,search">&#xD;
+var param = &quot;${param.value}&quot;;&#xD;
+if (param) {&#xD;
+	self.set(&quot;parameter&quot;, &quot;${param.value}&quot;);&#xD;
+} &#xD;
+&#xD;
+var value = search.get(&quot;text&quot;);&#xD;
+&#xD;
+if (value) {&#xD;
+	self.set(&quot;parameter&quot;, value);&#xD;
+}&#xD;
+&#xD;
+/*&#xD;
+var param = {&#xD;
+	editorValue: null,&#xD;
+	pageNumber: null&#xD;
+}&#xD;
+var param = &quot;${param.value}&quot;;&#xD;
+param.pageNumber = window.pageNumber;&#xD;
+if (param) {&#xD;
+	alert(param.pageNumber);&#xD;
+	param.editorValue = &quot;${param.value}&quot;;&#xD;
+	self.set(&quot;parameter&quot;, param);&#xD;
+} &#xD;
+&#xD;
+var value = search.get(&quot;text&quot;);&#xD;
+&#xD;
+if (value) {&#xD;
+	param.editorValue = value;&#xD;
+	self.set(&quot;parameter&quot;, param);&#xD;
+}&#xD;
+&#xD;
+*/</ClientEvent>
+      <ClientEvent name="onLoadData" signature="self,arg,bvSearch,ajaxActionPageNumber,last,next">var items = [];&#xD;
+var documents = self.getData();&#xD;
+&#xD;
+documents.each(function(d) {&#xD;
+	var type = d.get(&quot;name&quot;);&#xD;
+&#xD;
+	var item = {&#xD;
+		type: type,&#xD;
+		items: d.get(&quot;content&quot;),&#xD;
+		date: d.get(&quot;createDate&quot;)&#xD;
+	};&#xD;
+	items.push(item);&#xD;
+});&#xD;
+&#xD;
+bvSearch.set(&quot;items&quot;, items);&#xD;
+&#xD;
+last.set(&quot;visible&quot;, false);&#xD;
+last.set(&quot;disabled&quot;, true);&#xD;
+&#xD;
+window.number = 1;&#xD;
+ajaxActionPageNumber.execute();&#xD;
+</ClientEvent>
+      <Property name="dataType">[Document]</Property>
+      <Property name="dataProvider">searchResultController#loadDocumentsByEditorValue</Property>
+      <Property name="loadMode">onReady</Property>
+      <Property name="pageSize">10</Property>
+    </DataSet>
+    <Container layout="hbox">
+      <ClientEvent name="onCreateDom">$(arg.dom).addClass();&#xD;
+</ClientEvent>
+      <Property name="style">
+        <Property name="border">1px solid</Property>
+        <Property name="border-color">#d0d0d0</Property>
+      </Property>
+      <Property name="height">65</Property>
+      <Property name="width">100%</Property>
+      <Label>
+        <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
+        <Property name="exClassName">fa fa-language</Property>
+        <Property name="text">  内容管理系统</Property>
+        <Property name="style">
+          <Property name="key"></Property>
+        </Property>
+      </Label>
+      <TextEditor id="search">
+        <ClientEvent name="onKeyDown" signature="self,arg,dsDocument">&#xD;
+window.clearTimeout(self.urlQueryTimeout);&#xD;
+self.urlQueryTimeout = window.setTimeout(function() {&#xD;
+	var key = self.get(&quot;value&quot;);&#xD;
+	if (key) {&#xD;
+		dsDocument.flushAsync();&#xD;
+	}&#xD;
+	&#xD;
+}, 400);&#xD;
+&#xD;
+//window.setTimeout(function() {&#xD;
+//	var height = document.getElementById(&quot;d_bvSearch&quot;).offsetHeight;&#xD;
+//	document.getElementById(&quot;d_bvSearch&quot;).parentNode.style.height = height;&#xD;
+//}, 300);</ClientEvent>
+        <ClientEvent name="onFocus">&#xD;
+var width = 400;&#xD;
+window.setInterval(function() {&#xD;
+	width = width + 20;&#xD;
+	if (width &lt;= 500) {&#xD;
+		self.set(&quot;width&quot;, width);&#xD;
+	} else {&#xD;
+		window.clearInterval();&#xD;
+	}&#xD;
+}, 55);&#xD;
+&#xD;
+</ClientEvent>
+        <ClientEvent name="onBlur">&#xD;
+var width = 500;&#xD;
+window.setInterval(function() {&#xD;
+	width = width - 20;&#xD;
+	if (width > 400) {&#xD;
+		self.set(&quot;width&quot;, width);&#xD;
+	} else {&#xD;
+		window.clearInterval();&#xD;
+	}&#xD;
+}, 55);&#xD;
+&#xD;
+</ClientEvent>
+        <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;searchBox&quot;);&#xD;
+</ClientEvent>
+        <ClientEvent name="onPost" signature="self,arg,searchPanel">/*&#xD;
+searchPanel.show({&#xD;
+	anchorTarget: self,&#xD;
+	vAlign: &quot;bottom&quot;,&#xD;
+	offsetTop: 6,&#xD;
+	offsetLeft: 2&#xD;
+});&#xD;
+*/</ClientEvent>
+        <ClientEvent name="onReady">var param = &quot;${param.value}&quot;;&#xD;
+if (param) {&#xD;
+	self.set(&quot;text&quot;, param);&#xD;
+	//self.setFocus();&#xD;
+}&#xD;
+</ClientEvent>
+        <Property name="blankText">按标题搜索...</Property>
+        <Property name="exClassName">fa fa-search</Property>
+        <Property name="width">400</Property>
+      </TextEditor>
+      <Label>
+        <ClientEvent name="onCreateDom">$(arg.dom).off(&quot;click&quot;);&#xD;
+$(arg.dom)&#xD;
+	.addClass(&quot;issueBtn&quot;)&#xD;
+	.click(function() {&#xD;
+		window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue.d&quot;);			&#xD;
+		return false;&#xD;
+	});</ClientEvent>
+        <Property name="exClassName">fa fa-share-square-o</Property>
+        <Property name="text"> 发布</Property>
+      </Label>
+      <Label>
+        <ClientEvent name="onCreateDom" signature="self,arg,programaPanel">$(arg.dom).off(&quot;click&quot;);&#xD;
+$(arg.dom)&#xD;
+	.addClass(&quot;programaBtn&quot;)&#xD;
+	.click(function() {&#xD;
+		programaPanel.show({&#xD;
+			anchorTarget: self,&#xD;
+			vAlign: &quot;bottom&quot;,&#xD;
+			offsetTop: 38,&#xD;
+			offsetLeft: 72&#xD;
+		});			&#xD;
+		return false;&#xD;
+	});</ClientEvent>
+        <Property name="exClassName">fa fa-th</Property>
+        <Property name="tip">栏目列表</Property>
+      </Label>
+      <Button>
+        <ClientEvent name="onClick">if (self.get(&quot;caption&quot;) ==  &quot;&amp;nbsp;登&amp;nbsp;陆&quot;) {&#xD;
+	window.open(&quot;bdf3.security.ui.view.Login.d&quot;);&#xD;
+} else {&#xD;
+	dorado.MessageBox.confirm(&quot;确认退出？&quot;, function() {&#xD;
+		window.location.href = &quot;${configure['bdf3.logoutPath']}&quot;;		&#xD;
+	});&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+        <ClientEvent name="onReady">var username = &quot;${loginUsername}&quot;;&#xD;
+if (username) {&#xD;
+	self.set(&quot;caption&quot;, username);&#xD;
+} else {&#xD;
+	self.set(&quot;caption&quot;, &quot;&amp;nbsp;登&amp;nbsp;陆&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+        <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;loginBtn&quot;);&#xD;
+</ClientEvent>
+        <Property name="caption"> 登 陆</Property>
+        <Property name="style">
+          <Property name="font-weight">bold</Property>
+        </Property>
+      </Button>
+    </Container>
+    <Container id="homePage" layoutConstraint="align:center">
+      <Property name="width">1100</Property>
+      <Property name="height">1350</Property>
+      <BlockView id="bvSearch">
+        <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
+var time = new Date(arg.data.date).formatDate(&quot;Y-m-d&quot;);&#xD;
+&#xD;
+var $h = $(&quot;&lt;h4 class='ex header'>&quot;+ arg.data.type +&quot;&lt;/h4>&lt;p id='time'>&quot; + time + &quot;&lt;/p>&quot;).appendTo(arg.dom);&#xD;
+$h.click(function() {&#xD;
+	window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + arg.data.type;&#xD;
+});&#xD;
+&#xD;
+var showName = null;&#xD;
+&#xD;
+var text = arg.data.items;&#xD;
+if (text) {&#xD;
+	var showText = text.replace(/&lt;[^>]+>/g, &quot;&quot;);&#xD;
+	if (showText.length > 75) {&#xD;
+		showName = showText.substring(0, 75) + &quot;...&quot;;&#xD;
+	} else {&#xD;
+		showName = showText;&#xD;
+	}&#xD;
+} else {&#xD;
+	showName = &quot;无文章内容...&quot;;&#xD;
+}&#xD;
+&#xD;
+var $p = $(&quot;&lt;p class='ex items'>&quot; + showName + &quot;&lt;/p>&quot;).appendTo(arg.dom);&#xD;
+&#xD;
+</ClientEvent>
+        <Property name="lineSize">1</Property>
+        <Property name="blockHeight">120</Property>
+        <Property name="blockWidth">700</Property>
+      </BlockView>
+    </Container>
+    <Container layout="hbox" layoutConstraint="align:center">
+      <Property name="width">630</Property>
+      <Property name="height">100</Property>
+      <Button id="last">
+        <ClientEvent name="onClick" signature="self,arg,ajaxActionDocs">window.number--;&#xD;
+&#xD;
+ajaxActionDocs.execute();</ClientEvent>
+        <Property name="caption">&lt;上一页</Property>
+      </Button>
+      <Label id="info">
+        <Property name="width">150</Property>
+        <Property name="height">30</Property>
+        <Property name="style">
+          <Property name="text-align">center</Property>
+          <Property name="font-size">16px</Property>
+          <Property name="color">#058FE1</Property>
+        </Property>
+      </Label>
+      <Button id="next">
+        <ClientEvent name="onClick" signature="self,arg,ajaxActionDocs">window.number++;&#xD;
+&#xD;
+ajaxActionDocs.execute();&#xD;
+</ClientEvent>
+        <Property name="caption">下一页></Property>
+      </Button>
+    </Container>
+    <FloatPanel id="programaPanel">
+      <ClientEvent name="onShow" signature="self,arg,dsPrograma">dsPrograma.flushAsync();&#xD;
+</ClientEvent>
+      <Property name="width">340</Property>
+      <Property name="animateType">zoom</Property>
+      <Property name="style">
+        <Property name="min-height">380px</Property>
+      </Property>
+      <Property name="height">380</Property>
+      <Buttons/>
+      <Children>
+        <DataSet id="dsPrograma">
+          <ClientEvent name="onLoadData" signature="self,arg,bvPrograma">var items = [];&#xD;
+var programas = self.getData();&#xD;
+programas.each(function(p) {&#xD;
+	var type = p.get(&quot;name&quot;);&#xD;
+&#xD;
+	var item = {&#xD;
+		type: type,&#xD;
+		items: p.get(&quot;documents&quot;)&#xD;
+	};&#xD;
+	items.push(item);&#xD;
+});&#xD;
+&#xD;
+bvPrograma.set(&quot;items&quot;, items);</ClientEvent>
+          <Property name="dataType">[Programa]</Property>
+          <Property name="dataProvider">portalController#loadTopPrograma</Property>
+        </DataSet>
+        <BlockView id="bvPrograma">
+          <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
+var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-dropbox grey-text'>&lt;/i>&lt;br>&lt;h2>&quot;+ arg.data.type +&quot;&lt;/h2>&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
+$h.click(function() {&#xD;
+	if (arg.data.type == &quot;首页&quot;) {&#xD;
+		window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;&#xD;
+	} else {&#xD;
+		window.location.href = &quot;com.bstek.cms.web.portal.more.MoreDocumentQuery1.d?programaName=&quot; + arg.data.type;&#xD;
+	}	&#xD;
+});&#xD;
+</ClientEvent>
+          <Property name="lineSize">3</Property>
+          <Property name="width">336</Property>
+          <Property name="blockHeight">100</Property>
+          <Property name="blockWidth">100</Property>
+        </BlockView>
+      </Children>
+      <Tools/>
+    </FloatPanel>
+    <AjaxAction id="ajaxActionDocs">
+      <ClientEvent name="beforeExecute" signature="self,arg,search">var param = {&#xD;
+	value: null,&#xD;
+	pageNo: null&#xD;
+}&#xD;
+&#xD;
+param.pageNo = window.number;&#xD;
+var value = search.get(&quot;text&quot;);&#xD;
+&#xD;
+if (value) {&#xD;
+	param.value = value;&#xD;
+	self.set(&quot;parameter&quot;, param);&#xD;
+}</ClientEvent>
+      <ClientEvent name="onSuccess" signature="self,arg,bvSearch,search,info,last,next">var items = [];&#xD;
+var documents = arg.result;&#xD;
+&#xD;
+documents.each(function(d) {&#xD;
+	var type = d.name;&#xD;
+&#xD;
+	var item = {&#xD;
+		type: type,&#xD;
+		items: d.content,&#xD;
+		date: d.createDate&#xD;
+	};&#xD;
+	items.push(item);&#xD;
+});&#xD;
+&#xD;
+bvSearch.set(&quot;items&quot;, items);&#xD;
+&#xD;
+info.set(&quot;text&quot;, &quot; 第 &quot; + window.number + &quot; 页 / 共 &quot; + window.sum + &quot; 页 &quot;);&#xD;
+&#xD;
+if (window.number > 1) {&#xD;
+	last.set(&quot;visible&quot;, true);&#xD;
+	last.set(&quot;disabled&quot;, false);&#xD;
+} else {&#xD;
+	last.set(&quot;visible&quot;, false);&#xD;
+	last.set(&quot;disabled&quot;, true);&#xD;
+}&#xD;
+&#xD;
+if (window.number &lt; window.sum) {&#xD;
+	next.set(&quot;visible&quot;, true);&#xD;
+	next.set(&quot;disabled&quot;, false);&#xD;
+} else {&#xD;
+	next.set(&quot;visible&quot;, false);&#xD;
+	next.set(&quot;disabled&quot;, true);&#xD;
+}</ClientEvent>
+      <Property name="service">searchResultController#loadDocumentsByPageNo</Property>
+    </AjaxAction>
+    <AjaxAction id="ajaxActionPageNumber">
+      <ClientEvent name="beforeExecute" signature="self,arg,search">&#xD;
+var param = &quot;${param.value}&quot;;&#xD;
+if (param) {&#xD;
+	self.set(&quot;parameter&quot;, param);&#xD;
+} &#xD;
+&#xD;
+var value = search.get(&quot;text&quot;);&#xD;
+&#xD;
+if (value) {&#xD;
+	self.set(&quot;parameter&quot;, value);&#xD;
+}&#xD;
+</ClientEvent>
+      <ClientEvent name="onSuccess" signature="self,arg,info,next">window.sum = arg.result;&#xD;
+info.set(&quot;text&quot;, &quot; 第 &quot; + window.number + &quot; 页 / 共 &quot; + arg.result + &quot; 页 &quot;);&#xD;
+&#xD;
+if (arg.result == 1) {&#xD;
+	next.set(&quot;visible&quot;, false);&#xD;
+	next.set(&quot;disabled&quot;, true);	&#xD;
+} else {&#xD;
+	next.set(&quot;visible&quot;, true);&#xD;
+	next.set(&quot;disabled&quot;, false);&#xD;
+}</ClientEvent>
+      <Property name="service">searchResultController#getPageNumber</Property>
+    </AjaxAction>
+    <DataSetDropDown id="dataSetDropDown">
+      <ClientEvent name="onFilterItems" signature="self,arg,dsAllDocuments">dsAllDocuments.flush();</ClientEvent>
+      <Property name="dataSet">dsAllDocuments</Property>
+      <Property name="width">490</Property>
+      <Property name="height">136</Property>
+      <Property name="autoOpen">true</Property>
+      <Property name="buttonVisible">false</Property>
+      <Property name="dynaFilter">true</Property>
+      <Property name="editable">false</Property>
+      <Property name="filterOnTyping">true</Property>
+      <Property name="filterOnOpen">true</Property>
+      <Property name="property">name</Property>
+      <Property name="filterMode">serverSide</Property>
+    </DataSetDropDown>
+    <DataSet id="dsAllDocuments">
+      <ClientEvent name="beforeLoadData" signature="self,arg,search">var value = search.get(&quot;text&quot;);&#xD;
+if (value) {&#xD;
+	self.set(&quot;parameter&quot;, value);&#xD;
+} else {&#xD;
+	self.set(&quot;parameter&quot;, &quot;&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+      <Property name="dataType">[Document]</Property>
+      <Property name="dataProvider">portalController#loadAllDocuments</Property>
+    </DataSet>
+  </View>
+</ViewConfig>

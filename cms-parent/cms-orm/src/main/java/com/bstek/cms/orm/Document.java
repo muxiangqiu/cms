@@ -94,6 +94,9 @@ public class Document implements Serializable {
 	
 	@Transient
 	private List<Programa> pros;
+	
+	@Transient
+	private String subProId;
 
 	public String getId() {
 		return id;
@@ -222,5 +225,15 @@ public class Document implements Serializable {
 	public void setPros(List<Programa> pros) {
 		this.pros = pros;
 	}
+
+	public String getSubProId() {
+		return subProId;
+	}
+
+	public void setSubProId(String subProId) {
+		this.subProId = subProId;
+	}
+	
+	
 
 }

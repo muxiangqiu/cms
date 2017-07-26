@@ -8,7 +8,6 @@ import com.bstek.cms.orm.Document;
 import com.bstek.cms.orm.Programa;
 import com.bstek.cms.orm.ProgramaDocumentLink;
 import com.bstek.dorado.annotation.DataProvider;
-import com.bstek.dorado.annotation.Expose;
 import com.bstek.dorado.data.provider.Criteria;
 import com.bstek.dorado.data.provider.Page;
 
@@ -29,47 +28,24 @@ public class PortalController {
 				.end()
 				.desc("top")
 				.desc("createDate")	
-				.list(0, 6);
+				.list(0, 10);
 			programa.setDocuments(documents);
 		}
 		return programas;
 	}
 	
 	@DataProvider
-	public List<Programa> loadHotNews() {	
-		List<Programa> programas = JpaUtil.linq(Programa.class).like("name", "%热点").asc("createTime").list();
-		for (Programa programa : programas) {
-			List<Document> documents = JpaUtil
-					.linq(Document.class)
-					.in(ProgramaDocumentLink.class)
-						.select("documentId")
-						.equal("programaId", programa.getId())
-					.end()
-					.desc("top")
-					.desc("createDate")	
-					.list(0, 6);
-			programa.setDocuments(documents);
-		}		
-		return programas;
-	}
-
-	@DataProvider	
-	public List<Programa> loadTopPrograma() {
-		return JpaUtil
-			.linq(Programa.class)
-			.isNull("parentId")
-			.asc("order")
-			.list();
-	}
-	
-	@DataProvider
-	public List<Document> loadDocumentByName(String name) {
+	public List<Document> loadAllDocuments(String value) {
 		return JpaUtil
 			.linq(Document.class)
-			.equal("name", name)
-			.list();
+			.like("name", "%" + value + "%")
+			.desc("top")
+			.desc("createDate")
+			.list(0, 5);
+
 	}
-	
+
+
 	@DataProvider
 	public void loadDocumentByProgramaName(Page<Document> page, Criteria criteria, String programaName) {
 		JpaUtil
@@ -81,49 +57,13 @@ public class PortalController {
 			.paging(page);
 	}
 	
-	@Expose
-	@Transactional
-	public List<Document> saveBrowseNumber(String docId, Integer browseNumber) {
-		JpaUtil
-			.linu(Document.class)
-			.equal("id", docId)
-			.set("browseNumber", browseNumber)
-			.update();
-		
+	@DataProvider	
+	public List<Programa> loadTopPrograma() {
 		return JpaUtil
-			.linq(Document.class)
-			.desc("browseNumber")
-			.list(0, 50);
+			.linq(Programa.class)
+			.isNull("parentId")
+			.asc("order")
+			.list();
 	}
 	
-	@Expose
-	public void image() throws Exception {
-//		String param = "http://www.baidu.com";
-//		String url = "";
-//		if (param.startsWith("http")) {
-//			url = param;
-//		} else {
-//			url = "file:///" + param;
-//		}
-//
-//		Desktop.getDesktop().browse(new URL(url).toURI());
-//		Robot robot = new Robot();
-//		robot.delay(3000);
-//		Dimension d = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
-//		int width = (int) d.getWidth();
-//		int height = (int) d.getHeight();
-//
-//		robot.keyRelease(KeyEvent.VK_F11);
-//		robot.delay(1000);
-//		Image image = robot.createScreenCapture(new Rectangle(0, 0, width, height));
-//		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-//		Graphics g = bi.createGraphics();
-//		g.drawImage(image, 0, 0, width, height - 10, null);
-//		// 保存图片
-//		ImageIO.write(bi, "jpg", new File("D:/" + new Date() + ".jpg"));
-
-		System.out.println("---------00000000000000--------------");
-	}
-	
-
 }
