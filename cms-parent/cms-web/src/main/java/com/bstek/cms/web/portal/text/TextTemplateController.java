@@ -1,10 +1,9 @@
 package com.bstek.cms.web.portal.text;
 
-import java.util.List;
 
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.bstek.bdf3.dorado.jpa.JpaUtil;
 import com.bstek.cms.orm.Document;
 import com.bstek.cms.orm.Programa;
@@ -36,16 +35,12 @@ public class TextTemplateController {
 	
 	@Expose
 	@Transactional
-	public List<Document> saveBrowseNumber(String docId, Integer browseNumber) {
+	public void saveBrowseNumber(String docId, Integer browseNumber) {
 		JpaUtil
 			.linu(Document.class)
 			.equal("id", docId)
 			.set("browseNumber", browseNumber)
 			.update();
-		
-		return JpaUtil
-			.linq(Document.class)
-			.desc("browseNumber")
-			.list(0, 50);
 	}
+
 }

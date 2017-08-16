@@ -137,8 +137,11 @@ window.setTimeout(function() {&#xD;
     <Property name="packages">font-awesome,colors</Property>
     <Property name="contentOverflow">hidden</Property>
     <DataSet id="dsDocument">
-      <ClientEvent name="beforeLoadData">//var name = decodeURI(&quot;${param.name}&quot;);&#xD;
-self.set(&quot;parameter&quot;, &quot;${param.name}&quot;);&#xD;
+      <ClientEvent name="beforeLoadData">var param = &quot;${param.name}&quot;;&#xD;
+var name = param.replace(/\-/g, &quot;%&quot;);&#xD;
+&#xD;
+self.set(&quot;parameter&quot;, name);&#xD;
+&#xD;
 &#xD;
 &#xD;
 </ClientEvent>
@@ -171,7 +174,6 @@ if (doc.get(&quot;browseNumber&quot;) == null) {	&#xD;
 param.docId = doc.get(&quot;id&quot;);&#xD;
 ajaxAction.set(&quot;parameter&quot;, param).execute();&#xD;
 &#xD;
-&#xD;
 </ClientEvent>
       <Property name="dataProvider">textTemplateController#loadDocumentByName</Property>
       <Property name="dataType">[Document]</Property>
@@ -186,6 +188,7 @@ ajaxAction.set(&quot;parameter&quot;, param).execute();&#xD;
       </Property>
       <Property name="height">65</Property>
       <Property name="width">100%</Property>
+      <Property name="contentOverflow">hidden</Property>
       <Label>
         <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
@@ -228,14 +231,6 @@ window.setInterval(function() {&#xD;
 </ClientEvent>
         <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;searchBox&quot;);&#xD;
 </ClientEvent>
-        <ClientEvent name="onPost" signature="self,arg,searchPanel">/*&#xD;
-searchPanel.show({&#xD;
-	anchorTarget: self,&#xD;
-	vAlign: &quot;bottom&quot;,&#xD;
-	offsetTop: 6,&#xD;
-	offsetLeft: 2&#xD;
-});&#xD;
-*/</ClientEvent>
         <Property name="blankText">按标题搜索...</Property>
         <Property name="exClassName">fa fa-search</Property>
         <Property name="width">400</Property>
@@ -294,7 +289,7 @@ if (username) {&#xD;
       </Button>
     </Container>
     <Container id="homePage" layout="vbox" layoutConstraint="align:center">
-      <Property name="width">800</Property>
+      <Property name="width">900</Property>
       <Property name="height">auto</Property>
       <Label id="title">
         <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;title&quot;);&#xD;
@@ -307,7 +302,7 @@ if (username) {&#xD;
         <Property name="height">60</Property>
       </Label>
       <Container layoutConstraint="align:left">
-        <Property name="width">790</Property>
+        <Property name="width">890</Property>
         <Property name="style">
           <Property name="margin-top">20px</Property>
         </Property>
@@ -349,16 +344,16 @@ window.onresize = function() {  &#xD;
 		winWidth = document.body.clientWidth; &#xD;
 	}&#xD;
 	&#xD;
-	if (winWidth >= 800) {&#xD;
-		self.set(&quot;width&quot;, 780);&#xD;
-		self.get(&quot;parent&quot;).set(&quot;width&quot;, 800);&#xD;
+	if (winWidth >= 900) {&#xD;
+		self.set(&quot;width&quot;, 880);&#xD;
+		self.get(&quot;parent&quot;).set(&quot;width&quot;, 900);&#xD;
 		window.setTimeout(function() {&#xD;
 			document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.style.height=&quot;auto&quot;;&#xD;
 			document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.style.overflow=&quot;hidden&quot;;&#xD;
 			var height = document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.offsetHeight;&#xD;
 			self.set(&quot;height&quot;, height + 50);&#xD;
 		}, 300);&#xD;
-	} else if (winWidth >= 620 &amp;&amp; winWidth &lt; 800) {&#xD;
+	} else if (winWidth >= 620 &amp;&amp; winWidth &lt; 900) {&#xD;
 		self.set(&quot;width&quot;, 600);&#xD;
 		self.get(&quot;parent&quot;).set(&quot;width&quot;, 600);&#xD;
 		window.setTimeout(function() {&#xD;
@@ -394,16 +389,16 @@ if (window.innerWidth) {&#xD;
 	winWidth = document.body.clientWidth; &#xD;
 }&#xD;
 &#xD;
-if (winWidth >= 800) {&#xD;
-	self.set(&quot;width&quot;, 780);&#xD;
-	self.get(&quot;parent&quot;).set(&quot;width&quot;, 800);&#xD;
+if (winWidth >= 900) {&#xD;
+	self.set(&quot;width&quot;, 880);&#xD;
+	self.get(&quot;parent&quot;).set(&quot;width&quot;, 900);&#xD;
 	window.setTimeout(function() {&#xD;
 		document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.style.height=&quot;auto&quot;;&#xD;
 		document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.style.overflow=&quot;hidden&quot;;&#xD;
 		var height = document.getElementById(&quot;ueditor_0&quot;).contentWindow.document.body.offsetHeight;&#xD;
 		self.set(&quot;height&quot;, height + 50);&#xD;
 	}, 300);&#xD;
-} else if (winWidth >= 620 &amp;&amp; winWidth &lt; 800) {&#xD;
+} else if (winWidth >= 620 &amp;&amp; winWidth &lt; 900) {&#xD;
 	self.set(&quot;width&quot;, 600);&#xD;
 	self.get(&quot;parent&quot;).set(&quot;width&quot;, 600);&#xD;
 	window.setTimeout(function() {&#xD;
@@ -439,7 +434,7 @@ if (winWidth >= 800) {&#xD;
         <Property name="style">
           <Property name="color">#5B5B5B</Property>
         </Property>
-        <Property name="width">790</Property>
+        <Property name="width">890</Property>
       </UEditor>
     </Container>
     <AjaxAction id="ajaxAction">
@@ -497,7 +492,7 @@ $h.click(function() {&#xD;
       <ClientEvent name="onValueSelect">window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + arg.selectedValue;</ClientEvent>
       <Property name="dataSet">dsAllDocuments</Property>
       <Property name="width">490</Property>
-      <Property name="height">136</Property>
+      <Property name="height">0</Property>
       <Property name="autoOpen">true</Property>
       <Property name="buttonVisible">false</Property>
       <Property name="dynaFilter">true</Property>

@@ -143,6 +143,7 @@ bvDocument.set(&quot;items&quot;, items);&#xD;
       </Property>
       <Property name="height">65</Property>
       <Property name="width">100%</Property>
+      <Property name="contentOverflow">hidden</Property>
       <Label>
         <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
@@ -187,14 +188,6 @@ window.setInterval(function() {&#xD;
 </ClientEvent>
         <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;searchBox&quot;);&#xD;
 </ClientEvent>
-        <ClientEvent name="onPost" signature="self,arg,searchPanel">/*&#xD;
-searchPanel.show({&#xD;
-	anchorTarget: self,&#xD;
-	vAlign: &quot;bottom&quot;,&#xD;
-	offsetTop: 6,&#xD;
-	offsetLeft: 2&#xD;
-});&#xD;
-*/</ClientEvent>
         <Property name="blankText">按标题搜索...</Property>
         <Property name="exClassName">fa fa-search</Property>
         <Property name="width">400</Property>
@@ -252,29 +245,20 @@ if (username) {&#xD;
         </Property>
       </Button>
     </Container>
-    <Image>
-      <ClientEvent name="onReady">var i = 1;&#xD;
-window.setInterval(function() {	&#xD;
-	if (i &lt;= 3) {&#xD;
-		self.set(&quot;image&quot;, &quot;/static/images/news&quot; + i + &quot;.png&quot;);&#xD;
-		i++;&#xD;
-	} else {&#xD;
-		i = 1;&#xD;
-	}			&#xD;
-}, 1800);&#xD;
-&#xD;
-</ClientEvent>
-      <ClientEvent name="onCreateDom">$(arg.dom).off(&quot;click&quot;);&#xD;
-$(arg.dom)&#xD;
-	.addClass(&quot;link&quot;)&#xD;
-	.click(function() {&#xD;
-		alert(self.get(&quot;image&quot;));&#xD;
-	});</ClientEvent>
-      <Property name="height">300</Property>
-      <Property name="width">650</Property>
-      <Property name="image">/static/images/news1.png</Property>
+    <Container layoutConstraint="align:center">
+      <Property name="height">auto</Property>
+      <Property name="width">1080</Property>
+      <Property name="style">
+        <Property name="padding-top">80px</Property>
+        <Property name="margin-left">-15px</Property>
+      </Property>
       <Property name="ignored">true</Property>
-    </Image>
+      <Image>
+        <Property name="width">100%</Property>
+        <Property name="image">/static/images/top.png</Property>
+        <Property name="height">300</Property>
+      </Image>
+    </Container>
     <Container id="homePage" layoutConstraint="align:center">
       <Property name="height">0</Property>
       <Property name="width">1080</Property>
@@ -302,7 +286,9 @@ items.each(function(item){		&#xD;
 	var title = name.replace(/\s/g, &quot;,&quot;);	&#xD;
 	var $li = $(&quot;&lt;li>&lt;div title=&quot; + title + &quot;>&lt;div>&quot;+ showName +&quot;&lt;/li>&quot; + &quot;&lt;p>&quot;+ time + &quot;&lt;/p>&quot;).appendTo($ul);			&#xD;
 		$li.click(function() {&#xD;
-			window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + item.get(&quot;name&quot;);&#xD;
+			var type = item.get(&quot;name&quot;);&#xD;
+			var name = type.replace(/%/g, &quot;-&quot;);&#xD;
+			window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + name;&#xD;
 		});&#xD;
 &#xD;
 });&#xD;
@@ -354,8 +340,12 @@ if (window.innerWidth) {&#xD;
 } else if ((document.body) &amp;&amp; (document.body.clientWidth)) {&#xD;
 	winWidth = document.body.clientWidth; &#xD;
 }&#xD;
-&#xD;
-if (winWidth > 1100) {&#xD;
+if (winWidth > 2000) {&#xD;
+	self.set(&quot;lineSize&quot;, 3);&#xD;
+	self.set(&quot;width&quot;, 1650);&#xD;
+	self.set(&quot;blockWidth&quot;, 510);&#xD;
+	self.get(&quot;parent&quot;).set(&quot;width&quot;, 1700);&#xD;
+} else if (winWidth > 1100 &amp;&amp; winWidth &lt;= 2000) {&#xD;
 	self.set(&quot;lineSize&quot;, 2);&#xD;
 	self.set(&quot;width&quot;, 1075);&#xD;
 	self.set(&quot;blockWidth&quot;, 510);&#xD;
@@ -441,11 +431,12 @@ $h.click(function() {&#xD;
       <Tools/>
     </FloatPanel>
     <DataSetDropDown id="dataSetDropDown">
-      <ClientEvent name="onFilterItems" signature="self,arg,dsAllDocuments">dsAllDocuments.flush();</ClientEvent>
+      <ClientEvent name="onFilterItems" signature="self,arg,dsAllDocuments">dsAllDocuments.flush();&#xD;
+</ClientEvent>
       <ClientEvent name="onValueSelect">window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + arg.selectedValue;</ClientEvent>
       <Property name="dataSet">dsAllDocuments</Property>
       <Property name="width">490</Property>
-      <Property name="height">136</Property>
+      <Property name="height">0</Property>
       <Property name="autoOpen">true</Property>
       <Property name="buttonVisible">false</Property>
       <Property name="dynaFilter">true</Property>

@@ -130,7 +130,13 @@
 	
 	/*发布按钮 */
 	.issueBtn {
-		visibility: hidden;
+		position: absolute;
+		top: 25px;
+		left: 75%;
+		font-size: 18px;
+		height: 0px !important;
+		color: #6C6C6C;
+		cursor: pointer;
 	}
 }
 
@@ -204,7 +210,6 @@
 
 #d_viewMain {
 	overflow-y: auto !important;
-	overflow-x: hidden !important;
 }
 
 /*发布按钮*/

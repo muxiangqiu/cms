@@ -370,7 +370,6 @@ if (entity) {&#xD;
 		status: &quot;0&quot;,&#xD;
 		programaName: parentName + entity.get(&quot;name&quot;)&#xD;
 	});&#xD;
-	alert(parentName);&#xD;
 	dialogDocument.show();&#xD;
 } else {&#xD;
 	dorado.MessageBox.alert(&quot;请先新建栏目.&quot;);&#xD;

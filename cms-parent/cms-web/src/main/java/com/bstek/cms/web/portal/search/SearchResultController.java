@@ -23,7 +23,6 @@ public class SearchResultController {
 			.desc("top")
 			.desc("createDate")
 			.paging(page);
-		
 	}
 	
 	@DataProvider	

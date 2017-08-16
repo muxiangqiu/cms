@@ -6,10 +6,10 @@
 }
 
 /* 系统名称 */
-#d__uid_16 {
+#d_appName {
 	position: absolute;
 	top: 18px;
-	left: 20px;
+	left: 20%;
 	font-size: 26px;
 	color: #6C6C6C;
 	height: 0px !important;

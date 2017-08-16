@@ -31,7 +31,7 @@ public final class FileUtils {
 	
 	public static File getFileDirectory(){
 		String prefix = Configure.getString("file.prefixPath");
-		String suffix = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+		String suffix = new SimpleDateFormat("yyyy/MM/dd").format(new Date());		
 		File dir;
 		String realPath;
 		if (StringUtils.isEmpty(prefix)) {

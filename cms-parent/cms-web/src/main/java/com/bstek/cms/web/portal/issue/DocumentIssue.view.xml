@@ -166,7 +166,8 @@ if (winWidth >= 800) {&#xD;
       </Property>
       <Property name="height">65</Property>
       <Property name="width">100%</Property>
-      <Label>
+      <Property name="contentOverflow">hidden</Property>
+      <Label id="appName">
         <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
         <Property name="text">  内容管理系统</Property>

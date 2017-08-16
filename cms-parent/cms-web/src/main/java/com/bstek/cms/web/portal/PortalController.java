@@ -1,5 +1,6 @@
 package com.bstek.cms.web.portal;
 
+
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,21 +18,26 @@ public class PortalController {
 	
 	@DataProvider
 	public List<Programa> loadDocuments() {	
-		Programa pro = JpaUtil.linq(Programa.class).equal("name", "首页").isNull("parentId").findOne();
-		List<Programa> programas = JpaUtil.linq(Programa.class).equal("parentId", pro.getId()).asc("order").list();
-		for (Programa programa : programas) {
-			List<Document> documents = JpaUtil
-				.linq(Document.class)
-				.in(ProgramaDocumentLink.class)
-					.select("documentId")
-					.equal("programaId", programa.getId())
-				.end()
-				.desc("top")
-				.desc("createDate")	
-				.list(0, 10);
-			programa.setDocuments(documents);
+		List<Programa> topPros = JpaUtil.linq(Programa.class).notEqual("name", "首页").isNull("parentId").asc("order").list();
+			
+		for (Programa topPro : topPros) {
+			
+			List<Programa> subPros = JpaUtil.linq(Programa.class).equal("parentId", topPro.getId()).asc("order").list();
+			
+			if (!subPros.isEmpty()) {
+				List<Document> documents = JpaUtil
+						.linq(Document.class)
+						.in(ProgramaDocumentLink.class)
+							.select("documentId")
+							.equal("programaId", subPros.get(0).getId())
+						.end()
+						.desc("top")
+						.desc("createDate")	
+						.list(0, 10);
+				topPro.setDocuments(documents);
+			}	
 		}
-		return programas;
+		return topPros;
 	}
 	
 	@DataProvider
@@ -64,6 +70,50 @@ public class PortalController {
 			.isNull("parentId")
 			.asc("order")
 			.list();
+	}
+	
+	/*********************************************/
+	
+	@DataProvider
+	public List<Document> loadDocumentsByTop(int number) {
+		return JpaUtil
+			.linq(Document.class)
+			.desc("createDate")
+			.list(number, 15);
+
+	}
+	
+	@DataProvider
+	public List<Programa> loadAssignTopPrograma() {
+		return JpaUtil
+				.linq(Programa.class)
+				.isNull("parentId")
+				.notEqual("name", "首页")
+				.asc("order")
+				.list(0, 6);
+	}
+	
+	@DataProvider
+	public List<Programa> loadSpecialColumnProgramas() throws Exception {
+		List<Programa> topPros = JpaUtil.linq(Programa.class).equal("name", "首页").isNull("parentId").asc("order").list();
+		if (!topPros.isEmpty()) {
+			List<Programa> subPros = JpaUtil.linq(Programa.class).equal("parentId", topPros.get(0).getId()).asc("order").list();
+			
+			for (Programa subPro : subPros) {
+				List<Document> documents = JpaUtil
+						.linq(Document.class)
+						.in(ProgramaDocumentLink.class)
+							.select("documentId")
+							.equal("programaId", subPro.getId())
+						.end()
+						.desc("top")
+						.desc("createDate")	
+						.list(0, 15);
+				subPro.setDocuments(documents);
+			}
+			return subPros;
+		}
+		return null;
 	}
 	
 }

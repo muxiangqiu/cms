@@ -15,6 +15,7 @@ import com.bstek.bdf3.dorado.jpa.policy.impl.UpdatedDatePolicy;
 import com.bstek.cms.policy.CreatorPolicy;
 import com.bstek.dorado.annotation.PropertyDef;
 
+
 /**
  *	文档
  * @author bob.yang
@@ -233,7 +234,5 @@ public class Document implements Serializable {
 	public void setSubProId(String subProId) {
 		this.subProId = subProId;
 	}
-	
-	
 
 }

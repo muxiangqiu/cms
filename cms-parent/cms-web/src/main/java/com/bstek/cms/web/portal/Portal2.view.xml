@@ -3,6 +3,40 @@
   <Arguments/>
   <Context/>
   <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="order">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">序号</Property>
+      </PropertyDef>
+      <PropertyDef name="documents">
+        <Property name="dataType">[Document]</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+    </DataType>
     <DataType name="Document">
       <Property name="creationType">com.bstek.cms.orm.Document</Property>
       <PropertyDef name="id">
@@ -73,114 +107,46 @@
           <Property name="keyProperty">key</Property>
         </Property>
       </PropertyDef>
-      <PropertyDef name="text">
-        <ClientEvent name="onGetText">arg.text = arg.entity.get(&quot;content&quot;).replace(/&lt;[^>]+>/g, &quot;&quot;);&#xD;
-</ClientEvent>
-        <Property name="label">内容</Property>
-      </PropertyDef>
-    </DataType>
-    <DataType name="Programa">
-      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
-      <PropertyDef name="id">
-        <Property></Property>
-        <Property name="label">ID</Property>
-      </PropertyDef>
-      <PropertyDef name="name">
-        <Property></Property>
-        <Property name="label">栏目名称</Property>
-      </PropertyDef>
-      <PropertyDef name="parentId">
-        <Property></Property>
-        <Property name="label">上级ID</Property>
-      </PropertyDef>
-      <PropertyDef name="creator">
-        <Property></Property>
-        <Property name="label">创建人</Property>
-      </PropertyDef>
-      <PropertyDef name="createTime">
-        <Property name="dataType">Date</Property>
-        <Property name="label">创建时间</Property>
-      </PropertyDef>
-      <PropertyDef name="order">
-        <Property name="dataType">Integer</Property>
-        <Property name="label">序号</Property>
-      </PropertyDef>
-      <PropertyDef name="documents">
-        <Property name="dataType">[Document]</Property>
-      </PropertyDef>
-      <PropertyDef name="desc">
-        <Property></Property>
-        <Property name="label">描述</Property>
-      </PropertyDef>
     </DataType>
   </Model>
   <View layout="vbox">
-    <ClientEvent name="onClick" signature="self,arg,programaPanel,polit">programaPanel.hide();&#xD;
+    <ClientEvent name="onClick" signature="self,arg,programaPanel">programaPanel.hide();&#xD;
 </ClientEvent>
-    <ClientEvent name="onReady">window.number = 1;&#xD;
+    <ClientEvent name="onReady" signature="self,arg,moreBtn">window.moreNumber = 0;&#xD;
 </ClientEvent>
     <Property name="packages">font-awesome,colors</Property>
     <Property name="contentOverflow">hidden</Property>
     <DataSet id="dsDocument">
-      <ClientEvent name="beforeLoadData" signature="self,arg,search">&#xD;
-var param = &quot;${param.value}&quot;;&#xD;
-if (param) {&#xD;
-	self.set(&quot;parameter&quot;, &quot;${param.value}&quot;);&#xD;
-} &#xD;
-&#xD;
-var value = search.get(&quot;text&quot;);&#xD;
-&#xD;
-if (value) {&#xD;
-	self.set(&quot;parameter&quot;, value);&#xD;
-}&#xD;
-&#xD;
-/*&#xD;
-var param = {&#xD;
-	editorValue: null,&#xD;
-	pageNumber: null&#xD;
-}&#xD;
-var param = &quot;${param.value}&quot;;&#xD;
-param.pageNumber = window.pageNumber;&#xD;
-if (param) {&#xD;
-	alert(param.pageNumber);&#xD;
-	param.editorValue = &quot;${param.value}&quot;;&#xD;
-	self.set(&quot;parameter&quot;, param);&#xD;
-} &#xD;
-&#xD;
-var value = search.get(&quot;text&quot;);&#xD;
-&#xD;
-if (value) {&#xD;
-	param.editorValue = value;&#xD;
-	self.set(&quot;parameter&quot;, param);&#xD;
-}&#xD;
-&#xD;
-*/</ClientEvent>
-      <ClientEvent name="onLoadData" signature="self,arg,bvSearch,ajaxActionPageNumber,last,next">var items = [];&#xD;
+      <ClientEvent name="onLoadData" signature="self,arg,bvDocument">var items = [];&#xD;
 var documents = self.getData();&#xD;
 &#xD;
 documents.each(function(d) {&#xD;
 	var type = d.get(&quot;name&quot;);&#xD;
-&#xD;
 	var item = {&#xD;
 		type: type,&#xD;
 		items: d.get(&quot;content&quot;),&#xD;
-		date: d.get(&quot;createDate&quot;)&#xD;
+		date: d.get(&quot;createDate&quot;),&#xD;
+		creator: d.get(&quot;creator&quot;),&#xD;
+		programaName: d.get(&quot;programaName&quot;),&#xD;
+		browseNumber: d.get(&quot;browseNumber&quot;)&#xD;
 	};&#xD;
 	items.push(item);&#xD;
 });&#xD;
 &#xD;
-bvSearch.set(&quot;items&quot;, items);&#xD;
+bvDocument.set(&quot;items&quot;, items);&#xD;
 &#xD;
-last.set(&quot;visible&quot;, false);&#xD;
-last.set(&quot;disabled&quot;, true);&#xD;
-&#xD;
-window.number = 1;&#xD;
-ajaxActionPageNumber.execute();&#xD;
+if (documents.entityCount &lt; 15) {&#xD;
+	window.moreNumber = -1;&#xD;
+}&#xD;
+</ClientEvent>
+      <ClientEvent name="beforeLoadData">if (!window.moreNumber) {&#xD;
+	window.moreNumber = 0;&#xD;
+}&#xD;
+self.set(&quot;parameter&quot;, window.moreNumber);&#xD;
 </ClientEvent>
       <Property name="dataType">[Document]</Property>
-      <Property name="dataProvider">searchResultController#loadDocumentsByEditorValue</Property>
+      <Property name="dataProvider">portalController#loadDocumentsByTop</Property>
       <Property name="loadMode">onReady</Property>
-      <Property name="pageSize">10</Property>
     </DataSet>
     <Container layout="hbox">
       <ClientEvent name="onCreateDom">$(arg.dom).addClass();&#xD;
@@ -191,8 +157,9 @@ ajaxActionPageNumber.execute();&#xD;
       </Property>
       <Property name="height">65</Property>
       <Property name="width">100%</Property>
+      <Property name="contentOverflow">hidden</Property>
       <Label>
-        <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
+        <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal2.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
         <Property name="text">  内容管理系统</Property>
         <Property name="style">
@@ -200,20 +167,15 @@ ajaxActionPageNumber.execute();&#xD;
         </Property>
       </Label>
       <TextEditor id="search">
-        <ClientEvent name="onKeyDown" signature="self,arg,dsDocument">&#xD;
+        <ClientEvent name="onKeyDown">&#xD;
 window.clearTimeout(self.urlQueryTimeout);&#xD;
 self.urlQueryTimeout = window.setTimeout(function() {&#xD;
 	var key = self.get(&quot;value&quot;);&#xD;
-	if (key) {&#xD;
-		dsDocument.flushAsync();&#xD;
+	if (key &amp;&amp; arg.keyCode == 13) {&#xD;
+		window.location.href = &quot;com.bstek.cms.web.portal.search.SearchResult1.d?value=&quot; + key;&#xD;
 	}&#xD;
-	&#xD;
-}, 400);&#xD;
-&#xD;
-//window.setTimeout(function() {&#xD;
-//	var height = document.getElementById(&quot;d_bvSearch&quot;).offsetHeight;&#xD;
-//	document.getElementById(&quot;d_bvSearch&quot;).parentNode.style.height = height;&#xD;
-//}, 300);</ClientEvent>
+}, 500);&#xD;
+</ClientEvent>
         <ClientEvent name="onFocus">&#xD;
 var width = 400;&#xD;
 window.setInterval(function() {&#xD;
@@ -240,15 +202,10 @@ window.setInterval(function() {&#xD;
 </ClientEvent>
         <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;searchBox&quot;);&#xD;
 </ClientEvent>
-        <ClientEvent name="onReady">var param = &quot;${param.value}&quot;;&#xD;
-if (param) {&#xD;
-	self.set(&quot;text&quot;, param);&#xD;
-	//self.setFocus();&#xD;
-}&#xD;
-</ClientEvent>
         <Property name="blankText">按标题搜索...</Property>
         <Property name="exClassName">fa fa-search</Property>
         <Property name="width">400</Property>
+        <Property name="trigger">dataSetDropDown</Property>
       </TextEditor>
       <Label>
         <ClientEvent name="onCreateDom">$(arg.dom).off(&quot;click&quot;);&#xD;
@@ -302,14 +259,26 @@ if (username) {&#xD;
         </Property>
       </Button>
     </Container>
+    <Container id="imageContainer" layoutConstraint="align:center">
+      <Property name="width">1110</Property>
+      <Property name="height">auto</Property>
+      <Property name="style">
+        <Property name="padding-top">100px</Property>
+      </Property>
+      <Image>
+        <Property name="width">100%</Property>
+        <Property name="image">/static/images/top.png</Property>
+        <Property name="height">320</Property>
+      </Image>
+    </Container>
     <Container id="homePage" layoutConstraint="align:center">
-      <Property name="width">1100</Property>
-      <Property name="height">1350</Property>
-      <BlockView id="bvSearch">
+      <Property name="height">0</Property>
+      <Property name="width">1120</Property>
+      <BlockView id="bvDocument" layoutConstraint="left">
         <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
 var time = new Date(arg.data.date).formatDate(&quot;Y-m-d&quot;);&#xD;
 &#xD;
-var $h = $(&quot;&lt;h4 class='ex header'>&quot;+ arg.data.type +&quot;&lt;/h4>&lt;p id='time'>&quot; + time + &quot;&lt;/p>&quot;).appendTo(arg.dom);&#xD;
+var $h = $(&quot;&lt;img src='/static/images/touxiang.jpg'>&lt;h3>&quot;+ arg.data.creator + &quot; &quot; + time + &quot;&lt;/h3>&lt;h4 class='ex header'>&quot;+ arg.data.type +&quot;&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
 $h.click(function() {&#xD;
 	var type = arg.data.type;&#xD;
 	var name = type.replace(/%/g, &quot;-&quot;);&#xD;
@@ -321,8 +290,8 @@ var showName = null;&#xD;
 var text = arg.data.items;&#xD;
 if (text) {&#xD;
 	var showText = text.replace(/&lt;[^>]+>/g, &quot;&quot;);&#xD;
-	if (showText.length > 75) {&#xD;
-		showName = showText.substring(0, 75) + &quot;...&quot;;&#xD;
+	if (showText.length > 120) {&#xD;
+		showName = showText.substring(0, 120) + &quot;...&quot;;&#xD;
 	} else {&#xD;
 		showName = showText;&#xD;
 	}&#xD;
@@ -330,53 +299,99 @@ if (text) {&#xD;
 	showName = &quot;无文章内容...&quot;;&#xD;
 }&#xD;
 &#xD;
-var $p = $(&quot;&lt;p class='ex items'>&quot; + showName + &quot;&lt;/p>&quot;).appendTo(arg.dom);&#xD;
+var browseNumber;&#xD;
+if (arg.data.browseNumber == null) {&#xD;
+	browseNumber = 0;&#xD;
+} else {&#xD;
+	browseNumber = arg.data.browseNumber;&#xD;
+}&#xD;
 &#xD;
-</ClientEvent>
+var $p = $(&quot;&lt;p class='ex items'>&quot; + showName + &quot;&lt;/p>&quot;).appendTo(arg.dom);&#xD;
+var $p2 = $(&quot;&lt;p id='programaName'>&quot; + arg.data.programaName + &quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&quot; + &quot;&lt;i class='fa fa-eye'>&lt;/i>&lt;span id='browseNumber'>&quot; + &quot; &quot; + browseNumber + &quot;&lt;/span>&lt;/p>&quot;);&#xD;
+$p2.appendTo($p);&#xD;
+$p2.click(function() {&#xD;
+	window.location.href = &quot;com.bstek.cms.web.portal.more.MoreDocumentQuery1.d?subProgramaName=&quot; + arg.data.programaName;&#xD;
+});</ClientEvent>
         <Property name="lineSize">1</Property>
-        <Property name="blockHeight">120</Property>
-        <Property name="blockWidth">700</Property>
+        <Property name="blockHeight">210</Property>
+        <Property name="blockWidth">720</Property>
+        <Property name="vertSpacing">0</Property>
+        <Property name="width">730</Property>
+      </BlockView>
+      <BlockView id="bvSpecialColumnProgramas">
+        <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
+var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-pagelines'>&lt;/i> &quot;+ arg.data.type +&quot;&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
+&#xD;
+var items = arg.data.items || [];&#xD;
+var $ul = $(&quot;&lt;ul class='ex items'>&lt;/ul>&quot;).appendTo(arg.dom);&#xD;
+items.each(function(item){		&#xD;
+	//var time = new Date(item.get(&quot;createDate&quot;)).formatDate(&quot;Y-m-d&quot;);&#xD;
+	&#xD;
+	var showName;	&#xD;
+	var name = item.get(&quot;name&quot;);&#xD;
+	if (name.length > 20) {&#xD;
+		showName = name.substring(0, 19) + &quot;...&quot;;&#xD;
+	} else {&#xD;
+		showName = name;&#xD;
+	}&#xD;
+	&#xD;
+	var title = name.replace(/\s/g, &quot;,&quot;);	&#xD;
+	var $li = $(&quot;&lt;li>&lt;div title=&quot; + title + &quot;>&lt;div>&quot;+ showName +&quot;&lt;/li>&quot;).appendTo($ul);			&#xD;
+		$li.click(function() {&#xD;
+			var type = item.get(&quot;name&quot;);&#xD;
+			var name = type.replace(/%/g, &quot;-&quot;);&#xD;
+			window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + name;&#xD;
+		});&#xD;
+&#xD;
+});</ClientEvent>
+        <Property name="lineSize">1</Property>
+        <Property name="blockWidth">360</Property>
+        <Property name="blockHeight">480</Property>
+        <Property name="width">370</Property>
       </BlockView>
     </Container>
-    <Container layout="hbox" layoutConstraint="align:center">
-      <Property name="width">630</Property>
-      <Property name="height">100</Property>
-      <Button id="last">
-        <ClientEvent name="onClick" signature="self,arg,ajaxActionDocs">window.number--;&#xD;
-&#xD;
-ajaxActionDocs.execute();</ClientEvent>
-        <Property name="caption">&lt;上一页</Property>
-      </Button>
-      <Label id="info">
-        <Property name="width">150</Property>
-        <Property name="height">30</Property>
-        <Property name="style">
-          <Property name="text-align">center</Property>
-          <Property name="font-size">16px</Property>
-          <Property name="color">#058FE1</Property>
-        </Property>
-      </Label>
-      <Button id="next">
-        <ClientEvent name="onClick" signature="self,arg,ajaxActionDocs">window.number++;&#xD;
-&#xD;
-ajaxActionDocs.execute();&#xD;
+    <Container id="moreBtnContainer" layoutConstraint="align:center">
+      <Property name="height">60</Property>
+      <Property name="width">1100</Property>
+      <Button id="moreBtn" layoutConstraint="center">
+        <ClientEvent name="onClick" signature="self,arg,dsDocument">window.moreNumber++&#xD;
+dsDocument.flushAsync();&#xD;
 </ClientEvent>
-        <Property name="caption">下一页></Property>
+        <Property name="caption">换一批阅读</Property>
+        <Property name="width">720</Property>
       </Button>
     </Container>
-    <FloatPanel id="programaPanel">
-      <ClientEvent name="onShow" signature="self,arg,dsPrograma">dsPrograma.flushAsync();&#xD;
+    <DataSetDropDown id="dataSetDropDown">
+      <ClientEvent name="onFilterItems" signature="self,arg,dsAllDocuments">dsAllDocuments.flush();&#xD;
 </ClientEvent>
-      <Property name="width">340</Property>
-      <Property name="animateType">zoom</Property>
-      <Property name="style">
-        <Property name="min-height">380px</Property>
-      </Property>
-      <Property name="height">380</Property>
-      <Buttons/>
-      <Children>
-        <DataSet id="dsPrograma">
-          <ClientEvent name="onLoadData" signature="self,arg,bvPrograma">var items = [];&#xD;
+      <ClientEvent name="onValueSelect">window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + arg.selectedValue;</ClientEvent>
+      <Property name="dataSet">dsAllDocuments</Property>
+      <Property name="width">490</Property>
+      <Property name="height">0</Property>
+      <Property name="autoOpen">true</Property>
+      <Property name="buttonVisible">false</Property>
+      <Property name="dynaFilter">true</Property>
+      <Property name="editable">false</Property>
+      <Property name="filterOnTyping">true</Property>
+      <Property name="filterOnOpen">true</Property>
+      <Property name="property">name</Property>
+      <Property name="filterMode">serverSide</Property>
+    </DataSetDropDown>
+    <DataSet id="dsAllDocuments">
+      <ClientEvent name="beforeLoadData" signature="self,arg,search">var value = search.get(&quot;text&quot;);&#xD;
+if (value) {&#xD;
+	self.set(&quot;parameter&quot;, value);&#xD;
+} else {&#xD;
+	self.set(&quot;parameter&quot;, &quot;&quot;);&#xD;
+}&#xD;
+</ClientEvent>
+      <ClientEvent name="onLoadData">self.getData().setCurrent(&quot;&quot;);&#xD;
+</ClientEvent>
+      <Property name="dataType">[Document]</Property>
+      <Property name="dataProvider">portalController#loadAllDocuments</Property>
+    </DataSet>
+    <DataSet id="dsSpecialColumnProgramas">
+      <ClientEvent name="onLoadData" signature="self,arg,bvSpecialColumnProgramas">var items = [];&#xD;
 var programas = self.getData();&#xD;
 programas.each(function(p) {&#xD;
 	var type = p.get(&quot;name&quot;);&#xD;
@@ -388,11 +403,40 @@ programas.each(function(p) {&#xD;
 	items.push(item);&#xD;
 });&#xD;
 &#xD;
-bvPrograma.set(&quot;items&quot;, items);</ClientEvent>
+bvSpecialColumnProgramas.set(&quot;items&quot;, items);</ClientEvent>
+      <Property name="dataProvider">portalController#loadSpecialColumnProgramas</Property>
+      <Property name="dataType">[Programa]</Property>
+      <Property name="loadMode">onReady</Property>
+    </DataSet>
+    <FloatPanel id="programaPanel">
+      <ClientEvent name="onShow" signature="self,arg,dsAllTopPrograma">dsAllTopPrograma.flushAsync();&#xD;
+</ClientEvent>
+      <Property name="width">340</Property>
+      <Property name="animateType">zoom</Property>
+      <Property name="style">
+        <Property name="min-height">380px</Property>
+      </Property>
+      <Property name="height">380</Property>
+      <Buttons/>
+      <Children>
+        <DataSet id="dsAllTopPrograma">
+          <ClientEvent name="onLoadData" signature="self,arg,bvAllTopPrograma">var items = [];&#xD;
+var programas = self.getData();&#xD;
+programas.each(function(p) {&#xD;
+	var type = p.get(&quot;name&quot;);&#xD;
+&#xD;
+	var item = {&#xD;
+		type: type,&#xD;
+		items: p.get(&quot;documents&quot;)&#xD;
+	};&#xD;
+	items.push(item);&#xD;
+});&#xD;
+&#xD;
+bvAllTopPrograma.set(&quot;items&quot;, items);</ClientEvent>
           <Property name="dataType">[Programa]</Property>
           <Property name="dataProvider">portalController#loadTopPrograma</Property>
         </DataSet>
-        <BlockView id="bvPrograma">
+        <BlockView id="bvAllTopPrograma">
           <ClientEvent name="onRenderBlock">$(arg.dom).empty();&#xD;
 var $h = $(&quot;&lt;h4 class='ex header'>&lt;i class='fa fa-dropbox grey-text'>&lt;/i>&lt;br>&lt;h2>&quot;+ arg.data.type +&quot;&lt;/h2>&lt;/h4>&quot;).appendTo(arg.dom);&#xD;
 $h.click(function() {&#xD;
@@ -411,103 +455,5 @@ $h.click(function() {&#xD;
       </Children>
       <Tools/>
     </FloatPanel>
-    <AjaxAction id="ajaxActionDocs">
-      <ClientEvent name="beforeExecute" signature="self,arg,search">var param = {&#xD;
-	value: null,&#xD;
-	pageNo: null&#xD;
-}&#xD;
-&#xD;
-param.pageNo = window.number;&#xD;
-var value = search.get(&quot;text&quot;);&#xD;
-&#xD;
-if (value) {&#xD;
-	param.value = value;&#xD;
-	self.set(&quot;parameter&quot;, param);&#xD;
-}</ClientEvent>
-      <ClientEvent name="onSuccess" signature="self,arg,bvSearch,search,info,last,next">var items = [];&#xD;
-var documents = arg.result;&#xD;
-&#xD;
-documents.each(function(d) {&#xD;
-	var type = d.name;&#xD;
-&#xD;
-	var item = {&#xD;
-		type: type,&#xD;
-		items: d.content,&#xD;
-		date: d.createDate&#xD;
-	};&#xD;
-	items.push(item);&#xD;
-});&#xD;
-&#xD;
-bvSearch.set(&quot;items&quot;, items);&#xD;
-&#xD;
-info.set(&quot;text&quot;, &quot; 第 &quot; + window.number + &quot; 页 / 共 &quot; + window.sum + &quot; 页 &quot;);&#xD;
-&#xD;
-if (window.number > 1) {&#xD;
-	last.set(&quot;visible&quot;, true);&#xD;
-	last.set(&quot;disabled&quot;, false);&#xD;
-} else {&#xD;
-	last.set(&quot;visible&quot;, false);&#xD;
-	last.set(&quot;disabled&quot;, true);&#xD;
-}&#xD;
-&#xD;
-if (window.number &lt; window.sum) {&#xD;
-	next.set(&quot;visible&quot;, true);&#xD;
-	next.set(&quot;disabled&quot;, false);&#xD;
-} else {&#xD;
-	next.set(&quot;visible&quot;, false);&#xD;
-	next.set(&quot;disabled&quot;, true);&#xD;
-}</ClientEvent>
-      <Property name="service">searchResultController#loadDocumentsByPageNo</Property>
-    </AjaxAction>
-    <AjaxAction id="ajaxActionPageNumber">
-      <ClientEvent name="beforeExecute" signature="self,arg,search">&#xD;
-var param = &quot;${param.value}&quot;;&#xD;
-if (param) {&#xD;
-	self.set(&quot;parameter&quot;, param);&#xD;
-} &#xD;
-&#xD;
-var value = search.get(&quot;text&quot;);&#xD;
-&#xD;
-if (value) {&#xD;
-	self.set(&quot;parameter&quot;, value);&#xD;
-}&#xD;
-</ClientEvent>
-      <ClientEvent name="onSuccess" signature="self,arg,info,next">window.sum = arg.result;&#xD;
-info.set(&quot;text&quot;, &quot; 第 &quot; + window.number + &quot; 页 / 共 &quot; + arg.result + &quot; 页 &quot;);&#xD;
-&#xD;
-if (arg.result == 1) {&#xD;
-	next.set(&quot;visible&quot;, false);&#xD;
-	next.set(&quot;disabled&quot;, true);	&#xD;
-} else {&#xD;
-	next.set(&quot;visible&quot;, true);&#xD;
-	next.set(&quot;disabled&quot;, false);&#xD;
-}</ClientEvent>
-      <Property name="service">searchResultController#getPageNumber</Property>
-    </AjaxAction>
-    <DataSetDropDown id="dataSetDropDown">
-      <ClientEvent name="onFilterItems" signature="self,arg,dsAllDocuments">dsAllDocuments.flushAsync();</ClientEvent>
-      <Property name="dataSet">dsAllDocuments</Property>
-      <Property name="width">490</Property>
-      <Property name="height">136</Property>
-      <Property name="autoOpen">true</Property>
-      <Property name="buttonVisible">false</Property>
-      <Property name="dynaFilter">true</Property>
-      <Property name="editable">false</Property>
-      <Property name="filterOnTyping">true</Property>
-      <Property name="filterOnOpen">true</Property>
-      <Property name="property">name</Property>
-      <Property name="filterMode">serverSide</Property>
-    </DataSetDropDown>
-    <DataSet id="dsAllDocuments">
-      <ClientEvent name="beforeLoadData" signature="self,arg,search">var value = search.get(&quot;text&quot;);&#xD;
-if (value) {&#xD;
-	self.set(&quot;parameter&quot;, value);&#xD;
-} else {&#xD;
-	self.set(&quot;parameter&quot;, &quot;&quot;);&#xD;
-}&#xD;
-</ClientEvent>
-      <Property name="dataType">[Document]</Property>
-      <Property name="dataProvider">portalController#loadAllDocuments</Property>
-    </DataSet>
   </View>
 </ViewConfig>

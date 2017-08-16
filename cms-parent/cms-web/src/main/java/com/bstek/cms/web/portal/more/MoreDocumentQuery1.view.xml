@@ -122,7 +122,48 @@
     <Property name="packages">font-awesome,colors</Property>
     <Property name="contentOverflow">hidden</Property>
     <DataSet id="dsSubPrograma">
-      <ClientEvent name="beforeLoadData">self.set(&quot;parameter&quot;, &quot;${param.programaName}&quot;);</ClientEvent>
+      <ClientEvent name="beforeLoadData">var proName;&#xD;
+var programaName = &quot;${param.programaName}&quot;;&#xD;
+if (programaName) {&#xD;
+	self.set(&quot;parameter&quot;, programaName);&#xD;
+	proName = programaName;&#xD;
+}&#xD;
+&#xD;
+&#xD;
+var subProName = &quot;${param.subProgramaName}&quot;;&#xD;
+if (subProName) {&#xD;
+	var blank = subProName.indexOf(&quot; - &quot;);	&#xD;
+	self.set(&quot;parameter&quot;, subProName.substring(0, blank));&#xD;
+	proName = subProName;&#xD;
+}&#xD;
+</ClientEvent>
+      <ClientEvent name="onLoadData" signature="self,arg,ajaxActionCount">var subProName = &quot;${param.subProgramaName}&quot;;&#xD;
+if (subProName) {&#xD;
+	var blank = subProName.indexOf(&quot; - &quot;);&#xD;
+	var subProName = subProName.substring(blank + 3);&#xD;
+	self.getData().each(function(subPro) {&#xD;
+		if (subPro.get(&quot;name&quot;) == subProName) {&#xD;
+			subPro.setCurrent();&#xD;
+		}&#xD;
+	});&#xD;
+}&#xD;
+&#xD;
+var proName;&#xD;
+var programaName = &quot;${param.programaName}&quot;;&#xD;
+if (programaName) {&#xD;
+	self.set(&quot;parameter&quot;, programaName);&#xD;
+	proName = programaName;&#xD;
+}&#xD;
+&#xD;
+&#xD;
+var subProName = &quot;${param.subProgramaName}&quot;;&#xD;
+if (subProName) {&#xD;
+	var blank = subProName.indexOf(&quot; - &quot;);	&#xD;
+	self.set(&quot;parameter&quot;, subProName.substring(0, blank));&#xD;
+	proName = subProName.substring(0, blank);&#xD;
+}&#xD;
+&#xD;
+ajaxActionCount.set(&quot;parameter&quot;, proName).execute();</ClientEvent>
       <Property name="dataType">[Programa]</Property>
       <Property name="dataProvider">moreDocumentQueryController#loadSubProgramas</Property>
     </DataSet>
@@ -135,6 +176,7 @@
       </Property>
       <Property name="height">65</Property>
       <Property name="width">100%</Property>
+      <Property name="contentOverflow">hidden</Property>
       <Label>
         <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
@@ -178,14 +220,6 @@ window.setInterval(function() {&#xD;
 </ClientEvent>
         <ClientEvent name="onCreateDom">$(arg.dom).addClass(&quot;searchBox&quot;);&#xD;
 </ClientEvent>
-        <ClientEvent name="onPost" signature="self,arg,searchPanel">/*&#xD;
-searchPanel.show({&#xD;
-	anchorTarget: self,&#xD;
-	vAlign: &quot;bottom&quot;,&#xD;
-	offsetTop: 6,&#xD;
-	offsetLeft: 2&#xD;
-});&#xD;
-*/</ClientEvent>
         <Property name="blankText">按标题搜索...</Property>
         <Property name="exClassName">fa fa-search</Property>
         <Property name="width">400</Property>
@@ -243,29 +277,56 @@ if (username) {&#xD;
         </Property>
       </Button>
     </Container>
-    <Image>
-      <ClientEvent name="onReady">var i = 1;&#xD;
-window.setInterval(function() {	&#xD;
-	if (i &lt;= 3) {&#xD;
-		self.set(&quot;image&quot;, &quot;/static/images/news&quot; + i + &quot;.png&quot;);&#xD;
-		i++;&#xD;
-	} else {&#xD;
-		i = 1;&#xD;
-	}			&#xD;
-}, 1800);&#xD;
+    <Container id="topProContainer">
+      <Property name="height">100</Property>
+      <Property name="style">
+        <Property name="background-color">#F0F0F0</Property>
+        <Property name="margin-top">95px</Property>
+        <Property name="margin-left">40px</Property>
+      </Property>
+      <Property name="width">350</Property>
+      <Container layoutConstraint="left">
+        <Property name="height">auto</Property>
+        <Property name="width">100</Property>
+        <Image>
+          <Property name="image">/static/images/c2.png</Property>
+          <Property name="height">100</Property>
+          <Property name="width">100%</Property>
+          <Property name="style">
+            <Property name="background-color">#F0F0F0</Property>
+          </Property>
+        </Image>
+      </Container>
+      <Container>
+        <Property name="style">
+          <Property name="padding-left">20px</Property>
+        </Property>
+        <Label>
+          <ClientEvent name="onReady">var programaName = &quot;${param.programaName}&quot;;&#xD;
+if (programaName) {&#xD;
+	self.set(&quot;text&quot;, programaName);&#xD;
+}&#xD;
 &#xD;
-</ClientEvent>
-      <ClientEvent name="onCreateDom">$(arg.dom).off(&quot;click&quot;);&#xD;
-$(arg.dom)&#xD;
-	.addClass(&quot;link&quot;)&#xD;
-	.click(function() {&#xD;
-		alert(self.get(&quot;image&quot;));&#xD;
-	});</ClientEvent>
-      <Property name="height">300</Property>
-      <Property name="width">650</Property>
-      <Property name="image">/static/images/news1.png</Property>
-      <Property name="ignored">true</Property>
-    </Image>
+&#xD;
+var subProName = &quot;${param.subProgramaName}&quot;;&#xD;
+if (subProName) {&#xD;
+	var blank = subProName.indexOf(&quot; - &quot;);	&#xD;
+	self.set(&quot;text&quot;, subProName.substring(0, blank));&#xD;
+}</ClientEvent>
+          <Property name="style">
+            <Property name="font-size">25px</Property>
+            <Property name="padding-top">25px</Property>
+          </Property>
+        </Label>
+        <Label id="count">
+          <Property name="style">
+            <Property name="font-size">18px</Property>
+            <Property name="padding-top">10px</Property>
+            <Property name="color">#8E8E8E</Property>
+          </Property>
+        </Label>
+      </Container>
+    </Container>
     <Container id="homePage" layout="regionPadding:20">
       <Property name="height">0</Property>
       <DataGrid id="gridPro" layoutConstraint="left">
@@ -367,7 +428,7 @@ if (winWidth >= 800) {&#xD;
           <Property name="dataSet">dsSubPrograma</Property>
           <Property name="readOnly">true</Property>
           <Property name="dataPath">#.documents</Property>
-          <Property name="height">760</Property>
+          <Property name="height">746</Property>
           <Property name="showHeader">false</Property>
           <Property name="width">820</Property>
           <DataColumn name="name">
@@ -466,7 +527,7 @@ $h.click(function() {&#xD;
       <ClientEvent name="onValueSelect">window.location.href = &quot;com.bstek.cms.web.portal.text.TextTemplate1.d?name=&quot; + arg.selectedValue;</ClientEvent>
       <Property name="dataSet">dsAllDocuments</Property>
       <Property name="width">490</Property>
-      <Property name="height">136</Property>
+      <Property name="height">0</Property>
       <Property name="autoOpen">true</Property>
       <Property name="buttonVisible">false</Property>
       <Property name="dynaFilter">true</Property>
@@ -488,5 +549,10 @@ if (value) {&#xD;
       <Property name="dataType">[Document]</Property>
       <Property name="dataProvider">portalController#loadAllDocuments</Property>
     </DataSet>
+    <AjaxAction id="ajaxActionCount">
+      <ClientEvent name="onSuccess" signature="self,arg,count">count.set(&quot;text&quot;, &quot;收录了 &quot; + arg.result + &quot; 篇文章&quot;);&#xD;
+</ClientEvent>
+      <Property name="service">moreDocumentQueryController#loadCount</Property>
+    </AjaxAction>
   </View>
 </ViewConfig>
