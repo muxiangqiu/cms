@@ -212,7 +212,12 @@ window.setInterval(function() {&#xD;
 $(arg.dom)&#xD;
 	.addClass(&quot;issueBtn&quot;)&#xD;
 	.click(function() {&#xD;
-		window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue.d&quot;);			&#xD;
+		var username = &quot;${loginUsername}&quot;;&#xD;
+		if (username) {&#xD;
+			window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue1.d&quot;);&#xD;
+		} else {&#xD;
+			dorado.MessageBox.alert(&quot;请先登录！&quot;);&#xD;
+		}&#xD;
 		return false;&#xD;
 	});</ClientEvent>
         <Property name="exClassName">fa fa-share-square-o</Property>
@@ -260,7 +265,7 @@ if (username) {&#xD;
       </Button>
     </Container>
     <Container id="imageContainer" layoutConstraint="align:center">
-      <Property name="width">1110</Property>
+      <Property name="width">1100</Property>
       <Property name="height">auto</Property>
       <Property name="style">
         <Property name="padding-top">100px</Property>

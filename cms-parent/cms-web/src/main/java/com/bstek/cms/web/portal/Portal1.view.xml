@@ -198,7 +198,12 @@ window.setInterval(function() {&#xD;
 $(arg.dom)&#xD;
 	.addClass(&quot;issueBtn&quot;)&#xD;
 	.click(function() {&#xD;
-		window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue.d&quot;);			&#xD;
+		var username = &quot;${loginUsername}&quot;;&#xD;
+		if (username) {&#xD;
+			window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue1.d&quot;);&#xD;
+		} else {&#xD;
+			dorado.MessageBox.alert(&quot;请先登录！&quot;);&#xD;
+		}&#xD;
 		return false;&#xD;
 	});</ClientEvent>
         <Property name="exClassName">fa fa-share-square-o</Property>

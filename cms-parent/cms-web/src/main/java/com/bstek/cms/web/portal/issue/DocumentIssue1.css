@@ -1,0 +1,115 @@
+/*返回首页按钮*/
+#d_returnBtn {
+	color: #D94600;
+	border-color: #D94600;
+	border-radius: 60px;
+	height: 45px;
+	width: 80%;
+	background-color: #3f3f3f;
+	top: 35px !important;
+	left: 10% !important;
+}
+
+#d_returnBtn > .button-left {
+	padding-top: 8px;
+	font-size: 18px;
+}
+
+#d_returnBtn:hover {
+	color: #FF5809;
+	border-color: #FF5809;
+}
+
+#d_leftContainer {
+	font-size: 18px;
+	color: #F0F0F0;
+}
+
+/*文章状态*/
+#d_labelCon {
+	top: 100px !important;
+	height: 240px !important;
+}
+#d_labelCon > div > div > div {
+	padding-top: 18px;
+	padding-left: 25px;
+	height: 42px;
+}
+#d_labelCon > div > div > div:hover {
+	background-color: #FF8F59;
+	cursor: pointer;
+}
+
+#d_labelCon > div > div > .d-label.d-label-default.d-focused.d-label-focused {
+	background-color: #D94600;
+}
+
+/*新建按钮*/
+#d_new {
+	border: 1px solid #BEBEBE;
+}
+#d_new > div > div > div {
+	font-size: 18px;
+	height: 30px !important;
+    width: 140px !important;
+    top: 21px !important;
+    color: #3C3C3C;
+}
+#d_new > div > div > div:hover {
+	color: #000;
+	cursor: pointer;
+}
+
+/*表格*/
+#d_dgDoc, #d_docToolbar {
+	background-color: #FFF;	
+}
+.row > td {
+	height: 70px !important;	
+	font-size: 18px;
+}
+.d-grid .data-table .current-row {
+	background-color: #5B5B5B !important;
+}
+.d-grid .data-table td:hover {
+	background-color: #ADADAD !important;
+	cursor: pointer;
+}
+
+.d-grid .data-table .row td {
+	border: 1px solid #BEBEBE !important;
+}
+
+/*保存发布按钮*/
+#d_twoBtnCon, #d_rightCon, #d_docCon {
+	border: 1px solid #BEBEBE !important;
+}
+
+#d_saveDoc, #d_issueDoc {
+	font-size: 18px;
+	padding-left: 20px;
+	padding-top: 17px;
+	color: #3C3C3C;
+}
+#d_saveDoc:hover, #d_issueDoc:hover {
+	color: #000;
+	cursor: pointer;
+}
+
+/*textEditor*/
+#d_topProgramaEditor, #d_subProgramaEditor, #d_startDateEditor, #d_endDateEditor, #d_nameEditor {
+	height: 50px;
+}
+
+input.editor {
+	padding-top: 12px !important;
+    padding-left: 20px !important;
+    font-size: 16px !important;
+    width: 95% !important;
+    height: 25px !important;
+}
+
+.d-icon-button.d-trigger.d-icon-button-default {
+	margin-top: 13px !important;
+}
+

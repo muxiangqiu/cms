@@ -178,7 +178,7 @@ ajaxActionCount.set(&quot;parameter&quot;, proName).execute();</ClientEvent>
       <Property name="width">100%</Property>
       <Property name="contentOverflow">hidden</Property>
       <Label>
-        <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal1.d&quot;;</ClientEvent>
+        <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal2.d&quot;;</ClientEvent>
         <Property name="exClassName">fa fa-language</Property>
         <Property name="text">  内容管理系统</Property>
         <Property name="style">
@@ -230,7 +230,12 @@ window.setInterval(function() {&#xD;
 $(arg.dom)&#xD;
 	.addClass(&quot;issueBtn&quot;)&#xD;
 	.click(function() {&#xD;
-		window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue.d&quot;);			&#xD;
+		var username = &quot;${loginUsername}&quot;;&#xD;
+		if (username) {&#xD;
+			window.open(&quot;com.bstek.cms.web.portal.issue.DocumentIssue1.d&quot;);&#xD;
+		} else {&#xD;
+			dorado.MessageBox.alert(&quot;请先登录！&quot;);&#xD;
+		}&#xD;
 		return false;&#xD;
 	});</ClientEvent>
         <Property name="exClassName">fa fa-share-square-o</Property>

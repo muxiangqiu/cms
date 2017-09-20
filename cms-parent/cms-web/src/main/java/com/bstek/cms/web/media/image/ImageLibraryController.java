@@ -40,7 +40,7 @@ public class ImageLibraryController {
 		JpaUtil.save(mediaLibraries, new SmartSavePolicyAdapter() {
 
 			@Override
-			public void beforeInsert(SaveContext context) {
+			public boolean beforeInsert(SaveContext context) {
 				if (context.getEntity() instanceof FileInfo) {
 					FileInfo fileInfo = context.getEntity();
 					MediaLibrary library = context.getParent();
@@ -50,10 +50,11 @@ public class ImageLibraryController {
 					link.setFileId(fileInfo.getId());
 					JpaUtil.persist(link);
 				}
+				return true;
 			}
 			
 			@Override
-			public void beforeDelete(SaveContext context) {
+			public boolean beforeDelete(SaveContext context) {
 				if (context.getEntity() instanceof FileInfo) {
 					FileInfo fileInfo = context.getEntity();
 					MediaLibrary library = context.getParent();
@@ -62,6 +63,7 @@ public class ImageLibraryController {
 						.equal("fileId", fileInfo.getId())
 						.delete();					
 				}
+				return true;
 			}
 
 		});

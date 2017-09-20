@@ -213,6 +213,14 @@
 	overflow-y: auto !important;
 }
 
+/*图片*/
+/* #d_image {
+	background-image: url(/static/images/top.png);
+	background-repeat:no-repeat; 
+	background-size:100% auto;
+	-moz-background-size:100% auto;
+} */
+
 /*搜索提示框*/
 #d__uid_61 {
 	font-size: 15px;

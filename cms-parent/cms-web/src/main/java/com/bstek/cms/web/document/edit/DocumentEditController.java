@@ -43,7 +43,7 @@ public class DocumentEditController {
 		JpaUtil.save(programas, new SmartSavePolicyAdapter() {
 
 			@Override
-			public void beforeInsert(SaveContext context) {
+			public boolean beforeInsert(SaveContext context) {
 				Document document = context.getEntity();
 				Programa programa = context.getParent();
 				ProgramaDocumentLink link = new ProgramaDocumentLink();
@@ -51,16 +51,18 @@ public class DocumentEditController {
 				link.setProgramaId(programa.getId());
 				link.setDocumentId(document.getId());
 				JpaUtil.persist(link);
+				return true;
 			}
 			
 			@Override
-			public void beforeDelete(SaveContext context) {
+			public boolean beforeDelete(SaveContext context) {
 				Document document = context.getEntity();
 				Programa programa = context.getParent();
 				JpaUtil.lind(ProgramaDocumentLink.class)
 					.equal("programaId", programa.getId())
 					.equal("documentId", document.getId())
 					.delete();
+				return false;
 			}
 
 		});

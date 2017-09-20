@@ -66,6 +66,7 @@
     <Panel layout="padding:5;regionPadding:10">
       <Property name="caption">文档审核列表</Property>
       <Property name="iconClass">fa fa-tachometer green-text</Property>
+      <Property name="ignored">false</Property>
       <Buttons/>
       <Children>
         <ToolBar>

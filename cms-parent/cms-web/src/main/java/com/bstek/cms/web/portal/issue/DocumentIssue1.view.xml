@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewConfig>
+  <Arguments/>
+  <Context/>
+  <Model>
+    <DataType name="Programa">
+      <Property name="creationType">com.bstek.cms.orm.Programa</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="parentId">
+        <Property></Property>
+        <Property name="label">上级ID</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">创建人</Property>
+      </PropertyDef>
+      <PropertyDef name="createTime">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="desc">
+        <Property></Property>
+        <Property name="label">描述</Property>
+      </PropertyDef>
+      <Reference name="children">
+        <Property name="dataType">[SELF]</Property>
+        <Property name="parameter">$${this.id}</Property>
+        <Property name="dataProvider">documentIssueController#loadSubPrograma</Property>
+      </Reference>
+    </DataType>
+    <DataType name="Document">
+      <Property name="creationType">com.bstek.cms.orm.Document</Property>
+      <PropertyDef name="id">
+        <Property></Property>
+        <Property name="label">ID</Property>
+      </PropertyDef>
+      <PropertyDef name="deptId">
+        <Property></Property>
+        <Property name="label">部门</Property>
+      </PropertyDef>
+      <PropertyDef name="name">
+        <Property></Property>
+        <Property name="label">标题</Property>
+      </PropertyDef>
+      <PropertyDef name="creator">
+        <Property></Property>
+        <Property name="label">作者</Property>
+      </PropertyDef>
+      <PropertyDef name="createDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">创建时间</Property>
+      </PropertyDef>
+      <PropertyDef name="updateDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">修改时间</Property>
+      </PropertyDef>
+      <PropertyDef name="startDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">有效期</Property>
+      </PropertyDef>
+      <PropertyDef name="endDate">
+        <Property name="dataType">Date</Property>
+        <Property name="label">至</Property>
+      </PropertyDef>
+      <PropertyDef name="content">
+        <Property></Property>
+        <Property name="label">内容</Property>
+      </PropertyDef>
+      <PropertyDef name="type">
+        <Property></Property>
+        <Property name="label">类型</Property>
+      </PropertyDef>
+      <PropertyDef name="securityLevel">
+        <Property name="label">密级</Property>
+        <Property name="mapping">
+          <Property name="mapValues">${dict.items(&quot;MJ&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="status">
+        <Property name="label">状态</Property>
+        <Property name="mapping">
+          <Property name="mapValues">${dict.items(&quot;DS&quot;)}</Property>
+          <Property name="valueProperty">value</Property>
+          <Property name="keyProperty">key</Property>
+        </Property>
+      </PropertyDef>
+      <PropertyDef name="programaName">
+        <Property></Property>
+        <Property name="label">所属栏目名称</Property>
+      </PropertyDef>
+      <PropertyDef name="top">
+        <Property name="dataType">boolean</Property>
+        <Property name="label">置顶</Property>
+      </PropertyDef>
+      <PropertyDef name="topPrograma">
+        <ClientEvent name="onGetText">var name = arg.entity.get(&quot;programaName&quot;);&#xD;
+if (name) {&#xD;
+	var index = name.indexOf(&quot; - &quot;);&#xD;
+	arg.text = name.substring(0, index);&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+        <Property name="label">所属顶级栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="subPrograma">
+        <ClientEvent name="onGetText">var name = arg.entity.get(&quot;programaName&quot;);&#xD;
+if (name) {&#xD;
+	var index = name.indexOf(&quot; - &quot;);&#xD;
+	arg.text = name.substring(index + 3);&#xD;
+}&#xD;
+</ClientEvent>
+        <Property name="label">子级栏目</Property>
+      </PropertyDef>
+      <PropertyDef name="browseNumber">
+        <Property name="dataType">Integer</Property>
+        <Property name="label">浏览次数</Property>
+      </PropertyDef>
+      <PropertyDef name="subProId">
+        <Property></Property>
+      </PropertyDef>
+      <PropertyDef name="showName">
+        <ClientEvent name="onGetText">var showName = null;&#xD;
+var name = arg.entity.get(&quot;name&quot;);&#xD;
+if (name) {&#xD;
+	if (name.length > 16) {&#xD;
+		showName = name.substring(0, 15) + &quot;...&quot;;&#xD;
+	} else {&#xD;
+		showName = name;&#xD;
+	};&#xD;
+	arg.text = showName;&#xD;
+}&#xD;
+</ClientEvent>
+      </PropertyDef>
+    </DataType>
+  </Model>
+  <View layout="vbox">
+    <ClientEvent name="beforeRefreshDom" signature="self,arg,autoForm">/*&#xD;
+var winWidth;&#xD;
+if (window.innerWidth) {&#xD;
+	winWidth = window.innerWidth;&#xD;
+} else if ((document.body) &amp;&amp; (document.body.clientWidth)) {&#xD;
+	winWidth = document.body.clientWidth; &#xD;
+}&#xD;
+&#xD;
+if (winWidth >= 800) {&#xD;
+	autoForm.set(&quot;cols&quot;, &quot;*,*&quot;);&#xD;
+	autoForm.get(&quot;parent&quot;).set(&quot;height&quot;, &quot;95%&quot;);&#xD;
+} else if (winWidth >= 600 &amp;&amp; winWidth &lt; 800) {&#xD;
+	autoForm.set(&quot;cols&quot;, &quot;*&quot;);&#xD;
+	autoForm.get(&quot;parent&quot;).set(&quot;height&quot;, &quot;100%&quot;);&#xD;
+} else {&#xD;
+	autoForm.set(&quot;cols&quot;, &quot;*&quot;);&#xD;
+	autoForm.get(&quot;parent&quot;).set(&quot;height&quot;, &quot;120%&quot;);&#xD;
+}&#xD;
+*/</ClientEvent>
+    <ClientEvent name="onReady" signature="self,arg,dsDocument">//dsDocument.flush();&#xD;
+</ClientEvent>
+    <Property name="packages">font-awesome,colors</Property>
+    <DataSet id="dsTopPrograma">
+      <Property name="dataType">[Programa]</Property>
+      <Property name="dataProvider">documentIssueController#loadTopPrograma</Property>
+    </DataSet>
+    <DataSet id="dsDocument">
+      <Property name="dataType">[Document]</Property>
+      <Property name="dataProvider">documentIssueController#loadDocumentsByStatus</Property>
+      <Property name="pageSize">9</Property>
+      <Property name="loadMode">lazy</Property>
+    </DataSet>
+    <Container id="homePage" layout="hbox">
+      <Property name="height">100%</Property>
+      <Container id="leftContainer">
+        <Property name="width">17%</Property>
+        <Property name="style">
+          <Property name="background-color">#3f3f3f</Property>
+        </Property>
+        <Property name="contentOverflow">hidden</Property>
+        <Button id="returnBtn">
+          <ClientEvent name="onClick">window.location.href = &quot;com.bstek.cms.web.portal.Portal2.d&quot;;</ClientEvent>
+          <Property name="caption">返回首页</Property>
+        </Button>
+        <Container id="labelCon">
+          <Label>
+            <ClientEvent name="onClick" signature="self,arg,dsDocument">dsDocument.set(&quot;parameter&quot;, &quot;0&quot;).flushAsync();&#xD;
+</ClientEvent>
+            <Property name="text">初稿文章</Property>
+          </Label>
+          <Label>
+            <ClientEvent name="onClick" signature="self,arg,dsDocument">dsDocument.set(&quot;parameter&quot;, &quot;1&quot;).flushAsync();</ClientEvent>
+            <Property name="text">审核中文章</Property>
+          </Label>
+          <Label>
+            <ClientEvent name="onClick" signature="self,arg,dsDocument">dsDocument.set(&quot;parameter&quot;, &quot;2&quot;).flushAsync();</ClientEvent>
+            <Property name="text">已发布文章</Property>
+          </Label>
+          <Label>
+            <ClientEvent name="onClick" signature="self,arg,dsDocument">dsDocument.set(&quot;parameter&quot;, &quot;3&quot;).flushAsync();</ClientEvent>
+            <Property name="text">已下线文章</Property>
+          </Label>
+        </Container>
+      </Container>
+      <Container id="docCon">
+        <Property name="width">23%</Property>
+        <Property name="contentOverflowX">hidden</Property>
+        <Container id="new">
+          <Property name="height">60</Property>
+          <Label>
+            <ClientEvent name="onClick" signature="self,arg,dsDocument">dsDocument.getData().insert({&#xD;
+	status: &quot;0&quot;&#xD;
+}, &quot;begin&quot;);&#xD;
+</ClientEvent>
+            <Property name="text">新建文章</Property>
+            <Property name="exClassName">fa fa-plus-circle</Property>
+          </Label>
+        </Container>
+        <DataGrid id="dgDoc">
+          <Property name="dataSet">dsDocument</Property>
+          <Property name="readOnly">true</Property>
+          <Property name="showHeader">false</Property>
+          <DataColumn name="showName">
+            <Property name="property">showName</Property>
+            <Property name="align">center</Property>
+          </DataColumn>
+        </DataGrid>
+        <ToolBar id="docToolbar" layoutConstraint="bottom">
+          <DataPilot>
+            <Property name="itemCodes">|&lt;,&lt;,info,>,>|</Property>
+            <Property name="dataSet">dsDocument</Property>
+          </DataPilot>
+        </ToolBar>
+      </Container>
+      <Container id="rightCon">
+        <Property name="width">59%</Property>
+        <Container id="twoBtnCon" layout="hbox">
+          <Property name="height">60</Property>
+          <Label id="saveDoc">
+            <ClientEvent name="onClick" signature="self,arg,updateAction">updateAction.execute();&#xD;
+</ClientEvent>
+            <Property name="text">保存</Property>
+            <Property name="exClassName">fa fa-floppy-o</Property>
+          </Label>
+          <Label id="issueDoc">
+            <ClientEvent name="onClick" signature="self,arg,updateActionIssue,dsDocument">var doc = dsDocument.getData(&quot;#&quot;);&#xD;
+doc.set(&quot;status&quot;, &quot;1&quot;);&#xD;
+updateActionIssue.execute();&#xD;
+</ClientEvent>
+            <Property name="text">发布文章</Property>
+            <Property name="exClassName">fa fa-share</Property>
+          </Label>
+        </Container>
+        <Container id="editorCon">
+          <TextEditor id="topProgramaEditor">
+            <Property name="property">topPrograma</Property>
+            <Property name="blankText">请选择顶级栏目...</Property>
+            <Property name="dataSet">dsDocument</Property>
+            <Property name="trigger">dataSetDropDownTopPrograma</Property>
+          </TextEditor>
+          <TextEditor id="subProgramaEditor">
+            <Property name="property">subPrograma</Property>
+            <Property name="blankText">请选择子级栏目...</Property>
+            <Property name="dataSet">dsDocument</Property>
+            <Property name="trigger">dataSetDropDownSubPrograma</Property>
+          </TextEditor>
+          <TextEditor id="startDateEditor">
+            <Property name="property">startDate</Property>
+            <Property name="blankText">有效开始时期...</Property>
+            <Property name="dataSet">dsDocument</Property>
+          </TextEditor>
+          <TextEditor id="endDateEditor">
+            <Property name="property">endDate</Property>
+            <Property name="blankText">有效终止日期...</Property>
+            <Property name="dataSet">dsDocument</Property>
+          </TextEditor>
+          <TextEditor id="nameEditor">
+            <Property name="property">name</Property>
+            <Property name="blankText">文章标题...</Property>
+            <Property name="dataSet">dsDocument</Property>
+          </TextEditor>
+          <UEditor id="editor">
+            <Property name="dataSet">dsDocument</Property>
+            <Property name="property">content</Property>
+            <Property name="defaultFontSize">22px</Property>
+          </UEditor>
+        </Container>
+      </Container>
+    </Container>
+    <UpdateAction id="updateAction">
+      <Property name="executingMessage">正在保存...</Property>
+      <Property name="successMessage">保存成功.</Property>
+      <Property name="dataResolver">documentIssueController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsDocument</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <UpdateAction id="updateActionIssue">
+      <Property name="executingMessage">正在发布...</Property>
+      <Property name="successMessage">发布完成，审核中....</Property>
+      <Property name="dataResolver">documentIssueController#save</Property>
+      <UpdateItem>
+        <Property name="dataSet">dsDocument</Property>
+      </UpdateItem>
+    </UpdateAction>
+    <DataSetDropDown id="dataSetDropDownTopPrograma">
+      <Property name="dataSet">dsTopPrograma</Property>
+      <Property name="autoOpen">true</Property>
+      <Property name="dynaFilter">true</Property>
+      <Property name="editable">false</Property>
+      <Property name="filterMode">clientSide</Property>
+      <Property name="property">name</Property>
+    </DataSetDropDown>
+    <DataSetDropDown id="dataSetDropDownSubPrograma">
+      <ClientEvent name="onValueSelect" signature="self,arg,dsDocument,dsTopPrograma">window.proName = window.proName + &quot; - &quot; + arg.selectedValue;&#xD;
+var newDoc = dsDocument.getData(&quot;#&quot;);&#xD;
+newDoc.set(&quot;programaName&quot;, window.proName);&#xD;
+newDoc.set(&quot;subProId&quot;, dsTopPrograma.getData(&quot;#.#children&quot;).get(&quot;id&quot;));&#xD;
+</ClientEvent>
+      <ClientEvent name="beforeExecute" signature="self,arg,topProgramaEditor">if (topProgramaEditor.get(&quot;value&quot;)) {&#xD;
+	window.proName = topProgramaEditor.get(&quot;value&quot;);&#xD;
+} else {&#xD;
+	dorado.MessageBox.alert(&quot;请先选择顶级栏目！&quot;);&#xD;
+	arg.processDefault=false;&#xD;
+}&#xD;
+&#xD;
+</ClientEvent>
+      <Property name="dataSet">dsTopPrograma</Property>
+      <Property name="autoOpen">true</Property>
+      <Property name="dynaFilter">true</Property>
+      <Property name="editable">false</Property>
+      <Property name="filterMode">clientSide</Property>
+      <Property name="property">name</Property>
+      <Property name="dataPath">#.children</Property>
+    </DataSetDropDown>
+  </View>
+</ViewConfig>
